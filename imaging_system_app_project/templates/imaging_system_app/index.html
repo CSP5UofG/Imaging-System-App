@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+{% load static %} <!-- New line -->
+
+<html>
+	<head>
+		<title>GIF</title>
+		<link rel="icon" href="{% static 'images/logo.png' %}"
+			  type="image/png">
+	</head>
+	<body>
+		<div>
+			<img src="{% static 'images/logo.png' %}"
+			     alt="GIF logo"
+				 style='height: 5%; width: 5%' />
+		</div>
+		
+		<h1>This is the index page.</h1>
+			 
+		<div>	
+			<a href="/imaging_system_app/services/">Services</a><br />
+		</div>
+	</body>
+	
+
+</html>
