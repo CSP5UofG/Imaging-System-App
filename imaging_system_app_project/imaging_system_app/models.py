@@ -91,8 +91,8 @@ class WorkerProjectBridge(models.Model):
     
 class Bill(models.Model):
     bill_id = models.AutoField(primary_key = True)
-    billind_date = models.DateField(default=timezone.now)
-    billing_address = models.CharField(max_length = 100)
+    billing_date = models.DateField(default=timezone.now)
+    billing_address = models.CharField(max_length = 100, blank=True)
     total_cost = models.FloatField()
     cust_id = models.ForeignKey(Customer, on_delete=models.CASCADE)
     
