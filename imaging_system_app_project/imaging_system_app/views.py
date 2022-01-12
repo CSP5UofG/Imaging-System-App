@@ -10,3 +10,15 @@ def index(request):
 def services(request):
     context_dict = {}
     return render(request, 'imaging_system_app/services.html', context=context_dict)
+
+def projects(request):
+    context_dict={}
+    return render(request, 'imaging_system_app/projects.html', context=context_dict)
+
+def customers(request):
+    context_dict={}
+    return render(request, 'imaging_system_app/customers.html', context=context_dict)
+
+def bills(request):
+    context_dict={}
+    return render(request, 'imaging_system_app/bills.html', context=context_dict)
