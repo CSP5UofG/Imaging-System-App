@@ -1,38 +1,9 @@
-<!DOCTYPE html>
+{% extends 'imaging_system_app/base.html' %}
 
-{% load static %} <!-- New line -->
+{% block title_block %}
+    Home
+{% endblock %}
 
-<html>
-	<head>
-		<title>GIF</title>
-		<link rel="icon" href="{% static 'images/logo.png' %}"
-			  type="image/png">
-	</head>
-	<body>
-		<div>
-			<img src="{% static 'images/logo.png' %}"
-			     alt="GIF logo"
-				 style='height: 5%; width: 5%' />
-		</div>
-		
-		<h1>This is the index page.</h1>
-			 
-		<div>	
-			<a href="/imaging_system_app/services/">Services</a><br />
-		</div>
-		
-		<div>	
-			<a href="/imaging_system_app/projects/">Projects</a><br />
-		</div>
-
-		<div>	
-			<a href="/imaging_system_app/customers/">Customers</a><br />
-		</div>
-
-		<div>	
-			<a href="/imaging_system_app/bills/">Bills</a><br />
-		</div>
-	</body>
-	
-
-</html>
+{% block body_block %}  
+    <h1><strong> Home </strong></h1>
+{% endblock %}

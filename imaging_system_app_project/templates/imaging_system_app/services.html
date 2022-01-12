@@ -1,27 +1,10 @@
-<!DOCTYPE html>
+{% extends 'imaging_system_app/base.html' %}
 
-{% load static %} <!-- New line -->
+{% block title_block %}
+    Services
+{% endblock %}
 
-<html>
-	<head>
-		<title>GIF</title>
-		<link rel="icon" href="{% static 'images/logo.png' %}"
-			  type="image/png">
-	</head>
-	<body>
-		<div>
-			<img src="{% static 'images/logo.png' %}"
-			     alt="GIF logo"
-				 style='height: 5%; width: 5%' />
-		</div>
-		
-		<h1>This is the services page.</h1>
-			 
-		<div>	
-			<a href="/imaging_system_app">Home Page</a><br />
-		</div>
-	</body>
-	
-
-</html>
+{% block body_block %}  
+    <h1><strong> Services </strong></h1>
+{% endblock %}
 
