@@ -3,21 +3,31 @@
 
 <html>
    <head lang="en">
+
+       <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+       <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}">
        <meta charset="UTF-8"/>
+
        <title>
             GIF 
             {% block title_block %}
             {% endblock %}
         </title>
+
+        <div class="pagetitle">
+            {% block pagetitle %}
+            {% endblock %}
+        </div>
+
         <div>
-            <img src="{% static 'images/logo.png' %}" type="image/png" width="150" height="160">
+            <img src="{% static 'images/logo.png' %}" type="image/png" width="160" height="180">
         </div>  
+
     </head>
 
    <body>
         {% block body_block %}
         {% endblock %}
-
         <div id="Sidenav" class="sidenav">
 
             <a href="/imaging_system_app">Home</a><br />

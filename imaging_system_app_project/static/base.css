@@ -1,0 +1,53 @@
+.pagetitle{
+    vertical-align: text-top;
+    text-align: center;
+    color:white;
+    width: 15%;
+    height: 8%px;
+    background-color: #0071BC;
+    margin: auto;
+    position: absolute;
+    left: 25%;
+    border-radius: 0 0 5px 5px;
+    font-family: 'Poppins';
+    font-weight: bolder;
+}
+
+
+.sidenav {
+    height: 90%;
+    width: 220px;
+    position: fixed;
+    z-index: 1;
+    top: 17%;
+    left: 0;
+    background-color: #0071BC;
+    overflow-x: hidden;
+    padding-top: 20px;
+  }
+  
+.sidenav a {
+    padding: 8px 8px 8px 36px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #ffffff;
+    display: block;
+    transition: 0.1s;
+    font-family: 'Poppins';
+    font-weight: bolder;
+}
+
+a:hover{
+    background-color: white;
+    color:#0071BC;
+}
+
+a:active{
+    background-color: white;
+    color:#0071BC;  
+}
+
+  /* Page content */
+.main {
+    margin-left: 220px; /* Same as the width of the sidenav */
+  }
