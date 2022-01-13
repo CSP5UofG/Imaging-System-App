@@ -22,7 +22,7 @@
             {% for p in all_projects %}
                 <div class="project_entries">
                     <li class="project_entry">
-                        <h2>{{ p.project_date}} - {{ p.cust_id}}- {{p.num_samples}} samples </h2> <br />  
+                        <h2>{{ p.project_date}} - {{ p.cust_id.cust_name}}- {{p.num_samples}} samples </h2> <br />  
                     </li>
                 </div>
             {% endfor %}
