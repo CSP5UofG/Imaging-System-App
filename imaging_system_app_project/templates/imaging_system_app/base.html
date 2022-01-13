@@ -5,6 +5,10 @@
    <head lang="en">
 
        <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+
+       {% block css_block %}
+
+        {% endblock %}
        <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}">
        <meta charset="UTF-8"/>
 
@@ -26,8 +30,6 @@
     </head>
 
    <body>
-        {% block body_block %}
-        {% endblock %}
         <div id="Sidenav" class="sidenav">
 
             <a href="/imaging_system_app">Home</a><br />
@@ -40,6 +42,12 @@
 
             <a href="/imaging_system_app/bills/">Bills</a><br />
         </div>
+
+        <div class="body_block">
+            {% block body_block %}
+
+            {% endblock %}
+        </div>    
     </body>
 
 </html>

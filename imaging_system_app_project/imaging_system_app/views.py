@@ -1,7 +1,8 @@
 from django.shortcuts import render
 
-# Create your views here.
 from django.http import HttpResponse
+
+from imaging_system_app.models import Services, Customer, Worker, Project, WorkerProjectBridge, Bill, ProjectBillDetails, ProjectBillBridge
 
 def index(request):
     context_dict = {}
@@ -14,10 +15,11 @@ def services(request):
 def projects(request):
     context_dict={}
 
-    #all_projects = Project.objects.all()
+    
+    all_projects = Project.objects.all()
     #all_projects.order_by(project_date)
 
-    #context_dict['All projects']= all_projects
+    context_dict['all_projects']= all_projects
 
     return render(request, 'imaging_system_app/projects.html', context=context_dict)
 

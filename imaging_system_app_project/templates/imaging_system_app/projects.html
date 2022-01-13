@@ -1,8 +1,12 @@
-
 {% extends 'imaging_system_app/base.html' %}
+{% load static %}
 
 {% block title_block %}
-    Projects
+    - Projects
+{% endblock %}
+
+{% block css_block %}
+    <link rel="stylesheet" type="text/css" href="{% static 'projects.css' %}">
 {% endblock %}
 
 {% block pagetitle %}
@@ -10,6 +14,28 @@
 {% endblock %}
 
 
+
 {% block body_block %}  
-    
+
+    <ul id="project_list">
+        {% if all_projects %}
+            {% for p in all_projects %}
+                <div class="project_entries">
+                    <li class="project_entry">
+                        <h2>{{ p.project_date}} - {{ p.cust_id}}- {{p.num_samples}} samples </h2> <br />  
+                    </li>
+                </div>
+            {% endfor %}
+
+        {% else %}
+            <a href="/">
+                <div class="project_entry">
+                    <li>
+                    <strong><h2>There are no projects present.</h2></strong> <br />
+                    </li>
+                </div>
+            </a>
+        {% endif %}
+    </ul>
+
 {% endblock %}
