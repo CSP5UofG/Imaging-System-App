@@ -13,6 +13,12 @@ def services(request):
 
 def projects(request):
     context_dict={}
+
+    #all_projects = Project.objects.all()
+    #all_projects.order_by(project_date)
+
+    #context_dict['All projects']= all_projects
+
     return render(request, 'imaging_system_app/projects.html', context=context_dict)
 
 def customers(request):
