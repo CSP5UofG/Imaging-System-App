@@ -53,6 +53,12 @@ class Worker(models.Model):
     
 
 class Project(models.Model):
+    STATUS_CHOICES = [
+        (0, 'Prep'),
+        (1, 'Section'),
+        (2, 'Image'),
+        (3, 'Bill')
+    ]
     project_id = models.AutoField(primary_key = True)
     cust_id = models.ForeignKey(Customer, on_delete=models.CASCADE)
     project_date = models.DateField(default=timezone.now)
@@ -75,6 +81,8 @@ class Project(models.Model):
     second_dilution_time = models.CharField(max_length = 100, blank=True)
     contrast_staining = models.CharField(max_length = 100, blank=True)
     comments_results = models.CharField(max_length = 500, blank=True)
+    status = models.IntegerField(choices = STATUS_CHOICES, default = 0) # prep section image bill
+    
     
     def __str__(self):
         return str(self.project_id) + " ordered by: " + str(self.cust_id)

@@ -120,7 +120,8 @@ admin.site.register(ProjectBillBridge, ProjectBillBridgeAdmin)
 
 
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ('project_id', 'project_date', 'get_cust_id', 'get_cust_name', 'num_samples', )
+    list_display = ('project_id', 'project_date', 'get_cust_id', 'get_cust_name', 'num_samples', 'status')
+    list_filter = ('status', )
     search_fields = ('cust_id__cust_name', )
     date_hierarchy = 'project_date'
     def get_cust_id(self, obj): # Allows displaying customer id
