@@ -1,0 +1,23 @@
+.content_entry {
+    position:relative;
+    vertical-align: text-top;
+    text-align: left;
+    left: 20%;
+    font-family: 'Poppins';
+    font-size: 15px;
+}
+
+th{
+    font-family: 'Poppins';
+    font-size: 15px;
+    font-weight: bold;
+}
+
+td{
+    font-family: 'Poppins';
+    font-size: 14px;
+}
+
+li{
+    padding-top: 20%;
+}

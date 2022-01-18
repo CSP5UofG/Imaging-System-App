@@ -13,7 +13,6 @@
     font-weight: bolder;
 }
 
-
 .sidenav {
     height: 90%;
     width: 220px;
@@ -23,7 +22,13 @@
     left: 0;
     background-color: #0071BC;
     overflow-x: hidden;
-    padding-top: 20px;
+    padding-top: 1%;
+  }
+
+  .logo{
+    position:fixed;
+    z-index: 1;
+    padding: 20px;
   }
   
 .sidenav a {
@@ -48,6 +53,7 @@ a:active{
 }
 
   /* Page content */
-.main {
+.body_block {
     margin-left: 220px; /* Same as the width of the sidenav */
+    margin-top: 100px;
   }

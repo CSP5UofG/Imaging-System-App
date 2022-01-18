@@ -1,13 +1,38 @@
 {% extends 'imaging_system_app/base.html' %}
+{% load static %}
 
 {% block title_block %}
     - Bills
 {% endblock %}
 
+{% block css_block %}
+    <link rel="stylesheet" type="text/css" href="{% static 'content.css' %}">
+{% endblock %}
+
 {% block pagetitle %}
-    <h1><strong> Bills </strong></h1>
+	<h1><strong> Bills </strong></h1>
 {% endblock %}
 
 {% block body_block %}  
-    
+    <ul id="content_list">
+        {% if bills %}
+            {% for bill in bills %}
+                <div class="content_entries">
+                    <li class="content_entry">
+                        <h2>{{ bill.bill_id}} - {{ bill.billing_date}}- £{{bill.total_cost}}  <br /> 
+                    </li>
+                </div>
+            {% endfor %}
+
+        {% else %}
+            <a href="/">
+                <div class="content_entry">
+                    <li>
+                    <strong><h2>There are no bills present.</h2></strong> <br />
+                    </li>
+                </div>
+            </a>
+        {% endif %}
+    </ul>
+
 {% endblock %}
