@@ -2,55 +2,55 @@
 {% load static %}
 
 <html>
-   <head lang="en">
 
-       <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+<head lang="en">
 
-       {% block css_block %}
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
 
+    {% block css_block %}
+
+    {% endblock %}
+    <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}">
+    <meta charset="UTF-8" />
+
+    <title>
+        GIF
+        {% block title_block %}
         {% endblock %}
-       <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}">
-       <meta charset="UTF-8"/>
+    </title>
 
-       <title>
-            GIF 
-            {% block title_block %}
+</head>
+
+<body>
+    <div class="header">
+        <div class="pagetitle">
+            {% block pagetitle %}
             {% endblock %}
-        </title>
-
-    </head>
-
-   <body>
-    <div class="pagetitle">
-        {% block pagetitle %}
-        {% endblock %}
-    </div>
-
-    <div class="logo">
-        <img src="{% static 'images/logo.png' %}" type="image/png" width="160" height="180">
-    </div>  
-
-        <div id="Sidenav" class="sidenav">
-
-            <a href="/imaging_system_app">Home</a><br />
-
-            <a href="/imaging_system_app/services/">Services</a><br />
-            
-            <a href="/imaging_system_app/projects/">Projects</a><br />
-        
-            <a href="/imaging_system_app/customers/">Customers</a><br />
-
-            <a href="/imaging_system_app/bills/">Bills</a><br />
         </div>
 
-        <br /> <br /> <br /> <br /> <br /> <br /> <br /><br />
-        <!--- NEED TO FIX THIS BREAK IN FUTURE UPDATE --->
+        <div id="logo">
+            <img src="{% static 'images/logo.png' %}" type="image/png" width="160" height="180">
+        </div>
+    </div>
 
-        <div class="body_block">
-            {% block body_block %}
+    <div id="Sidenav" class="sidenav">
 
-            {% endblock %}
-        </div>    
-    </body>
+        <a href="/imaging_system_app">Home</a><br />
+
+        <a href="/imaging_system_app/services/">Services</a><br />
+
+        <a href="/imaging_system_app/projects/">Projects</a><br />
+
+        <a href="/imaging_system_app/customers/">Customers</a><br />
+
+        <a href="/imaging_system_app/bills/">Bills</a><br />
+    </div>
+
+    <div class="body_block">
+        {% block body_block %}
+
+        {% endblock %}
+    </div>
+</body>
 
 </html>

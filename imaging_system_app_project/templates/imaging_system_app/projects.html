@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block css_block %}
-    <link rel="stylesheet" type="text/css" href="{% static 'projects.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'content.css' %}">
 {% endblock %}
 
 {% block pagetitle %}
@@ -17,21 +17,21 @@
 
 {% block body_block %}  
 
-    <ul id="project_list">
+    <ul class="content_list">
         {% if all_projects %}
             {% for p in all_projects %}
-                <div class="project_entries">
-                    <li class="project_entry">
-                        <h2>{{ p.project_date}} - {{ p.cust_id.cust_name}}- {{p.num_samples}} samples </h2> <br />  
+                <div class="content_entries">
+                    <li class="content_entry">
+                        <h2>{{ p.project_date}} - {{ p.cust_id.cust_name}}- {{p.num_samples}} samples - {{p.get_status_display}} </h2> <br>  
                     </li>
                 </div>
             {% endfor %}
 
         {% else %}
             <a href="/">
-                <div class="project_entry">
+                <div class="content_entry">
                     <li>
-                    <strong><h2>There are no projects present.</h2></strong> <br />
+                    <strong><h2>There are no projects present.</h2></strong> <br>
                     </li>
                 </div>
             </a>

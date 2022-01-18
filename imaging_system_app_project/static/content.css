@@ -9,15 +9,16 @@
 
 th{
     font-family: 'Poppins';
-    font-size: 15px;
+    font-size: 18px;
     font-weight: bold;
 }
 
 td{
     font-family: 'Poppins';
-    font-size: 14px;
+    font-size: 16px;
 }
 
-li{
-    padding-top: 20%;
+.content_list{
+    position: absolute;
+    margin-top: 10%;
 }
