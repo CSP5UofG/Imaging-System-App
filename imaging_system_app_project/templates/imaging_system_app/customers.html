@@ -1,13 +1,38 @@
 {% extends 'imaging_system_app/base.html' %}
+{% load static %}
 
 {% block title_block %}
     - Customers
 {% endblock %}
 
+{% block css_block %}
+    <link rel="stylesheet" type="text/css" href="{% static 'content.css' %}">
+{% endblock %}
+
 {% block pagetitle %}
-    <h1><strong> Customers</strong></h1>
+	<h1><strong> Customers </strong></h1>
 {% endblock %}
 
 {% block body_block %}  
-    
+    <ul class="content_list">
+        {% if customers %}
+            {% for c in customers %}
+                <div class="content_entries">
+                    <li class="content_entry">
+                        <h2>{{ c.cust_id}} - {{ c.cust_name}}- {{c.cust_budget_code}} </h2> <br /> 
+                    </li>
+                </div>
+            {% endfor %}
+
+        {% else %}
+            <a href="/">
+                <div class="content_entry">
+                    <li>
+                    <strong><h2>There are no customers yet.</h2></strong> <br />
+                    </li>
+                </div>
+            </a>
+        {% endif %}
+    </ul>
+
 {% endblock %}
