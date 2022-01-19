@@ -22,60 +22,60 @@
             <h2>{{ s.cust_type}} Pricing — {{s.discount}}x  price multiplier</h2>
             <table>
                 <tr>
-                    <th>Process Name</th>
-                    <th>Cost (£)</th>
+                    <th>Name of the Service</th>
+                    <th>Cost of the Service</th>
                 </tr>
                 <tr>
-                    <td>Jeoll 200 TEM</td>
-                    <td>£{{s.jeol1200tem_cost}}</td>
+                    <td>Jeoll 200 TEM  </td>
+                    <td>£{{s.jeol1200tem_cost|floatformat:2}}</td>
                 </tr>
                 <tr>
-                    <td>Jeoll 100 SEM</td>
-                    <td>£{{s.jeol100sem_cost}}</td>
+                    <td>Jeoll 100 SEM  </td>
+                    <td>£{{s.jeol100sem_cost|floatformat:2}}</td>
                 </tr>
                 <tr>
-                    <td>TEM Processing</td>
-                    <td>£{{s.tem_processing_cost}}</td>
+                    <td>TEM Processing  </td>
+                    <td>£{{s.tem_processing_cost|floatformat:2}}</td>
                 </tr>
                 <tr>
-                    <td>Sectioning Stained</td>
-                    <td>£{{s.sectioning_stained_cost}}</td>
+                    <td>Sectioning Stained  </td>
+                    <td>£{{s.sectioning_stained_cost|floatformat:2}}</td>
                 </tr>
                 <tr>
                     <td>Sectioning Contrast Stained</td>
-                    <td>£{{s.sectioning_contrast_stained_cost}}</td>
+                    <td>£{{s.sectioning_contrast_stained_cost|floatformat:2}}</td>
                 </tr>
                 <tr>
                     <td>SEM Processing FD</td>
-                    <td>£{{s.sem_processing_fd_cost}}</td>
+                    <td>£{{s.sem_processing_fd_cost|floatformat:2}}</td>
                 </tr>
                 <tr>
                     <td>SEM Processing Mounting</td>
-                    <td>£{{s.sem_processing_mounting_cost}}</td>
+                    <td>£{{s.sem_processing_mounting_cost|floatformat:2}}</td>
                 </tr>
                 <tr>
                     <td>SEM</td>
-                    <td>£{{s.sem_cost}}</td>
+                    <td>£{{s.sem_cost|floatformat:2}}</td>
                 </tr>
                 <tr>
                     <td>Sectioning Staining</td>
-                    <td>£{{s.sectioning_stained_cost}}</td>
+                    <td>£{{s.sectioning_stained_cost|floatformat:2}}</td>
                 </tr>
                 <tr>
                     <td>Immunolabelling</td>
-                    <td>£{{s.immunolabelling_cost}}</td>
+                    <td>£{{s.immunolabelling_cost|floatformat:2}}</td>
                 </tr>
                 <tr>
                     <td>Cryosectioning</td>
-                    <td>£{{s.cryosectioning_cost}}</td>
+                    <td>£{{s.cryosectioning_cost|floatformat:2}}</td>
                 </tr>
                 <tr>
                     <td>Freeze Fracture</td>
-                    <td>£{{s.freeze_fracture_cost}}</td>
+                    <td>£{{s.freeze_fracture_cost|floatformat:2}}</td>
                 </tr>
                 <tr>
                     <td>IR White</td>
-                    <td>£{{s.ir_white_cost}}</td>
+                    <td>£{{s.ir_white_cost|floatformat:2}}</td>
                 </tr>
             </table>
             <br />
