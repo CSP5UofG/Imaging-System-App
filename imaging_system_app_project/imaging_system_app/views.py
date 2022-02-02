@@ -29,6 +29,15 @@ def projects(request):
 
     return render(request, 'imaging_system_app/projects.html', context=context_dict)
 
+
+def project_details(request):
+
+    context_dict={}
+    return render(request, 'imaging_system_app/project_details.html', context=context_dict)
+
+
+
+
 def customers(request):
     context_dict={}
 
