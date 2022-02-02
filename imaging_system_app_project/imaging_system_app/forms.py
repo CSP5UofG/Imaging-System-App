@@ -4,47 +4,22 @@ from django.utils import timezone
 
 
 class ServicesForm(forms.ModelForm):
-    cust_type = forms.CharField(max_length = 100,
-                                help_text = "Customer Type")
-    discount = forms.FloatField(help_text = "Discount")
-    jeol1200tem_cost = forms.FloatField(help_text = "jeol1200tem cost",
-                                        min_value = 0)
-    jeol100sem_cost = forms.FloatField(help_text = "jeol100sem cost",
-                                       min_value = 0)
-    tem_processing_cost = forms.FloatField(help_text = "tem processing cost",
-                                           min_value = 0)
-    sectioning_stained_cost = forms.FloatField(help_text = "sectioning stained cost",
-                                               min_value = 0)
-    sectioning_contrast_stained_cost = forms.FloatField(help_text = "sectioning contrast stained cost",
-                                                        min_value = 0)
-    negative_staining_cost = forms.FloatField(help_text = "negative staining cost",
-                                              min_value = 0)
-    sem_processing_mounting_cost = forms.FloatField(help_text = "sem processing mounting cost",
-                                                    min_value = 0)
-    sem_processing_fd_cost = forms.FloatField(help_text = "sem processing fd cost",
-                                              min_value = 0)
-    sem_cost = forms.FloatField(help_text = "sem cost",
-                                min_value = 0)
-    immunolabelling_cost = forms.FloatField(help_text = "immunolabelling cost",
-                                            min_value = 0)
-    cryosectioning_cost = forms.FloatField(help_text = "cryosectioning cost",
-                                           min_value = 0)
-    freeze_fracture_cost = forms.FloatField(help_text = "freeze fracture cost",
-                                            min_value = 0)
-    ir_white_cost = forms.FloatField(help_text = "ir white cost",
-                                     min_value = 0)
+    name = forms.CharField(max_length = 100,
+                                help_text = "Name of Service")
+    price = forms.FloatField(help_text = "Price of Service")
     
     class Meta:
         model = Services
-        fields = ('cust_type', 'discount', 'jeol1200tem_cost', 'jeol100sem_cost',
-                  'tem_processing_cost', 'sectioning_stained_cost',
-                  'sectioning_contrast_stained_cost', 'negative_staining_cost',
-                  'sem_processing_mounting_cost', 'sem_processing_fd_cost',
-                  'sem_cost', 'immunolabelling_cost', 'cryosectioning_cost',
-                  'freeze_fracture_cost', 'ir_white_cost', )
+        fields = ('name', 'price', )
 
 
 class CustomerForm(forms.ModelForm):
+    DISCOUNT_CHOICES = [
+        (0.5, 'In-House'),
+        (1.0, 'Normal'),
+        (1.5, 'Outside')
+    ]
+
     cust_name = forms.CharField(max_length = 100,
                                 help_text = "Customer Name")
     cust_tel_no = forms.CharField(max_length = 11,
@@ -53,13 +28,13 @@ class CustomerForm(forms.ModelForm):
                                  help_text = "Customer email address")
     cust_budget_code = forms.IntegerField(help_text = "Budget code",
                                           min_value = 0)
-    service_id = forms.ModelChoiceField(queryset = Services.objects.all(),
-                                        help_text = "Customer Type")
+    cust_type = forms.ChoiceField(choices = DISCOUNT_CHOICES,
+                               help_text = "Discount")
     
     class Meta:
         model = Customer
         fields = ('cust_name', 'cust_tel_no', 'cust_email', 'cust_budget_code',
-                  'service_id', )
+                  'cust_type', )
 
 
 class WorkerForm(forms.ModelForm):

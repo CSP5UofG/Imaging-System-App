@@ -15,85 +15,38 @@
 
 {% block body_block %}
 <ul class="content_list">
-    {% if services %}
-    {% for s in services %}
+
     <div class="content_entries">
         <li class="content_entry">
-            <h2>{{ s.cust_type}} Pricing — {{s.discount}}x  price multiplier</h2>
-            <table>
-                <tr>
-                    <th>Process Name</th>
-                    <th>Cost (£)</th>
-                </tr>
-                <tr>
-                    <td>Jeoll 200 TEM</td>
-                    <td>£{{s.jeol1200tem_cost}}</td>
-                </tr>
-                <tr>
-                    <td>Jeoll 100 SEM</td>
-                    <td>£{{s.jeol100sem_cost}}</td>
-                </tr>
-                <tr>
-                    <td>TEM Processing</td>
-                    <td>£{{s.tem_processing_cost}}</td>
-                </tr>
-                <tr>
-                    <td>Sectioning Stained</td>
-                    <td>£{{s.sectioning_stained_cost}}</td>
-                </tr>
-                <tr>
-                    <td>Sectioning Contrast Stained</td>
-                    <td>£{{s.sectioning_contrast_stained_cost}}</td>
-                </tr>
-                <tr>
-                    <td>SEM Processing FD</td>
-                    <td>£{{s.sem_processing_fd_cost}}</td>
-                </tr>
-                <tr>
-                    <td>SEM Processing Mounting</td>
-                    <td>£{{s.sem_processing_mounting_cost}}</td>
-                </tr>
-                <tr>
-                    <td>SEM</td>
-                    <td>£{{s.sem_cost}}</td>
-                </tr>
-                <tr>
-                    <td>Sectioning Staining</td>
-                    <td>£{{s.sectioning_stained_cost}}</td>
-                </tr>
-                <tr>
-                    <td>Immunolabelling</td>
-                    <td>£{{s.immunolabelling_cost}}</td>
-                </tr>
-                <tr>
-                    <td>Cryosectioning</td>
-                    <td>£{{s.cryosectioning_cost}}</td>
-                </tr>
-                <tr>
-                    <td>Freeze Fracture</td>
-                    <td>£{{s.freeze_fracture_cost}}</td>
-                </tr>
-                <tr>
-                    <td>IR White</td>
-                    <td>£{{s.ir_white_cost}}</td>
-                </tr>
-            </table>
-            <br />
-        </li>
-    </div>
-    {% endfor %}
-
-    {% else %}
-    <a href="/">
-        <div class="content_entry">
-            <li>
-                <strong>
-                    <h2>There are no services present.</h2>
-                </strong> <br />
-            </li>
-        </div>
-    </a>
-    {% endif %}
+			{% if services %}
+				<table>
+					<tr>
+						<th>Name</th>
+						<th>In-House</th>
+						<th>Normal</th>
+						<th>Outside</th>
+					</tr>
+					{% for s in services %}
+						<tr>
+							<td>{{ s.name }}</td>
+							<td>{{ s.price }}/2</td>
+							<td>{{ s.price }}</td>
+							<td>{{ s.price }}*1.5</td>
+						</tr>
+					{% endfor %}
+				</table>
+				
+			{% else %}
+			<a href="/">
+				<div class="content_entry">
+					<li>
+						<strong>
+							<h2>There are no services present.</h2>
+						</strong> <br />
+					</li>
+				</div>
+			</a>
+			{% endif %}
 </ul>
 
 {% endblock %}
