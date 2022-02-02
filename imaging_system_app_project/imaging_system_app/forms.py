@@ -6,11 +6,13 @@ from django.utils import timezone
 class ServicesForm(forms.ModelForm):
     name = forms.CharField(max_length = 100,
                                 help_text = "Name of Service")
-    price = forms.FloatField(help_text = "Price of Service")
+    normal_price = forms.FloatField(help_text = "Price of Service")
+    in_house_price = forms.FloatField(widget=forms.HiddenInput(), required = False)
+    outside_price = forms.FloatField(widget=forms.HiddenInput(), required = False)
     
     class Meta:
         model = Services
-        fields = ('name', 'price', )
+        fields = ('name', 'normal_price', )
 
 
 class CustomerForm(forms.ModelForm):

@@ -1,0 +1,43 @@
+{% extends 'imaging_system_app/base.html' %}
+{% load static %}
+
+{% block title_block %}
+    - Add a Customer
+{% endblock %}
+
+{% block css_block %}
+    <link rel="stylesheet" type="text/css" href="{% static 'content.css' %}">
+{% endblock %}
+
+{% block pagetitle %}
+	<h1><strong> Add a Customer </strong></h1>
+{% endblock %}
+
+{% block body_block %}  
+    <ul class="content_list">
+	     <div>
+            <form id="customer_form" method="post" action="{% url 'imaging_system_app:add-service' %}", enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for hidden in form.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+            {% for field in form.visible_fields %}
+                <div>
+                    {{ field.errors }}
+                    {{ field.help_text }}<br />
+                </div>
+                <div>
+                    {{ field }}<br /><br />
+                </div>
+                <div></div>
+            {% endfor %}
+                <br />
+                <button type="submit" name="submit">
+                        <p class="buttonText">Create New Service</p>
+                </button>
+                <div></div>
+        </form>
+        </div>
+    </ul>
+
+{% endblock %}

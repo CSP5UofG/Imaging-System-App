@@ -6,6 +6,7 @@ from imaging_system_app.forms import ServicesForm, CustomerForm, WorkerForm, Pro
 from django.urls import reverse
 
 
+
 from django.http import HttpResponse
 
 from imaging_system_app.models import Services, Customer, Worker, Project, WorkerProjectBridge, Bill, ProjectBillDetails, ProjectBillBridge
@@ -23,6 +24,22 @@ def services(request):
     context_dict['services']= services
 
     return render(request, 'imaging_system_app/services.html', context=context_dict)
+
+def addService(request):
+    form = ServicesForm
+    context_dict={'form': form}
+    
+    if request.method == 'POST':
+        form = ServicesForm(request.POST)
+        
+        if form.is_valid():
+            new_service = form.save(commit = False)
+            new_service.in_house_price = (new_service.normal_price)/2
+            new_service.outside_price = (new_service.normal_price)*1.5
+            new_service.save()
+            return redirect(reverse('imaging_system_app:services'))
+    return render(request, 'imaging_system_app/addServices.html', context=context_dict)
+
 
 def projects(request):
     context_dict={}

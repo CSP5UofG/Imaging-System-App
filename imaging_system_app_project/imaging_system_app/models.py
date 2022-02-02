@@ -7,7 +7,9 @@ from django.utils import timezone
 class Services(models.Model):
     service_id = models.AutoField(primary_key = True)
     name = models.CharField(max_length = 100)
-    price = models.FloatField()
+    normal_price = models.FloatField()
+    in_house_price = models.FloatField()
+    outside_price = models.FloatField()
 
     def __str__(self):
         return str(self.service_id) + " - " + str(self.name)

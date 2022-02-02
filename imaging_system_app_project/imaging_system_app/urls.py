@@ -11,4 +11,5 @@ urlpatterns = [
     path('bills/', views.bills, name='bills'),
     path('add-customer/', views.addCustomer, name='add-customer'),
     path('edit-customer/', views.editCustomer, name='edit-customer'),
+    path('add-service/', views.addService, name='add-service'),
 ]

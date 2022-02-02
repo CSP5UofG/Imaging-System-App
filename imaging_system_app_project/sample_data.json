@@ -3,91 +3,117 @@
         "pk": 1,
         "fields": {
             "name": "jeol1200tem",
-            "price": 50.0
+            "normal_price": 50.0,
+			"in_house_price": 25.0,
+			"outside_price": 75.0
         }
     }, {
         "model": "imaging_system_app.services",
         "pk": 2,
         "fields": {
             "name": "jeol100sem",
-            "price": 55.0
+            "normal_price": 55.0,
+			"in_house_price": 27.5,
+			"outside_price": 82.5
         }
     },{
         "model": "imaging_system_app.services",
         "pk": 3,
         "fields": {
             "name": "tem processing",
-            "price": 100.0
+            "normal_price": 100.0,
+			"in_house_price": 50.0 ,
+			"outside_price": 150.0
         }
     },{
         "model": "imaging_system_app.services",
         "pk": 4,
         "fields": {
             "name": "sectioning stained",
-            "price": 40.0
+            "normal_price": 40.0,
+			"in_house_price": 20.0,
+			"outside_price": 60.0
         }
     }, {
         "model": "imaging_system_app.services",
         "pk": 5,
         "fields": {
             "name": "sectioning contrast stained",
-            "price": 50.0
+            "normal_price": 50.0,
+			"in_house_price": 25.0,
+			"outside_price": 75.0
         }
     },{
         "model": "imaging_system_app.services",
         "pk": 6,
         "fields": {
             "name": "negative staining",
-            "price": 10.0
+            "normal_price": 10.0,
+			"in_house_price": 5.0,
+			"outside_price": 15.0
         }
     },{
         "model": "imaging_system_app.services",
         "pk": 7,
         "fields": {
             "name": "sem processing mounting",
-            "price": 100.0
+            "normal_price": 100.0,
+			"in_house_price": 50.0,
+			"outside_price": 150.0
         }
     },{
         "model": "imaging_system_app.services",
         "pk": 8,
         "fields": {
             "name": "sem processing fd",
-            "price": 200.0
+            "normal_price": 200.0,
+			"in_house_price": 100.0,
+			"outside_price": 300.0
         }
     },{
         "model": "imaging_system_app.services",
         "pk": 9,
         "fields": {
             "name": "sem",
-            "price": 40.0
+            "normal_price": 40.0,
+			"in_house_price": 20.0,
+			"outside_price": 60.0
         }
     },{
         "model": "imaging_system_app.services",
         "pk": 11,
         "fields": {
             "name": "immunolabelling",
-            "price": 70.0
+            "normal_price": 70.0,
+			"in_house_price": 35.0,
+			"outside_price": 105.0
         }
     },{
         "model": "imaging_system_app.services",
         "pk": 12,
         "fields": {
             "name": "cryosectioning",
-            "price": 150
+            "normal_price": 150,
+			"in_house_price": 75.0,
+			"outside_price": 225.0
         }
     },{
         "model": "imaging_system_app.services",
         "pk": 13,
         "fields": {
             "name": "freeze fracture",
-            "price": 100.0
+            "normal_price": 100.0,
+			"in_house_price": 50.0,
+			"outside_price": 50.0
         }
     },{
         "model": "imaging_system_app.services",
         "pk": 14,
         "fields": {
             "name": "ir white",
-            "price": 80.0
+            "normal_price": 80.0,
+			"in_house_price": 40.0,
+			"outside_price": 120.0
         }
     },{
         "model": "imaging_system_app.customer",

@@ -29,9 +29,9 @@
 					{% for s in services %}
 						<tr>
 							<td>{{ s.name }}</td>
-							<td>{{ s.price }}/2</td>
-							<td>{{ s.price }}</td>
-							<td>{{ s.price }}*1.5</td>
+							<td>{{ s.in_house_price }}</td>
+							<td>{{ s.normal_price }}</td>
+							<td>{{ s.outside_price }}</td>
 						</tr>
 					{% endfor %}
 				</table>

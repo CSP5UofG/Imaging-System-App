@@ -3,7 +3,7 @@ from django.contrib import admin
 from .models import Customer, Worker, Services, Bill, ProjectBillDetails, ProjectBillBridge, Project, WorkerProjectBridge
 
 class ServicesAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price', )
+    list_display = ('name', 'normal_price', 'in_house_price', 'outside_price')
 
 
 admin.site.register(Services, ServicesAdmin)
