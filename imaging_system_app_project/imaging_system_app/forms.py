@@ -78,10 +78,20 @@ class WorkerForm(forms.ModelForm):
 
 
 class ProjectForm(forms.ModelForm):
+    STATUS_CHOICES = [
+        (0, 'Prep'),
+        (1, 'Section'),
+        (2, 'Image'),
+        (3, 'Bill')
+        ]
+    
+    
     cust_id = forms.ModelChoiceField(queryset = Customer.objects.all(),
                                      help_text = "Customer Company")
     project_date = forms.DateField(help_text = "Date",
                                    widget = forms.SelectDateWidget)
+    status = forms.ChoiceField(choices = STATUS_CHOICES,
+                               help_text = "Status")
     num_samples = forms.IntegerField(help_text = "Number of Samples",
                                      min_value = 0)
     specimen_procedure = forms.CharField(max_length = 500,
@@ -123,7 +133,7 @@ class ProjectForm(forms.ModelForm):
     
     class Meta:
         model = Project
-        fields = ('cust_id', 'project_date', 'num_samples', 'chemical_fixation',
+        fields = ('cust_id', 'project_date', 'status', 'num_samples', 'specimen_procedure', 'chemical_fixation',
                   'neg_staining', 'cryofixation', 'tem_embedding_schedule',
                   'dehydration', 'resin', 'sem', 'sem_mount', 'fd', 'cpd',
                   'sem_cost', 'temp_time', 'immunolabelling', 'first_dilution_time',
