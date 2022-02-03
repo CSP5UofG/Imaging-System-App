@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-from .helper import FieldLookup
 from .models import Customer, Worker, Services, Bill, ProjectBillDetails, ProjectBillBridge, Project, WorkerProjectBridge
 import datetime
 from imaging_system_app.forms import ServicesForm, CustomerForm, WorkerForm, ProjectForm, WorkerProjectBridgeForm, BillForm, ProjectBillDetailsForm, ProjectBillBridgeForm
@@ -19,8 +18,18 @@ def services(request):
     context_dict = {}
     
     services = Services.objects.all()
-    #services.order_by(service_id) TODO: Implement querying based on Service ID
-
+    #services.order_by(service_id) 
+    
+    # search 'name'
+    if request.method == 'POST':
+        q = request.POST.get('query')
+        if q != "":
+            # Allows displaying search string in text box
+            context_dict['q']= q
+        if q:
+            services = Services.objects.filter(name__icontains = q)
+            
+    
     context_dict['services']= services
 
     return render(request, 'imaging_system_app/services.html', context=context_dict)
@@ -45,10 +54,38 @@ def projects(request):
     context_dict={}
 
     
-    all_projects = Project.objects.all()
-    #all_projects.order_by(project_date)
+    bills = Project.objects.all()
+    #bills.order_by(project_date)
+    
+    # search 'cust_id__cust_name', date filter
+    if request.method == 'POST':
+        q = request.POST.get('query')
+        datefrom = request.POST.get('project_from')
+        dateto = request.POST.get('project_to')
+        if q != "":
+            # Allows displaying search string in text box
+            context_dict['q']= q
+        if q:
+            bills = Project.objects.filter(cust_id__cust_name__icontains = q)
+        if datefrom != "":
+            # Allows displaying search string in text box
+            context_dict['datefrom']= datefrom
+        if dateto != "":
+            # Allows displaying search string in text box
+            context_dict['dateto']= dateto
+        if datefrom:
+            try:
+                bills = bills.filter(project_date__gte = datetime.date(int(datefrom[0:4]), int(datefrom[4:6]), int(datefrom[6:8])))
+            except:
+                bills = bills.none()
+        if dateto:
+            try:
+                bills = bills.filter(project_date__lte = datetime.date(int(dateto[0:4]), int(dateto[4:6]), int(dateto[6:8])))
+            except:
+                bills = bills.none()
+    
 
-    context_dict['all_projects']= all_projects
+    context_dict['bills']= bills
 
     return render(request, 'imaging_system_app/projects.html', context=context_dict)
 
@@ -56,6 +93,16 @@ def customers(request):
     context_dict={}
 
     customers = Customer.objects.all()
+    
+    # search 'cust_name', 'cust_tel_no', 'cust_email', 'cust_budget_code'
+    if request.method == 'POST':
+        q = request.POST.get('query')
+        if q != "":
+            # Allows displaying search string in text box
+            context_dict['q']= q
+        if q:
+            customers = Customer.objects.filter(Q(cust_name__icontains=q) | Q(cust_tel_no__icontains=q) | Q(cust_email__icontains=q) | Q(cust_budget_code__icontains=q))
+        
     customers.order_by("cust_id")
 
     context_dict['customers']= customers
@@ -101,8 +148,71 @@ def bills(request):
     context_dict={}
 
     bills = Bill.objects.all()
+    
+    # search 'cust_id__cust_name', date filter
+    if request.method == 'POST':
+        q = request.POST.get('query')
+        datefrom = request.POST.get('project_from')
+        dateto = request.POST.get('project_to')
+        if q != "":
+            # Allows displaying search string in text box
+            context_dict['q']= q
+        if q:
+            bills = Bill.objects.filter(cust_id__cust_name__icontains = q)
+        if datefrom != "":
+            # Allows displaying search string in text box
+            context_dict['datefrom']= datefrom
+        if dateto != "":
+            # Allows displaying search string in text box
+            context_dict['dateto']= dateto
+        if datefrom:
+            try:
+                bills = bills.filter(project_date__gte = (datetime.dateint(datefrom[0:4]), int(datefrom[4:6]), int(datefrom[6:8])))
+            except:
+                bills = bills.none()
+        if dateto:
+            try:
+                bills = bills.filter(project_date__lte = datetime.date(int(dateto[0:4]), int(dateto[4:6]), int(dateto[6:8])))
+            except:
+                bills = bills.none()
+                
     bills.order_by("bill_id")
 
     context_dict['bills']= bills
 
     return render(request, 'imaging_system_app/bills.html', context=context_dict)
+    
+def queries(request):
+    # sample view for queries in imaging_system_app/queries/
+    context_dict={}
+    projects = Project.objects.all()
+    if request.method == 'POST':
+        query = request.POST.get('project_customer')
+        datefrom = request.POST.get('project_from')
+        dateto = request.POST.get('project_to')
+        if query != "":
+            # Allows displaying search string in text box
+            context_dict['query']= query
+        if query:
+            projects = Project.objects.filter(cust_id__cust_name__icontains = query)
+            
+        if datefrom != "":
+            # Allows displaying search string in text box
+            context_dict['datefrom']= datefrom
+        if dateto != "":
+            # Allows displaying search string in text box
+            context_dict['dateto']= dateto
+        if datefrom:
+            try:
+                projects = projects.filter(project_date__gte = datetime.date(int(datefrom[0:4]), int(datefrom[4:6]), int(datefrom[6:8])))
+            except:
+                projects = projects.none()
+        if dateto:
+            try:
+                projects = projects.filter(project_date__lte = datetime.date(int(dateto[0:4]), int(dateto[4:6]), int(dateto[6:8])))
+            except:
+                projects = projects.none()
+        
+        
+    context_dict['projects']= projects
+    return render(request, 'imaging_system_app/queries.html', context=context_dict)
