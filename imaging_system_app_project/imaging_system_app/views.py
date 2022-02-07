@@ -12,6 +12,8 @@ from imaging_system_app.models import Services, Customer, Worker, Project, Worke
 
 def index(request):
     context_dict = {}
+    bill = ProjectBillBridge.objects.filter(bill_id = 1)
+    print(bill.values_list('bill_id', flat=True))
     return render(request, 'imaging_system_app/index.html', context=context_dict)
 
 def services(request):
@@ -54,8 +56,8 @@ def projects(request):
     context_dict={}
 
     
-    bills = Project.objects.all()
-    #bills.order_by(project_date)
+    all_projects = Project.objects.all()
+    all_projects.order_by("project_date")
     
     # search 'cust_id__cust_name', date filter
     if request.method == 'POST':
@@ -66,7 +68,7 @@ def projects(request):
             # Allows displaying search string in text box
             context_dict['q']= q
         if q:
-            bills = Project.objects.filter(cust_id__cust_name__icontains = q)
+            all_projects = Project.objects.filter(cust_id__cust_name__icontains = q)
         if datefrom != "":
             # Allows displaying search string in text box
             context_dict['datefrom']= datefrom
@@ -75,17 +77,17 @@ def projects(request):
             context_dict['dateto']= dateto
         if datefrom:
             try:
-                bills = bills.filter(project_date__gte = datetime.date(int(datefrom[0:4]), int(datefrom[4:6]), int(datefrom[6:8])))
+                all_projects  = all_projects.filter(project_date__gte = datetime.date(int(datefrom[0:4]), int(datefrom[4:6]), int(datefrom[6:8])))
             except:
-                bills = bills.none()
+                all_projects  = all_projects.none()
         if dateto:
             try:
-                bills = bills.filter(project_date__lte = datetime.date(int(dateto[0:4]), int(dateto[4:6]), int(dateto[6:8])))
+                all_projects  = all_projects.filter(project_date__lte = datetime.date(int(dateto[0:4]), int(dateto[4:6]), int(dateto[6:8])))
             except:
-                bills = bills.none()
+                all_projects = all_projects.none()
     
 
-    context_dict['bills']= bills
+    context_dict['all_projects']= all_projects
 
     return render(request, 'imaging_system_app/projects.html', context=context_dict)
 
