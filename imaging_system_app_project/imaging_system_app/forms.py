@@ -1,6 +1,7 @@
 from django import forms
 from imaging_system_app.models import Customer, Worker, Services, Bill, ProjectBillDetails, ProjectBillBridge, Project, WorkerProjectBridge
 from django.utils import timezone
+import datetime
 
 
 class ServicesForm(forms.ModelForm):
@@ -46,10 +47,13 @@ class WorkerForm(forms.ModelForm):
                                     help_text = "Worker tel. no")
     worker_email = forms.CharField(max_length = 100,
                                    help_text = "Worker email address")
+    cust_id = forms.ModelChoiceField(queryset = Customer.objects.all(),
+                                     help_text = "Customer Company")
     
     class Meta:
         model = Worker
-        fields = ('worker_name', 'worker_tel_no', 'worker_email', )
+        fields = ('worker_name', 'worker_tel_no', 'worker_email', 'cust_id', )
+
 
 
 class ProjectForm(forms.ModelForm):
@@ -61,7 +65,7 @@ class ProjectForm(forms.ModelForm):
         ]
     
     project_date = forms.DateField(help_text = "Date",
-                                   widget = forms.SelectDateWidget(years=range(2000, 2100)))
+                                   widget = forms.SelectDateWidget(years=range(2000, 2100)), initial=datetime.date.today)
     status = forms.ChoiceField(choices = STATUS_CHOICES,
                                help_text = "Status")
     num_samples = forms.IntegerField(help_text = "Number of Samples",
@@ -125,7 +129,7 @@ class WorkerProjectBridgeForm(forms.ModelForm):
 
 class BillForm(forms.ModelForm):
     billing_date = forms.DateField(widget = forms.SelectDateWidget(years=range(2000, 2100)),
-                                   help_text = "Date")
+                                   help_text = "Date", initial=datetime.date.today)
     billing_address = forms.CharField(max_length = 100,
                                       help_text = "Billing Address")
     total_cost = forms.FloatField(help_text = "Total Cost",

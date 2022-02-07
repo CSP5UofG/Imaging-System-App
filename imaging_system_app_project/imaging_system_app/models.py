@@ -131,6 +131,9 @@ class ProjectBillDetails(models.Model):
     
     total = models.FloatField()
     
+    def get_total(self):
+        self.total = 0
+    
     def get_fields(self):
         return [(field.name, field.value_to_string(self)) for field in self._meta.fields]
     

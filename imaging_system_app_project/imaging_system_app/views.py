@@ -92,37 +92,91 @@ def projectDetails(request, project_id):
     context_dict={}
     context_dict['project'] = ProjectBillDetails.objects.get(project_id = project_id)
     context_dict['workers'] = WorkerProjectBridge.objects.filter(project_id = project_id)
-    print(ProjectBillDetails.objects.get(project_id = project_id).get_fields())
     return render(request, 'imaging_system_app/projectdetails.html', context=context_dict)
+
 
 def editProject(request, project_id):
     context_dict={}
     try:
         project = ProjectBillDetails.objects.get(project_id = project_id)
+        context_dict['project'] = project
+        worker = WorkerProjectBridge.objects.filter(project_id = project_id).first().worker_id
+        context_dict['workers'] = worker
     except ProjectBillDetails.DoesNotExist:
         project = None
     
     if project is None:
         return redirect('/imaging_system_app/')
         
-    context_dict['project'] = ProjectBillDetails.objects.get(project_id = project_id)
-    context_dict['workers'] = WorkerProjectBridge.objects.filter(project_id = project_id)
     #fill new form with current instance
+    customerform = CustomerForm(request.POST or None, instance=project.project_id.cust_id)
+    workerform = WorkerForm(request.POST or None, instance=worker)
     projectform = ProjectForm(request.POST or None, instance=project.project_id)
     projectbilldetailsform = ProjectBillDetailsForm(request.POST or None, instance=project)
+    context_dict['customerform'] = customerform
+    context_dict['workerform'] = workerform
     context_dict['projectform'] = projectform
     context_dict['projectbilldetailsform'] = projectbilldetailsform
     
     if request.method == 'POST':
+        customerupdate = CustomerForm(request.POST)
+        workerupdate = WorkerForm(request.POST)
         projectupdate = ProjectForm(request.POST)
         projectbilldetailsupdate = ProjectBillDetailsForm(request.POST)
     
         
-        if projectupdate.is_valid() and projectbilldetailsupdate.is_valid():
+        if customerupdate.is_valid() and workerupdate.is_valid() and projectupdate.is_valid() and projectbilldetailsupdate.is_valid():
+            customerupdate.save()
+            workerupdate.save()
             projectform.save()
             projectbilldetailsform.save()
             return redirect(reverse('imaging_system_app:project-details', kwargs={"project_id": project_id}))
     return render(request, 'imaging_system_app/editProject.html', context=context_dict)
+
+
+def addProject(request):
+    context_dict = {}
+    
+    customerform = CustomerForm
+    workerform = WorkerForm
+    projectform = ProjectForm
+    projectbilldetailsform = ProjectBillDetailsForm
+    
+    context_dict['customerform'] = customerform
+    context_dict['workerform'] = workerform
+    context_dict['projectform'] = projectform
+    context_dict['projectbilldetailsform'] = projectbilldetailsform
+    
+    if request.method == 'POST':
+        customerform = CustomerForm(request.POST)
+        workerform = WorkerForm(request.POST)
+        projectform = ProjectForm(request.POST)
+        projectbilldetailsform = ProjectBillDetailsForm(request.POST)
+        
+        worker = workerform.instance
+        project = projectform.instance
+        projectbilldetails = projectbilldetailsform.instance
+        
+        if customerform.is_valid():
+            customer = customerform.save()
+            
+            # add customer to Worker object
+            worker.cust_id = customer
+            # add customer to Project object
+            project.cust_id = customer
+            if workerform.is_valid():
+                worker.save()
+                if projectform.is_valid():
+                    project.save()
+                    # add project and worker to WorkerProjectBridge
+                    WorkerProjectBridge.objects.create(worker_id=worker, project_id=project)
+                    # add project to ProjectBillDetails object
+                    projectbilldetails.project_id = project
+                    if projectbilldetailsform.is_valid():
+                        projectbilldetails.get_total()
+                        projectbilldetails.save()
+                        return redirect(reverse('imaging_system_app:projects'))
+    return render(request, 'imaging_system_app/addProject.html', context=context_dict)
 
 def customers(request):
     context_dict={}
