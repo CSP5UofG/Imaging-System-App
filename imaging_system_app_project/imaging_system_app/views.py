@@ -108,6 +108,62 @@ def customers(request):
     context_dict['customers']= customers
 
     return render(request, 'imaging_system_app/customers.html', context=context_dict)
+    
+def customerDetails(request, cust_id):
+    context_dict={}
+    context_dict['customer']= Customer.objects.get(cust_id = cust_id)
+    context_dict['workers']= Worker.objects.filter(cust_id = cust_id)
+    context_dict['projects']= ProjectBillDetails.objects.filter(project_id__cust_id = cust_id)
+    context_dict['bills']= Bill.objects.filter(cust_id = cust_id)
+
+    return render(request, 'imaging_system_app/customerdetails.html', context=context_dict)
+
+def editCustomer(request, cust_id):
+    context_dict={}
+    try:
+        customer = Customer.objects.get(cust_id = cust_id)
+    except Customer.DoesNotExist:
+        customer = None
+    
+    if customer is None:
+        return redirect('/imaging_system_app/')
+    
+    context_dict['customer']= customer
+    #fill new form with current instance
+    form = CustomerForm(request.POST or None, instance=customer)
+    context_dict['form'] = form
+    
+    if request.method == 'POST':
+        update = CustomerForm(request.POST)
+        
+        if update.is_valid():
+            new_customer = form.save()
+            return redirect(reverse('imaging_system_app:customerdetails', kwargs={"cust_id": cust_id}))
+    return render(request, 'imaging_system_app/editCustomer.html', context=context_dict)
+
+def editWorker(request, worker_id):
+    context_dict={}
+    try:
+        worker = Worker.objects.get(worker_id = worker_id)
+    except Worker.DoesNotExist:
+        worker = None
+    
+    if worker is None:
+        return redirect('/imaging_system_app/')
+    
+    context_dict['worker']= worker
+    cust_id = worker.cust_id.cust_id
+    #fill new form with current instance
+    form = WorkerForm(request.POST or None, instance=worker)
+    context_dict['form'] = form
+    
+    if request.method == 'POST':
+        update = WorkerForm(request.POST)
+        
+        if update.is_valid():
+            new_worker = form.save()
+            return redirect(reverse('imaging_system_app:customerdetails', kwargs={"cust_id": cust_id}))
+    return render(request, 'imaging_system_app/editWorker.html', context=context_dict)
 
 def addCustomer(request):
     form = CustomerForm
@@ -120,28 +176,6 @@ def addCustomer(request):
             new_customer = form.save()
             return redirect(reverse('imaging_system_app:customers'))
     return render(request, 'imaging_system_app/addCustomer.html', context=context_dict)
-
-def editCustomer(request):
-    #find the walk object to edit
-    try:
-        customer = Customer.objects.order_by('cust_id')[:1].first()
-    except Customer.DoesNotExist:
-        customer = None
-    
-    if customer is None:
-        return redirect('/imaging_system_app/')
-    
-    #fill new form with current instance
-    form = CustomerForm(request.POST or None, instance=customer)
-    context_dict={'form': form}
-    
-    if request.method == 'POST':
-        update = CustomerForm(request.POST)
-        
-        if update.is_valid():
-            new_customer = form.save()
-            return redirect(reverse('imaging_system_app:customers'))
-    return render(request, 'imaging_system_app/editCustomer.html', context=context_dict)
 
 
 def bills(request):
