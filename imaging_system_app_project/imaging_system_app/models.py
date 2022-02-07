@@ -78,6 +78,8 @@ class Project(models.Model):
     comments_results = models.CharField(max_length = 500, blank=True)
     status = models.IntegerField(choices = STATUS_CHOICES, default = 0) # prep section image bill
     
+    def get_fields(self):
+        return [(field.name, field.value_to_string(self)) for field in self._meta.fields]
     
     def __str__(self):
         return str(self.project_id) + " ordered by: " + str(self.cust_id)
@@ -128,6 +130,9 @@ class ProjectBillDetails(models.Model):
     extra3_cost = models.FloatField(blank=True, null = True)
     
     total = models.FloatField()
+    
+    def get_fields(self):
+        return [(field.name, field.value_to_string(self)) for field in self._meta.fields]
     
     def __str__(self):
         return "Prjoect bill: " + str(self.project_bill_id) + " - " + str(self.total)

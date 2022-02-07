@@ -53,7 +53,6 @@ def addService(request):
 def projects(request):
     context_dict={}
 
-    
     all_projects = Project.objects.all()
     all_projects.order_by("project_date")
     
@@ -88,6 +87,42 @@ def projects(request):
     context_dict['all_projects']= all_projects
 
     return render(request, 'imaging_system_app/projects.html', context=context_dict)
+
+def projectDetails(request, project_id):
+    context_dict={}
+    context_dict['project'] = ProjectBillDetails.objects.get(project_id = project_id)
+    context_dict['workers'] = WorkerProjectBridge.objects.filter(project_id = project_id)
+    print(ProjectBillDetails.objects.get(project_id = project_id).get_fields())
+    return render(request, 'imaging_system_app/projectdetails.html', context=context_dict)
+
+def editProject(request, project_id):
+    context_dict={}
+    try:
+        project = ProjectBillDetails.objects.get(project_id = project_id)
+    except ProjectBillDetails.DoesNotExist:
+        project = None
+    
+    if project is None:
+        return redirect('/imaging_system_app/')
+        
+    context_dict['project'] = ProjectBillDetails.objects.get(project_id = project_id)
+    context_dict['workers'] = WorkerProjectBridge.objects.filter(project_id = project_id)
+    #fill new form with current instance
+    projectform = ProjectForm(request.POST or None, instance=project.project_id)
+    projectbilldetailsform = ProjectBillDetailsForm(request.POST or None, instance=project)
+    context_dict['projectform'] = projectform
+    context_dict['projectbilldetailsform'] = projectbilldetailsform
+    
+    if request.method == 'POST':
+        projectupdate = ProjectForm(request.POST)
+        projectbilldetailsupdate = ProjectBillDetailsForm(request.POST)
+    
+        
+        if projectupdate.is_valid() and projectbilldetailsupdate.is_valid():
+            projectform.save()
+            projectbilldetailsform.save()
+            return redirect(reverse('imaging_system_app:project-details', kwargs={"project_id": project_id}))
+    return render(request, 'imaging_system_app/editProject.html', context=context_dict)
 
 def customers(request):
     context_dict={}
@@ -138,7 +173,7 @@ def editCustomer(request, cust_id):
         
         if update.is_valid():
             new_customer = form.save()
-            return redirect(reverse('imaging_system_app:customerdetails', kwargs={"cust_id": cust_id}))
+            return redirect(reverse('imaging_system_app:customer-details', kwargs={"cust_id": cust_id}))
     return render(request, 'imaging_system_app/editCustomer.html', context=context_dict)
 
 def editWorker(request, worker_id):
