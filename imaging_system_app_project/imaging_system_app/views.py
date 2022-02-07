@@ -12,8 +12,6 @@ from imaging_system_app.models import Services, Customer, Worker, Project, Worke
 
 def index(request):
     context_dict = {}
-    bill = ProjectBillBridge.objects.filter(bill_id = 1)
-    print(bill.values_list('bill_id', flat=True))
     return render(request, 'imaging_system_app/index.html', context=context_dict)
 
 def services(request):
