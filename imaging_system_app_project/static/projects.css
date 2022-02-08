@@ -51,7 +51,7 @@
 }
 
 
-#view_project{
+.table_buttons{
     border-radius: 30px;
     border-color: #0071BC;  
     color: #0071BC;
@@ -61,7 +61,7 @@
     width: 80%;
 }
 
-#view_project:hover {
+.table_buttons:hover {
     width: 90%;
     height: 90%;
 }
