@@ -7,6 +7,7 @@
 
 {% block css_block %}
     <link rel="stylesheet" type="text/css" href="{% static 'content.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'projects.css' %}">
 {% endblock %}
 
 {% block pagetitle %}
@@ -15,24 +16,43 @@
 
 {% block body_block %}  
     <ul class="content_list">
-        {% if bills %}
-            {% for bill in bills %}
-                <div class="content_entries">
-                    <li class="content_entry">
-                        <h2>{{ bill.bill_id}} - {{ bill.billing_date}}- £{{bill.total_cost}} - Customer: {{bill.cust_id}}  <br /> 
-                    </li>
-                </div>
-            {% endfor %}
+    
+        <div class="search_bar">
+            <input type="text" id="search_bar" placeholder="Search bills" id>
+        </div>
 
-        {% else %}
-            <a href="/">
-                <div class="content_entry">
-                    <li>
-                    <strong><h2>There are no bills present.</h2></strong> <br />
-                    </li>
-                </div>
-            </a>
-        {% endif %}
+        <table class="tables">
+            <tr>
+                <th>ID</th>
+                <th>Billing date</th>
+                <th>Customer</th>
+                <th>Total cost</th>
+                <th></th>
+            </tr>
+            {% if bills %}
+                {% for bill in bills %}
+                    
+                    <tr>
+                        <td id="left_corner"> {{ bill.bill_id}}</td>
+                        <td> {{ bill.billing_date}} </td>
+                        <td> {{bill.cust_id}} </td>
+                        <td> £{{bill.total_cost}}</td>
+                        <td> <a href="" class="table_buttons"> Edit</a></td>
+                        <td id="right_corner"> <a href="" class="table_buttons"> View </a></td>
+
+                    </tr>  
+                {% endfor %}
+            
+            {% else %}
+                <a href="/">
+                    <div class="content_entry">
+                        <li>
+                        <strong><h2>There are no bills present.</h2></strong> <br />
+                        </li>
+                    </div>
+                </a>
+            {% endif %}
+
     </ul>
 
 {% endblock %}
