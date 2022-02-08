@@ -60,6 +60,18 @@ def project_details(request):
     context_dict={}
     return render(request, 'imaging_system_app/project_details.html', context=context_dict)
 
+def addProject(request):
+    form = ProjectForm
+    context_dict={'form': form}
+    
+    if request.method == 'POST':
+        form = ProjectForm(request.POST)
+        
+        if form.is_valid():
+            new_project = form.save()
+            return redirect(reverse('imaging_system_app:projects'))
+    return render(request, 'imaging_system_app/addProject.html', context=context_dict)
+
 
 
 
