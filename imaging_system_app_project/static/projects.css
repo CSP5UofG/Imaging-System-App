@@ -66,7 +66,7 @@
     height: 90%;
 }
 
-.new_project{
+.new_entry{
     border-radius: 30px;
     background-color: #A90F9A;
     border-color: #A90F9A;
@@ -80,13 +80,13 @@
     width: 10%;
 }
 
-.new_project:hover{
+.new_entry:hover{
     background-color: #810b75;
     font-size: 17px;
     
 }
 
-.new_project:hover span{
+.new_entry:hover span{
     padding-right: 25px;
     
 }
