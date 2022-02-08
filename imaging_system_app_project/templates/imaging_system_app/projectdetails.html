@@ -1,0 +1,96 @@
+{% extends 'imaging_system_app/base.html' %}
+{% load static %}
+
+{% block title_block %}
+    - {{ project.project_id.cust_id.cust_name }} project {{ project.project_id.project_id }}
+{% endblock %}
+
+{% block css_block %}
+    <link rel="stylesheet" type="text/css" href="{% static 'content.css' %}">
+{% endblock %}
+
+{% block pagetitle %}
+	<h1><strong> {{ project.project_id.cust_id.cust_name }} project {{ project.project_id.project_id }} </strong></h1>
+{% endblock %}
+
+{% block body_block %}
+	<ul class="content_list">
+		<div>
+			<table>
+				<tr>
+					<th>Project date</th>
+					<th>Status</th>
+					<th>Number of samples</th>
+				</tr>
+				<tr>
+					<td>{{ project.project_id.project_date }}</td>
+					<td>{{ project.project_id.get_status_display }}</td>
+					<td>{{ project.project_id.num_samples }}</td>
+				</tr>
+			</table>
+		</div>
+		<div>
+			<table>
+				<tr>
+					<td></td>
+					<th>Name</th>
+					<th>Contact telephone number</th>
+					<th>Email</th>
+				</tr>
+				<tr>
+					<th>Customer</th>
+					<td>{{ project.project_id.cust_id.cust_name }}</td>
+					<td>{{ project.project_id.cust_id.cust_tel_no }}</td>
+					<td>{{ project.project_id.cust_id.email }}</td>
+				</tr>
+				{% for w in workers %}
+					<tr>
+						<th>Worker</th>
+						<td>{{ w.worker_id.worker_name }}</td>
+						<td>{{ w.worker_id.worker_tel_no }}</td>
+						<td>{{ w.worker_id.worker_email }}</td>
+					</tr>
+				{% endfor %}
+			</table>
+		</div>
+		<div>
+			<table>
+				<tr>
+					<th>Budget code</th>
+					<td>{{ project.project_id.cust_id.budget_code }}</td>
+				</tr>
+				<tr>
+					<th>Customer type</th>
+					<td>{{ project.project_id.cust_id.get_cust_type_display }}</td>
+				</tr>
+			</table>
+		</div>
+		<div>
+			<h2>Specimen preparation record</h2>
+			<table>
+				{% for name, value in project.project_id.get_fields %}
+					{% if not name == "project_id" and not name == "cust_id" and not name == "project_date" and not name == "num_samples" and not name == "status" %}
+						<tr>
+							<th>{{ name }}</th>
+							<td>{{ value }}</td>
+						</tr>
+					{% endif %}
+				{% endfor %}
+			</table>
+		</div>
+		<div>
+			<h2>Billing</h2>
+			<table>
+				{% for name, value in project.get_fields %}
+					{% if not name == "project_bill_id" and not name == "project_id" and not value == "None" and value %}
+						<tr>
+							<th>{{ name }}</th>
+							<td>{{ value }}</td>
+						</tr>
+					{% endif %}
+				{% endfor %}
+			</table>
+		</div>
+	</ul>
+
+{% endblock %}

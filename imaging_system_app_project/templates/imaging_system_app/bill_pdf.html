@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html>
+
+<head lang="en">
+
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+    <meta charset="UTF-8" />
+
+    <title>
+        GIF - {{ bill.project_id.cust_id.cust_name }} bill {{ bill.bill_id }}
+    </title>
+
+</head>
+
+<body>
+    <div class="body_block">
+        {% block body_block %}
+		<div id="iii_logo">
+			<img src="{% static 'images/iii_logo.png' %}" type="image/png">
+		</div>
+		<div id="logo">
+			<center>
+			<img src="{% static 'images/logo.png' %}" type="image/png" width="160" height="180">
+			</center>
+		</div>
+		<div>
+			<strong><center><h1>Electron Microsscopy Unit</h1><center></strong>
+		</div>
+		{% if bill.billing_address %}
+			<div>
+				<strong>Invoice to:</strong>
+				</br>
+				{{ bill.cust_id.cust_name }}
+				</br>
+				{{ bill.billing_address }}
+			</div>
+			</br>
+		{% endif %}
+		<div>
+			{% if not bill.billing_address %}
+				Budget holder: {{ bill.cust_id.cust_name }}
+				</br>
+			{% endif %}
+			Period: {{start_date}} to {{end_date}}
+			</br>
+			Budget code: {{ bill.cust_id.budget_code }}
+		</div>
+		</br>
+		<div>
+			<strong>Workers</strong>
+			</br>
+			{% for w in workers %}
+				{{ w.worker_name }}
+				</br>
+			{% endfor %}
+			</br>
+		</div>
+		<div>
+			<table>
+				<tr>
+					<th>Projects</th>
+					<th>Project date</th>
+					<th>Total</th>
+				</tr>
+				{% for p in projectbilldetails %}
+				<tr>
+					<td>{{ p.project_id.project_id }}</td>
+					<td>{{ p.project_id.project_date }}</td>
+					<td>{{ p.total }}</td>
+				{% endfor %}
+				</tr>
+			</table>
+		</div>
+		</br>
+		<div>
+			<table>
+			{% for p in projectbilldetails %}
+				{% for name, value in p.get_fields %}
+					{% if not name == "project_bill_id" and not name == "project_id" and not value == "None" and value and not name == "total"%}
+						<tr>
+							<th>{{ name }}</th>
+							<td>{{ value }}</td>
+						</tr>
+					{% endif %}
+				{% endfor %}
+			{% endfor %}
+			</table>
+		</div>
+		<div>
+			<strong><h1>Grand Total: {{ bill.total_cost }}</h1></strong>
+		</div>
+		{% endblock %}
+	</div>
+</body>
+
+</html>
