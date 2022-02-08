@@ -106,10 +106,12 @@ td{
 .new_entry{
     border-radius: 30px;
     background-color: #A90F9A;
-    padding: 20px;
+    padding: 12.5px;
+    margin-top: 10px;
     text-align: center;
     font-family: 'Poppins';
     font-size: 15px;
+    height: 75%;
     width: 100%;
     flex: 2 3 auto;
 }
