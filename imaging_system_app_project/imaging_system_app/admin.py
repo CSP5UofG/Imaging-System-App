@@ -3,23 +3,14 @@ from django.contrib import admin
 from .models import Customer, Worker, Services, Bill, ProjectBillDetails, ProjectBillBridge, Project, WorkerProjectBridge
 
 class ServicesAdmin(admin.ModelAdmin):
-    list_display = ('cust_type', 'discount', )
+    list_display = ('name', 'normal_price', 'in_house_price', 'outside_price')
 
 
 admin.site.register(Services, ServicesAdmin)
 
 class CustomerAdmin(admin.ModelAdmin):
-    list_display = ('cust_id', 'cust_name', 'cust_tel_no', 'cust_email', 'cust_budget_code', 'get_cust_type', 'get_discount', )
-    list_filter = ('service_id__cust_type', )
+    list_display = ('cust_id', 'cust_name', 'cust_tel_no', 'cust_email', 'cust_budget_code', 'cust_type')
     search_fields = ('cust_name', 'cust_tel_no', 'cust_email', 'cust_budget_code', )
-    def get_cust_type(self, obj): # Allows displaying customer type
-        return obj.service_id.cust_type
-    get_cust_type.admin_order_field  = 'service_id__cust_type'
-    get_cust_type.short_description = 'Customer type'
-    def get_discount(self, obj): # Allows displaying discount
-        return obj.service_id.discount
-    get_discount.admin_order_field  = 'service_id__discount'
-    get_discount.short_description = 'Discount'
 
 admin.site.register(Customer, CustomerAdmin)
 

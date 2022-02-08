@@ -2,63 +2,120 @@
         "model": "imaging_system_app.services",
         "pk": 1,
         "fields": {
-            "cust_type": "Normal",
-            "discount": 1.0,
-            "jeol1200tem_cost": 50.0,
-            "jeol100sem_cost": 55.0,
-            "tem_processing_cost": 100.0,
-            "sectioning_stained_cost": 40.0,
-            "sectioning_contrast_stained_cost": 50.0,
-            "negative_staining_cost": 10.0,
-            "sem_processing_mounting_cost": 100.0,
-            "sem_processing_fd_cost": 200.0,
-            "sem_cost": 40.0,
-            "immunolabelling_cost": 70.0,
-            "cryosectioning_cost": 150.0,
-            "freeze_fracture_cost": 100.0,
-            "ir_white_cost": 80.0
+            "name": "jeol1200tem",
+            "normal_price": 50.0,
+			"in_house_price": 25.0,
+			"outside_price": 75.0
         }
     }, {
         "model": "imaging_system_app.services",
         "pk": 2,
         "fields": {
-            "cust_type": "In-House",
-            "discount": 0.5,
-            "jeol1200tem_cost": 25.0,
-            "jeol100sem_cost": 27.5,
-            "tem_processing_cost": 50.0,
-            "sectioning_stained_cost": 20.0,
-            "sectioning_contrast_stained_cost": 25.0,
-            "negative_staining_cost": 5.0,
-            "sem_processing_mounting_cost": 50.0,
-            "sem_processing_fd_cost": 100.0,
-            "sem_cost": 20.0,
-            "immunolabelling_cost": 35.0,
-            "cryosectioning_cost": 75.0,
-            "freeze_fracture_cost": 50.0,
-            "ir_white_cost": 40.0
+            "name": "jeol100sem",
+            "normal_price": 55.0,
+			"in_house_price": 27.5,
+			"outside_price": 82.5
         }
-    }, {
+    },{
         "model": "imaging_system_app.services",
         "pk": 3,
         "fields": {
-            "cust_type": "Outside",
-            "discount": 2.0,
-            "jeol1200tem_cost": 100.0,
-            "jeol100sem_cost": 110.0,
-            "tem_processing_cost": 200.0,
-            "sectioning_stained_cost": 80.0,
-            "sectioning_contrast_stained_cost": 100.0,
-            "negative_staining_cost": 20.0,
-            "sem_processing_mounting_cost": 200.0,
-            "sem_processing_fd_cost": 400.0,
-            "sem_cost": 80.0,
-            "immunolabelling_cost": 140.0,
-            "cryosectioning_cost": 300.0,
-            "freeze_fracture_cost": 200.0,
-            "ir_white_cost": 160.0
+            "name": "tem processing",
+            "normal_price": 100.0,
+			"in_house_price": 50.0 ,
+			"outside_price": 150.0
+        }
+    },{
+        "model": "imaging_system_app.services",
+        "pk": 4,
+        "fields": {
+            "name": "sectioning stained",
+            "normal_price": 40.0,
+			"in_house_price": 20.0,
+			"outside_price": 60.0
         }
     }, {
+        "model": "imaging_system_app.services",
+        "pk": 5,
+        "fields": {
+            "name": "sectioning contrast stained",
+            "normal_price": 50.0,
+			"in_house_price": 25.0,
+			"outside_price": 75.0
+        }
+    },{
+        "model": "imaging_system_app.services",
+        "pk": 6,
+        "fields": {
+            "name": "negative staining",
+            "normal_price": 10.0,
+			"in_house_price": 5.0,
+			"outside_price": 15.0
+        }
+    },{
+        "model": "imaging_system_app.services",
+        "pk": 7,
+        "fields": {
+            "name": "sem processing mounting",
+            "normal_price": 100.0,
+			"in_house_price": 50.0,
+			"outside_price": 150.0
+        }
+    },{
+        "model": "imaging_system_app.services",
+        "pk": 8,
+        "fields": {
+            "name": "sem processing fd",
+            "normal_price": 200.0,
+			"in_house_price": 100.0,
+			"outside_price": 300.0
+        }
+    },{
+        "model": "imaging_system_app.services",
+        "pk": 9,
+        "fields": {
+            "name": "sem",
+            "normal_price": 40.0,
+			"in_house_price": 20.0,
+			"outside_price": 60.0
+        }
+    },{
+        "model": "imaging_system_app.services",
+        "pk": 11,
+        "fields": {
+            "name": "immunolabelling",
+            "normal_price": 70.0,
+			"in_house_price": 35.0,
+			"outside_price": 105.0
+        }
+    },{
+        "model": "imaging_system_app.services",
+        "pk": 12,
+        "fields": {
+            "name": "cryosectioning",
+            "normal_price": 150,
+			"in_house_price": 75.0,
+			"outside_price": 225.0
+        }
+    },{
+        "model": "imaging_system_app.services",
+        "pk": 13,
+        "fields": {
+            "name": "freeze fracture",
+            "normal_price": 100.0,
+			"in_house_price": 50.0,
+			"outside_price": 50.0
+        }
+    },{
+        "model": "imaging_system_app.services",
+        "pk": 14,
+        "fields": {
+            "name": "ir white",
+            "normal_price": 80.0,
+			"in_house_price": 40.0,
+			"outside_price": 120.0
+        }
+    },{
         "model": "imaging_system_app.customer",
         "pk": 1,
         "fields": {
@@ -66,7 +123,7 @@
             "cust_tel_no": "44734567891",
             "cust_email": "One@dummy-mail.com",
             "cust_budget_code": 102,
-            "service_id": 1
+			"cust_type": 0.5
         }
     }, {
         "model": "imaging_system_app.customer",
@@ -76,7 +133,7 @@
             "cust_tel_no": "44734567891",
             "cust_email": "CompanyTwo@dummy-mail.com",
             "cust_budget_code": 103,
-            "service_id": 1
+			"cust_type": 0.5
         }
     }, {
         "model": "imaging_system_app.customer",
@@ -86,7 +143,7 @@
             "cust_tel_no": "44734567891",
             "cust_email": "ThirdC@dummy-mail.com",
             "cust_budget_code": 112,
-            "service_id": 2
+			"cust_type": 1.0
         }
     }, {
         "model": "imaging_system_app.customer",
@@ -96,7 +153,7 @@
             "cust_tel_no": "44734567891",
             "cust_email": "4company@dummy-mail.com",
             "cust_budget_code": 105,
-            "service_id": 3
+			"cust_type": 1.0
         }
     }, {
         "model": "imaging_system_app.customer",
@@ -106,7 +163,7 @@
             "cust_tel_no": "44734567891",
             "cust_email": "FiveGuys@dummy-mail.com",
             "cust_budget_code": 121,
-            "service_id": 3
+			"cust_type": 1.5
         }
     }, {
         "model": "imaging_system_app.customer",
@@ -116,7 +173,7 @@
             "cust_tel_no": "44734567891",
             "cust_email": "6andCo@dummy-mail.com",
             "cust_budget_code": 116,
-            "service_id": 2
+			"cust_type": 1.5
         }
     }, {
         "model": "imaging_system_app.worker",
