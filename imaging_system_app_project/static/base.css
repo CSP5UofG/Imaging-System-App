@@ -25,6 +25,12 @@
   display: block;
 }
 
+.logo{
+  width:7.5%;
+  height:100%;
+  padding: 0.5%;
+}
+
 .sidenav {
     height: 90%;
     width: 220px;
