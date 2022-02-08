@@ -1,19 +1,4 @@
-.pagetitle{
-    vertical-align: text-top;
-    text-align: center;
-    color:white;
-    width: 15%;
-    height: 8%px;
-    background-color: #0071BC;
-    margin: auto;
-    position: absolute;
-    left: 25%;
-    border-radius: 0 0 10px 10px;
-    font-family: 'Poppins';
-    font-weight: bolder;
-}
-
-.header{
+/*.header{
   position:fixed;
   overflow: auto;
   z-index: 1;
@@ -31,40 +16,108 @@
   padding: 0.5%;
 }
 
-.sidenav {
-    height: 90%;
-    width: 220px;
-    position: fixed;
-    z-index: 1;
-    top: 17%;
-    left: 0;
-    background-color: #0071BC;
-    overflow-x: hidden;
-    padding-top: 1%;
-  }
-  
-.sidenav a {
-    padding: 12px 12px 12px 36px;
-    text-decoration: none;
-    font-size: 25px;
-    color: #ffffff;
-    display: block;
-    transition: 0.1s;
-    font-family: 'Poppins';
-    font-weight: bolder;
-}
 
-a:hover{
-    background-color: white;
-    color:#0071BC;
-}
 
-a:active{
-    background-color: white;
-    color:#0071BC;  
-}
-
-  /* Page content */
+  // Page content
 .body_block {
-    margin-left: 220px; /* Same as the width of the sidenav */
-  }
+    margin-left: 220px; // Same as the width of the sidenav
+  }*/
+
+html{
+  height: 100%;
+}
+
+body{
+  height: 100%;
+  overflow-y: auto;
+  margin: 0px;
+  display: flex;
+  box-sizing: border-box;
+}
+
+.column{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  height: 20%;
+  background-color: #eeeeee;
+}
+
+.side{
+  flex: 10%;
+}
+
+.main{
+  flex:90%;
+}
+
+#left{
+  flex-shrink: 0;
+}
+
+.top-left{
+  flex-shrink: 0;
+}
+
+.top-right {
+  flex-shrink: 0;
+  display: inline-flex;
+}
+
+ul {
+  display: inline-flex;
+  list-style: none;
+}
+
+.bottom {
+  flex-grow: 1;  
+}
+
+.pagetitle{
+  text-align: center;
+  color:white;
+  width: 15%;
+  height: 55%;
+  background-color: #0071BC;
+  border-radius: 0 0 10px 10px;
+  font-family: 'Poppins';
+  font-weight: bolder;
+  margin-left: 10%;
+}
+
+.logo{
+  width:95%;
+  height:95%;
+  margin: 1%;
+}
+
+.sidenav {
+  height: 100%;
+  width: 100%;
+  z-index: 1;
+  background-color: #0071BC;
+}
+
+.sidenav a {
+  padding: 12px 12px 12px 36px;
+  text-decoration: none;
+  font-size: 23px;
+  color: #ffffff;
+  display: block;
+  transition: 0.1s;
+  font-family: 'Poppins';
+  font-weight: bolder;
+}
+
+.sidenav a:hover{
+  background-color: white;
+  color:#0071BC;
+}
+
+.sidenav a:active{
+  background-color: white;
+  color:#0071BC;  
+}

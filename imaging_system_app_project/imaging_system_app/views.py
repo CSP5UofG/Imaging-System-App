@@ -42,6 +42,31 @@ def addService(request):
             return redirect(reverse('imaging_system_app:services'))
     return render(request, 'imaging_system_app/addServices.html', context=context_dict)
 
+def editService(request, pk):
+    #find the walk object to edit
+    try:
+        service = Services.objects.filter(service_id = pk).first()
+    except Services.DoesNotExist:
+        service = None
+    
+    if service is None:
+        return redirect('/imaging_system_app/')
+    
+    #fill new form with current instance
+    form = ServicesForm(request.POST or None, instance=service)
+    context_dict ={'form': form, 'pk': pk}
+    
+    if request.method == 'POST':
+        update = ServicesForm(request.POST)
+        
+        if form.is_valid():
+            new_service = form.save(commit = False)
+            new_service.in_house_price = (new_service.normal_price)/2
+            new_service.outside_price = (new_service.normal_price)*1.5
+            new_service.save()
+            return redirect(reverse('imaging_system_app:services'))
+    return render(request, 'imaging_system_app/editServices.html', context=context_dict)
+
 
 def projects(request):
     context_dict={}

@@ -15,14 +15,17 @@
 {% endblock %}
 
 {% block body_block %}  
-    <ul class="content_list">
+
+    <div class="action_bar">
         <div class="new_entry">
             <a href="/imaging_system_app/add-customer">New customer</a><br />
         </div>
 
         <div class="search_bar">
             <input type="text" id="search_bar" placeholder="Search customers" id>
-        </div>    
+        </div>
+    </div>
+
         <table class="tables">
             <tr>
                 <th>Name</th>
@@ -46,9 +49,7 @@
             {% else %}
                 <a href="/">
                     <div class="content_entry">
-                        <li>
                         <strong><h2>There are no customers yet.</h2></strong> <br />
-                        </li>
                     </div>
                 </a>
             {% endif %}

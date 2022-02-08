@@ -15,11 +15,12 @@
 {% endblock %}
 
 {% block body_block %}  
-    <ul class="content_list">
     
+    <div class="action_bar">
         <div class="search_bar">
             <input type="text" id="search_bar" placeholder="Search bills" id>
         </div>
+    </div>
 
         <table class="tables">
             <tr>
@@ -45,14 +46,9 @@
             
             {% else %}
                 <a href="/">
-                    <div class="content_entry">
-                        <li>
                         <strong><h2>There are no bills present.</h2></strong> <br />
-                        </li>
-                    </div>
                 </a>
             {% endif %}
 
-    </ul>
 
 {% endblock %}

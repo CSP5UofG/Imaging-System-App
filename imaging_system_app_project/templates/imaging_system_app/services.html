@@ -6,57 +6,52 @@
 {% endblock %}
 
 {% block css_block %}
-	<link rel="stylesheet" type="text/css" href="{% static 'content.css' %}">
-	<link rel="stylesheet" type="text/css" href="{% static 'projects.css' %}">  
+<link rel="stylesheet" type="text/css" href="{% static 'content.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'projects.css' %}">
 {% endblock %}
 
 {% block pagetitle %}
-	<h1><strong> Services </strong></h1>
+<h1><strong> Services </strong></h1>
 {% endblock %}
 
 {% block body_block %}
-<ul class="content_list">
+
+<div class="action_bar">
 	<div class="new_entry">
 		<a href="">New service</a><br />
 	</div>
 
 	<div class="search_bar">
 		<input type="text" id="search_bar" placeholder="Search services" id>
-	</div>    
+	</div>
+</div>
 
-    <div class="content_entries">
-        <li class="content_entry">
-			{% if services %}
-				<table class="tables">
-					<tr>
-						<th>Name</th>
-						<th>In-House</th>
-						<th>Normal</th>
-						<th>Outside</th>
-					</tr>
-					{% for s in services %}
-						<tr>
-							<td id="left_corner">{{ s.name }}</td>
-							<td>{{ s.in_house_price }}</td>
-							<td>{{ s.normal_price }}</td>
-							<td>{{ s.outside_price }}</td>
-							<td> <a href="" class="table_buttons"> Edit</a></td>
-                        	<td id="right_corner"> <a href="" class="table_buttons"> View </a></td>
-						</tr>
-					{% endfor %}
-				</table>
-				
-			{% else %}
-			<a href="/">
-				<div class="content_entry">
-					<li>
-						<strong>
-							<h2>There are no services present.</h2>
-						</strong> <br />
-					</li>
-				</div>
-			</a>
-			{% endif %}
-</ul>
+	{% if services %}
+	<table class="tables">
+		<tr>
+			<th>Name</th>
+			<th>In-House</th>
+			<th>Normal</th>
+			<th>Outside</th>
+		</tr>
+		{% for s in services %}
+		<tr>
+			<td id="left_corner">{{ s.name }}</td>
+			<td>{{ s.in_house_price }}</td>
+			<td>{{ s.normal_price }}</td>
+			<td>{{ s.outside_price }}</td>
+			<td> <a href="{% url 'imaging_system_app:edit-service' s.service_id %}" class="table_buttons"> Edit</a>
+			</td>
+			<td id="right_corner"> <a href="" class="table_buttons"> View </a></td>
+		</tr>
+		{% endfor %}
+	</table>
+	{% else %}
+	<a href="/">
+			<strong>
+				<h2>There are no services present.</h2>
+			</strong> <br />
+	</a>
+	{% endif %}
 
-{% endblock %}
+	{% endblock %}
