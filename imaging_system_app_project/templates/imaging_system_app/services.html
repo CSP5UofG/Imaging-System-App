@@ -6,7 +6,8 @@
 {% endblock %}
 
 {% block css_block %}
-<link rel="stylesheet" type="text/css" href="{% static 'content.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'content.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'projects.css' %}">  
 {% endblock %}
 
 {% block pagetitle %}
@@ -15,11 +16,18 @@
 
 {% block body_block %}
 <ul class="content_list">
+	<div class="new_entry">
+		<a href="">New service</a><br />
+	</div>
+
+	<div class="search_bar">
+		<input type="text" id="search_bar" placeholder="Search services" id>
+	</div>    
 
     <div class="content_entries">
         <li class="content_entry">
 			{% if services %}
-				<table>
+				<table class="tables">
 					<tr>
 						<th>Name</th>
 						<th>In-House</th>
@@ -28,10 +36,12 @@
 					</tr>
 					{% for s in services %}
 						<tr>
-							<td>{{ s.name }}</td>
+							<td id="left_corner">{{ s.name }}</td>
 							<td>{{ s.in_house_price }}</td>
 							<td>{{ s.normal_price }}</td>
 							<td>{{ s.outside_price }}</td>
+							<td> <a href="" class="table_buttons"> Edit</a></td>
+                        	<td id="right_corner"> <a href="" class="table_buttons"> View </a></td>
 						</tr>
 					{% endfor %}
 				</table>
