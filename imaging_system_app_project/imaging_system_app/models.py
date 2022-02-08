@@ -6,36 +6,31 @@ from django.utils import timezone
     
 class Services(models.Model):
     service_id = models.AutoField(primary_key = True)
-    cust_type = models.CharField(max_length = 100)
-    discount = models.FloatField()
-    jeol1200tem_cost = models.FloatField()
-    jeol100sem_cost = models.FloatField()
-    tem_processing_cost = models.FloatField()
-    sectioning_stained_cost = models.FloatField()
-    sectioning_contrast_stained_cost = models.FloatField()
-    negative_staining_cost = models.FloatField()
-    sem_processing_mounting_cost = models.FloatField()
-    sem_processing_fd_cost = models.FloatField()
-    sem_cost = models.FloatField()
-    immunolabelling_cost = models.FloatField()
-    cryosectioning_cost = models.FloatField()
-    freeze_fracture_cost = models.FloatField()
-    ir_white_cost = models.FloatField()
-    
+    name = models.CharField(max_length = 100)
+    normal_price = models.FloatField()
+    in_house_price = models.FloatField()
+    outside_price = models.FloatField()
+
     def __str__(self):
-        return str(self.service_id) + " - " + str(self.cust_type)
+        return str(self.service_id) + " - " + str(self.name)
     
     class Meta:
         verbose_name_plural = 'Services'
 
 
 class Customer(models.Model):
+    DISCOUNT_CHOICES = [
+        (0.5, 'In-House'),
+        (1.0, 'Normal'),
+        (1.5, 'Outside')
+    ]
+        
     cust_id = models.AutoField(primary_key = True)
     cust_name = models.CharField(max_length = 100)
     cust_tel_no = models.CharField(max_length = 11) #specify if numbers can be international
     cust_email = models.CharField(max_length = 100)
     cust_budget_code = models.IntegerField()
-    service_id = models.ForeignKey(Services, on_delete=models.CASCADE, default=None)
+    cust_type = models.FloatField(choices = DISCOUNT_CHOICES, default = 1)
     
     def __str__(self):
         return str(self.cust_id) + " " + str(self.cust_name)
