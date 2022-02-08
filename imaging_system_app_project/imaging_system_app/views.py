@@ -13,6 +13,8 @@ from imaging_system_app.models import Services, Customer, Worker, Project, Worke
 
 def index(request):
     context_dict = {}
+    context_dict['projects'] = Project.objects.order_by('-project_date')[:5]
+    context_dict['bills'] = Bill.objects.order_by('-billing_date')[:5]
     return render(request, 'imaging_system_app/index.html', context=context_dict)
 
 def services(request):
