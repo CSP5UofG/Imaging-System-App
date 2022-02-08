@@ -6,7 +6,6 @@
 {% endblock %}
 
 {% block css_block %}
-<link rel="stylesheet" type="text/css" href="{% static 'projects.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'content.css' %}">
 <script type="text/javascript" src="{% static 'javascript/sortTable.js' %}"></script>
 {% endblock %}
@@ -18,27 +17,6 @@
 
 
 {% block body_block %}
-
-<!-- {% if all_projects %}
-            {% for p in all_projects %}
-                <div class="content_entries">
-                    <li class="content_entry">
-                        <h2>{{ p.project_date}} - {{ p.cust_id.cust_name}}- {{p.num_samples}} samples - {{p.get_status_display}} </h2> <br>  
-                    </li>
-                </div>
-            {% endfor %}
-
-        {% else %}
-            <a href="/">
-                <div class="content_entry">
-                    <li>
-                    <strong><h2>There are no projects present.</h2></strong> <br>
-                    </li>
-                </div>
-            </a>
-        {% endif %} -->
-
-
 <div class="action_bar">
     <div class="new_entry">
         <a href="/imaging_system_app/add-project">New project</a><br />
