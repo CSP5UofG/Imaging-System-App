@@ -6,7 +6,9 @@
 {% endblock %}
 
 {% block css_block %}
-    <link rel="stylesheet" type="text/css" href="{% static 'content.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'projects.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'content.css' %}">
+<script type="text/javascript" src="{% static 'javascript/sortTable.js' %}"></script>
 {% endblock %}
 
 {% block pagetitle %}
@@ -18,7 +20,7 @@
 {% block body_block %}  
 
     <ul class="content_list">
-        {% if all_projects %}
+        <!-- {% if all_projects %}
             {% for p in all_projects %}
                 <div class="content_entries">
                     <li class="content_entry">
@@ -35,7 +37,45 @@
                     </li>
                 </div>
             </a>
-        {% endif %}
+        {% endif %} -->
+
+        <div>
+            <button class="new_project">New project</button>
+        </div>
+        <div class="search_bar">
+            <input type="text" id="search_bar" placeholder="Search.." id>
+        </div>    
+        <table id="all_projects">
+            <tr>
+                <th onclick="sortTable(0)">Date</th>
+                <th onclick="sortTable(1)">Customer</th>
+                <th onclick="sortTable(2)">Number of samples</th>
+                <th onclick="sortTable(3)">Status </th>
+                <th></th>
+            </tr>
+
+            {% if all_projects %}
+                {% for p in all_projects %}
+                        <tr>
+                            <td id="left_corner"> {{p.project_date}} </td>
+                            <td> {{p.cust_id.cust_name}} </td>
+                            <td> {{p.num_samples}} </td>
+                            <td> {{p.get_status_display}} </td>
+                            <td id="right_corner"> <button type="button" id="view_project"> View details </button> </td>
+                        </tr>  
+                {% endfor %}        
+
+            {% else %}
+                <a href="/">
+                    <div class="content_entry">
+                        <li>
+                        <strong><h2>There are no projects present.</h2></strong> <br>
+                        </li>
+                    </div>
+                </a>         
+            {% endif %}     
+        </table>
+
     </ul>
 
 {% endblock %}
