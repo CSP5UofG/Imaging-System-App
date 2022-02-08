@@ -97,10 +97,10 @@ def addCustomer(request):
             return redirect(reverse('imaging_system_app:customers'))
     return render(request, 'imaging_system_app/addCustomer.html', context=context_dict)
 
-def editCustomer(request):
+def editCustomer(request, pk):
     #find the walk object to edit
     try:
-        customer = Customer.objects.order_by('cust_id')[:1].first()
+        customer = Customer.objects.filter(cust_id = pk).first()
     except Customer.DoesNotExist:
         customer = None
     
@@ -109,7 +109,7 @@ def editCustomer(request):
     
     #fill new form with current instance
     form = CustomerForm(request.POST or None, instance=customer)
-    context_dict={'form': form}
+    context_dict ={'form': form, 'pk': pk}
     
     if request.method == 'POST':
         update = CustomerForm(request.POST)
