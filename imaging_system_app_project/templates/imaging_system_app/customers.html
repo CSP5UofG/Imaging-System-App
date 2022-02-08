@@ -17,9 +17,10 @@
 
 {% block body_block %}  
     <ul class="content_list">
-        <div>
-            <button class="new_entry">New customer</button>
+        <div class="new_entry">
+            <a href="/imaging_system_app/add-customer">New customer</a><br />
         </div>
+
         <div class="search_bar">
             <input type="text" id="search_bar" placeholder="Search customers" id>
         </div>    
@@ -37,7 +38,7 @@
                         <td id="left_corner"> {{ c.cust_name}}</td>
                         <td> +{{c.cust_tel_no}} </td>
                         <td> {{c.cust_budget_code}} </td>
-                        <td id="right_corner"> <button type="button" class="table_buttons"> Edit customer </button></td>
+                        <td id="right_corner"> <a href="/imaging_system_app/edit-customer" class="table_buttons"> Edit customer </button></td>
                     </tr>  
                 {% endfor %}
 

@@ -52,10 +52,10 @@
 
 
 .table_buttons{
+    padding: 3px;
     border-radius: 30px;
     border-color: #0071BC;  
     color: #0071BC;
-    padding: 3px;
     font-family: 'Poppins';
     font-size: 15px;
     width: 80%;
@@ -69,15 +69,23 @@
 .new_entry{
     border-radius: 30px;
     background-color: #A90F9A;
-    border-color: #A90F9A;
-    color: white;
     padding: 10px;
+    text-align: center;
     font-family: 'Poppins';
     font-size: 15px;
     left: 25%;
     top: 22%;
     position: fixed;
     width: 10%;
+}
+
+.new_entry a{
+    color: white;
+    text-decoration: none;
+}
+.new_entry a :hover{
+    color: white;
+    background-color: #810b75;
 }
 
 .new_entry:hover{
