@@ -1,4 +1,4 @@
-#all_projects{
+.tables{
     width: 60%;
     position:fixed;
     left: 25%;
@@ -8,7 +8,7 @@
     overflow-y: scroll;
 }
 
-#all_projects td {
+.tables td {
     width: max-content + 10%;
     height: 20%;
    
@@ -24,12 +24,12 @@
     
 }
 
-#all_projects tr {
+.tables tr {
     border-radius: 30px;
 }
 
 
-#all_projects th{
+.tables th{
     width: max-content;
     padding-top: 12px ;
     padding-bottom: 12px;

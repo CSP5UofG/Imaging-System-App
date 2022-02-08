@@ -7,6 +7,8 @@
 
 {% block css_block %}
     <link rel="stylesheet" type="text/css" href="{% static 'content.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'projects.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'content.css' %}">   
 {% endblock %}
 
 {% block pagetitle %}
@@ -15,7 +17,7 @@
 
 {% block body_block %}  
     <ul class="content_list">
-        <table id="all_projects">
+        <table class="tables">
             <tr>
                 <th>Name</th>
                 <th>Telephone number</th>
