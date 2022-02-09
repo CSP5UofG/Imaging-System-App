@@ -2,11 +2,37 @@
 {% load static %}
 
 {% block title_block %}
- Project {{ project.project_id.project_id }}
+Project {{ project.project_id.project_id }}
 {% endblock %}
 
 {% block css_block %}
 <link rel="stylesheet" type="text/css" href="{% static 'content.css' %}">
+
+<style>
+    .project_info {
+        margin-left: 5%;
+        margin-top: 2.5%;
+        background-color: #cccccc;
+        width: 80%;
+        text-align: center;
+        border: 5px solid #cccccc;
+        border-radius: 10px;
+        display: flex;
+        font-family: 'Poppins';
+    }
+
+    .project_info_column {
+        height: 100%;
+        flex-direction: column;
+        flex: 1 1 auto;
+        text-align: center;
+    }
+
+    .project_info_header {
+        font-weight: bold;
+    }
+</style>
+
 {% endblock %}
 
 {% block pagetitle %}
@@ -14,57 +40,61 @@
 {% endblock %}
 
 {% block body_block %}
-<div>
-    <table>
-        <tr>
-            <th>Project date</th>
-            <th>Status</th>
-            <th>Number of samples</th>
-        </tr>
-        <tr>
-            <td>{{ project.project_id.project_date }}</td>
-            <td>{{ project.project_id.get_status_display }}</td>
-            <td>{{ project.project_id.num_samples }}</td>
-        </tr>
-    </table>
+<div class="project_info">
+    <div class="project_info_column">
+        <div class="project_info_header">Project date</div>
+        <div>{{ project.project_id.project_date }}</div>
+    </div>
+    <div class="project_info_column">
+        <div class="project_info_header">Status</div>
+        <div>{{ project.project_id.get_status_display }}</div>
+    </div>
+    <div class="project_info_column">
+        <div class="project_info_header">Number of samples</div>
+        <div>{{ project.project_id.num_samples }}</div>
+    </div>
 </div>
-<div>
-    <table>
-        <tr>
-            <td></td>
-            <th>Name</th>
-            <th>Contact telephone number</th>
-            <th>Email</th>
-        </tr>
-        <tr>
-            <th>Customer</th>
-            <td>{{ project.project_id.cust_id.cust_name }}</td>
-            <td>{{ project.project_id.cust_id.cust_tel_no }}</td>
-            <td>{{ project.project_id.cust_id.email }}</td>
-        </tr>
+
+<div class="project_info">
+    <div class="project_info_column">
+        <br>
+        <div class="project_info_header">Customer</div>
+        <div class="project_info_header">Worker</div>
+    </div>
+    <div class="project_info_column">
+        <div class="project_info_header">Name</div>
+        <div>{{ project.project_id.cust_id.cust_name }}</div>
         {% for w in workers %}
-        <tr>
-            <th>Worker</th>
-            <td>{{ w.worker_id.worker_name }}</td>
-            <td>{{ w.worker_id.worker_tel_no }}</td>
-            <td>{{ w.worker_id.worker_email }}</td>
-        </tr>
+            <div>{{ w.worker_id.worker_name }}</div>
         {% endfor %}
-    </table>
+    </div>
+    <div class="project_info_column">
+        <div class="project_info_header">Contact telephone number</div>
+        <div>+{{ project.project_id.cust_id.cust_tel_no }}</div>
+        {% for w in workers %}
+            <div>+{{ w.worker_id.worker_tel_no }}</div>
+        {% endfor %}
+    </div>
+    <div class="project_info_column">
+        <div class="project_info_header">Email</div>
+        <div>{{ project.project_id.cust_id.email }}</div>
+        {% for w in workers %}
+            <div>{{ w.worker_id.worker_email }}</div>
+        {% endfor %}
+    </div>
 </div>
-<div>
-    <table>
-        <tr>
-            <th>Budget code</th>
-            <td>{{ project.project_id.cust_id.budget_code }}</td>
-        </tr>
-        <tr>
-            <th>Customer type</th>
-            <td>{{ project.project_id.cust_id.get_cust_type_display }}</td>
-        </tr>
-    </table>
+
+<div class="project_info">
+    <div class="project_info_column">
+        <div class="project_info_header">Budget Code</div>
+        <div>{{ project.project_id.cust_id.budget_code }}</div>
+    </div>
+    <div class="project_info_column">
+        <div class="project_info_header">Customer Type</div>
+        <div>{{ project.project_id.cust_id.get_cust_type_display }}</div>
+    </div>
 </div>
-<div>
+
     <h2>Specimen preparation record</h2>
     <table>
         {% for name, value in project.project_id.get_fields %}
@@ -81,7 +111,7 @@
     <h2>Billing</h2>
     <table>
         {% for name, value in project.get_fields %}
-        {% if not name == "project_bill_id" and not name == "project_id" and not value == "None" and value %}
+        {% if not name == "project_bill_id" and not name == "project_id" and not value == "None" and valued %}
         <tr>
             <th>{{ name }}</th>
             <td>{{ value }}</td>

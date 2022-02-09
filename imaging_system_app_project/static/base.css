@@ -18,7 +18,9 @@ body{
 
 .header {
   height: 20%;
+  width: 100%;
   background-color: #eeeeee;
+  position: fixed;
 }
 
 .side{
@@ -48,7 +50,8 @@ ul {
 }
 
 .bottom {
-  flex-grow: 1;  
+  flex-grow: 1;
+  margin-top: 11%;
 }
 
 .pagetitle{
@@ -65,16 +68,18 @@ ul {
 }
 
 .logo{
-  width:95%;
-  height:95%;
+  width:7.5%;
+  height:75%;
   margin: 1%;
+  z-index: 1;
 }
 
 .sidenav {
   height: 100%;
-  width: 100%;
-  z-index: 1;
+  top: 20%;
+  width: 10%;
   background-color: #0071BC;
+  position: fixed;
 }
 
 .sidenav a {
