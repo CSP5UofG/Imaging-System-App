@@ -282,7 +282,7 @@ def editCustomer(request, id):
     if customer is None:
         return redirect('/imaging_system_app/')
     
-    context_dict['customer']= customer
+    context_dict = {'customer': customer}
     #fill new form with current instance
     form = CustomerForm(request.POST or None, instance=customer)
     context_dict ={'form': form, 'id': id}
@@ -292,7 +292,7 @@ def editCustomer(request, id):
         
         if update.is_valid():
             new_customer = form.save()
-            return redirect(reverse('imaging_system_app:customer-details', kwargs={"cust_id": cust_id}))
+            return redirect(reverse('imaging_system_app:customer-details', kwargs={"id": id}))
     return render(request, 'imaging_system_app/editCustomer.html', context=context_dict)
 
 # ===================== WORKER =====================  #
