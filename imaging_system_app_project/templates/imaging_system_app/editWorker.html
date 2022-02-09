@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title_block %}
-    - Update a worker
+     Update a worker
 {% endblock %}
 
 {% block css_block %}
@@ -10,11 +10,10 @@
 {% endblock %}
 
 {% block pagetitle %}
-	<h1><strong> Update a worker </strong></h1>
+	<h1><strong> Update Worker </strong></h1>
 {% endblock %}
 
-{% block body_block %}  
-    <ul class="content_list">
+{% block body_block %} 
 		<h1> Customer: {{ worker.cust_id.cust_name }} </h1>
 	     <div>
             <form id="worker_form" method="post", enctype="multipart/form-data">
@@ -33,12 +32,11 @@
                 <div></div>
             {% endfor %}
                 <br />
-                <button type="submit" name="submit">
+                <button type="submit" name="submit" class="submit_button">
                         <p class="buttonText">Update Worker</p>
                 </button>
                 <div></div>
         </form>
         </div>
-    </ul>
 
 {% endblock %}

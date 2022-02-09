@@ -9,17 +9,20 @@ from django_xhtml2pdf.utils import generate_pdf
 
 from imaging_system_app.models import Services, Customer, Worker, Project, WorkerProjectBridge, Bill, ProjectBillDetails, ProjectBillBridge
 
+
 def index(request):
     context_dict = {}
     context_dict['projects'] = Project.objects.order_by('-project_date')[:5]
     context_dict['bills'] = Bill.objects.order_by('-billing_date')[:5]
     return render(request, 'imaging_system_app/index.html', context=context_dict)
 
+# ===================== SERVICES =====================  #
 
 def services(request):
     context_dict = {}
     
     services = Services.objects.all()
+    #TODO: Implement sorting based on Service ID
     #services.order_by(service_id) 
     
     # search 'name'
@@ -30,7 +33,6 @@ def services(request):
             context_dict['q']= q
         if q:
             services = Services.objects.filter(name__icontains = q)
-            
     
     context_dict['services']= services
 
@@ -51,6 +53,32 @@ def addService(request):
             return redirect(reverse('imaging_system_app:services'))
     return render(request, 'imaging_system_app/addServices.html', context=context_dict)
 
+def editService(request, id):
+    #find the walk object to edit
+    try:
+        service = Services.objects.filter(service_id = id).first()
+    except Services.DoesNotExist:
+        service = None
+    
+    if service is None:
+        return redirect('/imaging_system_app/')
+    
+    #fill new form with current instance
+    form = ServicesForm(request.POST or None, instance=service)
+    context_dict ={'form': form, 'id': id}
+    
+    if request.method == 'POST':
+        update = ServicesForm(request.POST)
+        
+        if form.is_valid():
+            new_service = form.save(commit = False)
+            new_service.in_house_price = (new_service.normal_price)/2
+            new_service.outside_price = (new_service.normal_price)*1.5
+            new_service.save()
+            return redirect(reverse('imaging_system_app:services'))
+    return render(request, 'imaging_system_app/editServices.html', context=context_dict)
+
+# ===================== PROJECTS =====================  #
 
 def projects(request):
     context_dict={}
@@ -90,12 +118,24 @@ def projects(request):
 
     return render(request, 'imaging_system_app/projects.html', context=context_dict)
 
-def projectDetails(request, project_id):
+def projectDetails(request, id):
     context_dict={}
-    context_dict['project'] = ProjectBillDetails.objects.get(project_id = project_id)
-    context_dict['workers'] = WorkerProjectBridge.objects.filter(project_id = project_id)
-    return render(request, 'imaging_system_app/projectdetails.html', context=context_dict)
+    context_dict['project'] = ProjectBillDetails.objects.get(project_id = id)
+    context_dict['workers'] = WorkerProjectBridge.objects.filter(project_id = id)
+    return render(request, 'imaging_system_app/projectDetails.html', context=context_dict)
 
+"""def addProject(request):
+    form = ProjectForm
+    context_dict={'form': form}
+    
+    if request.method == 'POST':
+        form = ProjectForm(request.POST)
+        
+        if form.is_valid():
+            new_project = form.save()
+            return redirect(reverse('imaging_system_app:projects'))
+    return render(request, 'imaging_system_app/addProject.html', context=context_dict)
+"""
 def addProject(request):
     context_dict = {}
     
@@ -139,13 +179,13 @@ def addProject(request):
                         projectbilldetails.save()
                         return redirect(reverse('imaging_system_app:projects'))
     return render(request, 'imaging_system_app/addProject.html', context=context_dict)
-    
-def editProject(request, project_id):
+
+def editProject(request, id):
     context_dict={}
     try:
-        project = ProjectBillDetails.objects.get(project_id = project_id)
+        project = ProjectBillDetails.objects.get(project_id = id)
         context_dict['project'] = project
-        worker = WorkerProjectBridge.objects.filter(project_id = project_id).first().worker_id
+        worker = WorkerProjectBridge.objects.filter(project_id = id).first().worker_id
         context_dict['workers'] = worker
     except ProjectBillDetails.DoesNotExist:
         project = None
@@ -162,6 +202,7 @@ def editProject(request, project_id):
     context_dict['workerform'] = workerform
     context_dict['projectform'] = projectform
     context_dict['projectbilldetailsform'] = projectbilldetailsform
+    context_dict['id'] = id
     
     if request.method == 'POST':
         customerupdate = CustomerForm(request.POST)
@@ -175,9 +216,10 @@ def editProject(request, project_id):
             workerupdate.save()
             projectform.save()
             projectbilldetailsform.save()
-            return redirect(reverse('imaging_system_app:project-details', kwargs={"project_id": project_id}))
+            return redirect(reverse('imaging_system_app:project-details', kwargs={"project_id": id}))
     return render(request, 'imaging_system_app/editProject.html', context=context_dict)
 
+# ===================== CUSTOMERS =====================  #
 
 def customers(request):
     context_dict={}
@@ -208,6 +250,16 @@ def customerDetails(request, cust_id):
 
     return render(request, 'imaging_system_app/customerdetails.html', context=context_dict)
 
+def customerDetails(request, id):
+    context_dict={}
+    context_dict['customer']= Customer.objects.get(cust_id = id)
+    context_dict['workers']= Worker.objects.filter(cust_id = id)
+    context_dict['projects']= ProjectBillDetails.objects.filter(project_id__cust_id = id)
+    context_dict['bills']= Bill.objects.filter(cust_id = id)
+
+    return render(request, 'imaging_system_app/customerDetails.html', context=context_dict)
+
+
 def addCustomer(request):
     form = CustomerForm
     context_dict={'form': form}
@@ -219,11 +271,11 @@ def addCustomer(request):
             new_customer = form.save()
             return redirect(reverse('imaging_system_app:customers'))
     return render(request, 'imaging_system_app/addCustomer.html', context=context_dict)
-    
-def editCustomer(request, cust_id):
-    context_dict={}
+
+def editCustomer(request, id):
+    #find the walk object to edit
     try:
-        customer = Customer.objects.get(cust_id = cust_id)
+        customer = Customer.objects.filter(cust_id = id).first()
     except Customer.DoesNotExist:
         customer = None
     
@@ -233,7 +285,7 @@ def editCustomer(request, cust_id):
     context_dict['customer']= customer
     #fill new form with current instance
     form = CustomerForm(request.POST or None, instance=customer)
-    context_dict['form'] = form
+    context_dict ={'form': form, 'id': id}
     
     if request.method == 'POST':
         update = CustomerForm(request.POST)
@@ -242,6 +294,8 @@ def editCustomer(request, cust_id):
             new_customer = form.save()
             return redirect(reverse('imaging_system_app:customer-details', kwargs={"cust_id": cust_id}))
     return render(request, 'imaging_system_app/editCustomer.html', context=context_dict)
+
+# ===================== WORKER =====================  #
 
 def editWorker(request, worker_id):
     context_dict={}
@@ -264,9 +318,10 @@ def editWorker(request, worker_id):
         
         if update.is_valid():
             new_worker = form.save()
-            return redirect(reverse('imaging_system_app:customerdetails', kwargs={"cust_id": cust_id}))
+            return redirect(reverse('imaging_system_app:customer-details', kwargs={"cust_id": cust_id}))
     return render(request, 'imaging_system_app/editWorker.html', context=context_dict)
 
+# ===================== BILLS =====================  #
 
 def bills(request):
     context_dict={}
@@ -306,13 +361,13 @@ def bills(request):
 
     return render(request, 'imaging_system_app/bills.html', context=context_dict)
 
-def billDetails(request, bill_id):
-    context_dict = bill_context_dict(bill_id)
+def billDetails(request, id):
+    context_dict = bill_context_dict(id)
     # TODO: combine bill units and calculate grand total
-    return render(request, 'imaging_system_app/billdetails.html', context=context_dict)
+    return render(request, 'imaging_system_app/billDetails.html', context=context_dict)
     
-def printBill(request, bill_id):
-    context_dict = bill_context_dict(bill_id)
+def printBill(request, id):
+    context_dict = bill_context_dict(id)
     
     resp = HttpResponse(content_type='application/pdf')
     result = generate_pdf('imaging_system_app/bill_pdf.html', file_object=resp, context = context_dict)
@@ -333,6 +388,7 @@ def bill_context_dict(bill_id):
     context_dict['end_date'] = projects.order_by('project_date').last().project_date
     return context_dict    
 
+# ===================== QUERIES =====================  #
 
 def queries(request):
     # sample view for queries in imaging_system_app/queries/

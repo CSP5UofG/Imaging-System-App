@@ -14,25 +14,44 @@
 {% endblock %}
 
 {% block body_block %}  
-    <ul class="content_list">
-        {% if customers %}
-            {% for c in customers %}
-                <div class="content_entries">
-                    <li class="content_entry">
-                        <h2>{{ c.cust_name}} - +{{c.cust_tel_no}} - {{c.cust_budget_code}} </h2> <br /> 
-                    </li>
-                </div>
-            {% endfor %}
 
-        {% else %}
-            <a href="/">
-                <div class="content_entry">
-                    <li>
-                    <strong><h2>There are no customers yet.</h2></strong> <br />
-                    </li>
-                </div>
-            </a>
-        {% endif %}
-    </ul>
+    <div class="action_bar">
+        <div class="new_entry">
+            <a href="/imaging_system_app/add-customer">New customer</a><br />
+        </div>
+
+        <div class="search_bar">
+            <input type="text" id="search_bar" placeholder="Search customers" id>
+        </div>
+    </div>
+
+        <table class="tables">
+            <tr>
+                <th>Name</th>
+                <th>Telephone number</th>
+                <th>Budget code</th>
+                <th></th>
+            </tr>
+            {% if customers %}
+                {% for c in customers %}
+                    
+                    <tr>
+                        <td id="left_corner"> {{ c.cust_name}}</td>
+                        <td> +{{c.cust_tel_no}} </td>
+                        <td> {{c.cust_budget_code}} </td>
+                        <td> <a href="{% url 'imaging_system_app:edit-customer' c.cust_id %}" class="table_buttons"> Edit</a></td>
+                        <td id="right_corner"> <a href="{% url 'imaging_system_app:customer-details' c.cust_id %}" class="table_buttons"> View </a></td>
+
+                    </tr>  
+                {% endfor %}
+
+            {% else %}
+                <a href="/">
+                    <div class="content_entry">
+                        <strong><h2>There are no customers yet.</h2></strong> <br />
+                    </div>
+                </a>
+            {% endif %}
+        </table>
 
 {% endblock %}

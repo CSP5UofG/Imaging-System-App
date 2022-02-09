@@ -82,7 +82,7 @@ class Project(models.Model):
         return [(field.name, field.value_to_string(self)) for field in self._meta.fields]
     
     def __str__(self):
-        return str(self.project_id) + " ordered by: " + str(self.cust_id)
+        return str(self.project_id)
     
  
 class WorkerProjectBridge(models.Model):

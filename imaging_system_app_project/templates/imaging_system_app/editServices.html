@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title_block %}
-    - {{ customer.cust_name }}
+    - Update Service
 {% endblock %}
 
 {% block css_block %}
@@ -10,30 +10,30 @@
 {% endblock %}
 
 {% block pagetitle %}
-	<h1><strong> Update Customer </strong></h1>
+	<h1><strong> Update Service </strong></h1>
 {% endblock %}
 
 {% block body_block %}  
     <ul class="content_list">
 	     <div>
-            <form id="customer_form" method="post" action="{% url 'imaging_system_app:edit-customer' id %}", enctype="multipart/form-data">
+            <form id="service_form" method="post" action="{% url 'imaging_system_app:edit-service' id %}", enctype="multipart/form-data">
             {% csrf_token %}
             {% for hidden in form.hidden_fields %}
                 {{ hidden }}
             {% endfor %}
             {% for field in form.visible_fields %}
-                <div>
+                <div class="form_header">
                     {{ field.errors }}
                     {{ field.help_text }}<br />
                 </div>
-                <div>
+                <div class="form_header">
                     {{ field }}<br /><br />
                 </div>
                 <div></div>
             {% endfor %}
                 <br />
-                <button type="submit" name="submit">
-                        <p class="buttonText">Update Customer</p>
+                <button type="submit" name="submit" class="submit_button">
+                        <p class="buttonText">Update Service</p>
                 </button>
                 <div></div>
         </form>

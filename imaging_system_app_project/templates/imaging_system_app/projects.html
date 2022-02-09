@@ -2,40 +2,61 @@
 {% load static %}
 
 {% block title_block %}
-    - Projects
+- Projects
 {% endblock %}
 
 {% block css_block %}
-    <link rel="stylesheet" type="text/css" href="{% static 'content.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'content.css' %}">
+<script type="text/javascript" src="{% static 'javascript/sortTable.js' %}"></script>
 {% endblock %}
 
 {% block pagetitle %}
-    <h1><strong> All projects</strong></h1>
+<h1><strong> All projects</strong></h1>
 {% endblock %}
 
 
 
-{% block body_block %}  
+{% block body_block %}
+<div class="action_bar">
+    <div class="new_entry">
+        <a href="/imaging_system_app/add-project">New Project</a><br />
+    </div>
+    <div class="search_bar">
+        <input type="text" id="search_bar" placeholder="Search projects" id>
+    </div>
+</div>
 
-    <ul class="content_list">
-        {% if all_projects %}
-            {% for p in all_projects %}
-                <div class="content_entries">
-                    <li class="content_entry">
-                        <h2>{{ p.project_date}} - {{ p.cust_name}}- {{p.num_samples}} samples - {{p.get_status_display}} </h2> <br>  
-                    </li>
-                </div>
-            {% endfor %}
+<table class="tables">
+    <tr>
+        <th onclick="sortTable(0)">Date</th>
+        <th onclick="sortTable(1)">Customer</th>
+        <th onclick="sortTable(2)">Number of samples</th>
+        <th onclick="sortTable(3)">Status </th>
+        <th></th>
+    </tr>
 
-        {% else %}
-            <a href="/">
-                <div class="content_entry">
-                    <li>
-                    <strong><h2>There are no projects present.</h2></strong> <br>
-                    </li>
-                </div>
-            </a>
-        {% endif %}
-    </ul>
+    {% if all_projects %}
+    {% for p in all_projects %}
+    <tr>
+        <td id="left_corner"> {{p.project_date}} </td>
+        <td> {{p.cust_id.cust_name}} </td>
+        <td> {{p.num_samples}} </td>
+        <td> {{p.get_status_display}} </td>
+        <td></td>
+        <td> <a href="{% url 'imaging_system_app:edit-project' p.project_id %}" class="table_buttons"> Edit</a></td>
+        <td id="right_corner"> <a href="{% url 'imaging_system_app:project-details' p.project_id %}" class="table_buttons"> View </a></td>
+    </tr>
+    {% endfor %}
+
+    {% else %}
+    <a href="/">
+        <div class="content_entry">
+            <strong>
+                <h2>There are no projects present.</h2>
+            </strong> <br>
+        </div>
+    </a>
+    {% endif %}
+</table>
 
 {% endblock %}

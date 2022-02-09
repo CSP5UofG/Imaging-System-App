@@ -11,20 +11,21 @@ urlpatterns = [
     path('bills/', views.bills, name='bills'),
     
     path('add-service/', views.addService, name='add-service'),
+    path('edit-service/<id>', views.editService, name='edit-service'),
     
-    path('projects/<project_id>/', views.projectDetails, name='project-details'),
+    path('projects/<id>/', views.projectDetails, name='project-details'),
     path('add-project/', views.addProject, name='add-project'),
-    path('projects/<project_id>/edit/', views.editProject, name='edit-project'),
+    path('projects/<id>/edit/', views.editProject, name='edit-project'),
     
-    path('customers/<cust_id>/', views.customerDetails, name='customer-details'),
+    path('customers/<id>/', views.customerDetails, name='customer-details'),
     path('add-customer/', views.addCustomer, name='add-customer'),
-    path('customers/<cust_id>/edit/', views.editCustomer, name='edit-customer'),
-    path('workers/<worker_id>/edit/', views.editWorker, name='edit-worker'),
+    path('customers/<id>/edit/', views.editCustomer, name='edit-customer'),
+    path('workers/<id>/edit/', views.editWorker, name='edit-worker'),
     
-    path('bills/<bill_id>/', views.billDetails, name='bill-details'),
-    path('bills/<bill_id>/print/', views.printBill, name='print-bill'),
+    path('bills/<id>/', views.billDetails, name='bill-details'),
+    path('bills/<id>/print/', views.printBill, name='print-bill'),
     
     # sample view for queries
     path('queries/', views.queries, name='queries'),
-    
+
 ]

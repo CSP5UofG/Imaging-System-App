@@ -10,43 +10,46 @@
 {% endblock %}
 
 {% block pagetitle %}
-	<h1><strong> Services </strong></h1>
+<h1><strong> Services </strong></h1>
 {% endblock %}
 
 {% block body_block %}
-<ul class="content_list">
 
-    <div class="content_entries">
-        <li class="content_entry">
-			{% if services %}
-				<table>
-					<tr>
-						<th>Name</th>
-						<th>In-House</th>
-						<th>Normal</th>
-						<th>Outside</th>
-					</tr>
-					{% for s in services %}
-						<tr>
-							<td>{{ s.name }}</td>
-							<td>{{ s.in_house_price }}</td>
-							<td>{{ s.normal_price }}</td>
-							<td>{{ s.outside_price }}</td>
-						</tr>
-					{% endfor %}
-				</table>
-				
-			{% else %}
-			<a href="/">
-				<div class="content_entry">
-					<li>
-						<strong>
-							<h2>There are no services present.</h2>
-						</strong> <br />
-					</li>
-				</div>
-			</a>
-			{% endif %}
-</ul>
+<div class="action_bar">
+	<div class="new_entry">
+		<a href="/imaging_system_app/add-service">New service</a><br />
+	</div>
 
-{% endblock %}
+	<div class="search_bar">
+		<input type="text" id="search_bar" placeholder="Search services" id>
+	</div>
+</div>
+
+	{% if services %}
+	<table class="tables">
+		<tr>
+			<th>Name</th>
+			<th>In-House</th>
+			<th>Normal</th>
+			<th>Outside</th>
+		</tr>
+		{% for s in services %}
+		<tr>
+			<td id="left_corner">{{ s.name }}</td>
+			<td>{{ s.in_house_price }}</td>
+			<td>{{ s.normal_price }}</td>
+			<td>{{ s.outside_price }}</td>
+			<td> <a href="{% url 'imaging_system_app:edit-service' s.service_id %}" class="table_buttons"> Edit</a>
+			</td>
+		</tr>
+		{% endfor %}
+	</table>
+	{% else %}
+	<a href="/">
+			<strong>
+				<h2>There are no services present.</h2>
+			</strong> <br />
+	</a>
+	{% endif %}
+
+	{% endblock %}

@@ -1,10 +1,27 @@
-.content_entry {
-    position:relative;
-    vertical-align: text-top;
-    text-align: left;
-    left: 20%;
+.form_header{
     font-family: 'Poppins';
-    font-size: 15px;
+    font-size: 18px;
+}
+
+.submit_button {
+    background-color: transparent;
+    border: 5px;
+    border-style: solid;
+    border-radius: 10px;
+    color: #0071bc;
+    font-family: 'Poppins';
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  .submit_button :hover{
+    color: #004675;
+    font-size: 20px;
+  }
+
+input{
+    font-family: 'Poppins';
+    font-size: 16px;
 }
 
 th{
@@ -18,7 +35,139 @@ td{
     font-size: 16px;
 }
 
-.content_list{
-    position: absolute;
+.content_entries{
     margin-top: 10%;
+}
+
+.tables{
+    width: 80%;
+    border-collapse: collapse;
+    border-radius: 20px;
+    overflow-y: scroll;
+    margin-left: 5%;
+}
+
+.tables td {
+    width: max-content + 10%;
+    height: 20%;
+    
+    font-family: 'Poppins';
+    font-size: 20px;
+    padding: 5px;
+
+    vertical-align: text-top;
+    text-align:center;
+    color:black;
+    background-color: #EEEEEE;
+    
+}
+
+.tables tr {
+    border-radius: 30px;
+}
+
+
+.tables th{
+    width: max-content;
+    padding-top: 12px ;
+    padding-bottom: 12px;
+    text-align: center;
+    color: black;  
+}
+
+.table_title {
+    vertical-align: text-top;
+    text-align: center;
+    color:black;
+    left: 25%;
+    font-family: 'Poppins';
+    font-size: 20px;
+    border-radius: 30px;
+    position: fixed;
+    padding: 2px;
+    
+}
+
+.table_buttons{
+    padding: 3px;
+    border-radius: 30px;
+    border-color: #0071BC;  
+    color: #0071BC;
+    font-family: 'Poppins';
+    font-size: 15px;
+    width: 80%;
+}
+
+.table_buttons:hover {
+    width: 90%;
+    height: 90%;
+}
+
+.new_entry{
+    border-radius: 30px;
+    background-color: #A90F9A;
+    padding: 12.5px;
+    margin-top: 10px;
+    text-align: center;
+    font-family: 'Poppins';
+    font-size: 15px;
+    height: 75%;
+    width: 100%;
+    flex: 2 3 auto;
+}
+
+.new_entry a{
+    color: white;
+    text-decoration: none;
+}
+.new_entry a :hover{
+    color: white;
+    background-color: #810b75;
+}
+
+.new_entry:hover{
+    background-color: #810b75;
+    font-size: 17px;
+    
+}
+
+.new_entry:hover span{
+    padding-right: 25px;
+    
+}
+
+.action_bar{
+   margin: 0px;
+   display: flex;
+   box-sizing: border-box;
+   margin-top: 5%;
+   margin-left: 5%;
+   width: 65%;
+}
+
+.search_bar{
+    width: 100%;
+    flex: 5 1 auto;
+}
+
+#search_bar{
+    padding: 10px;
+    border-radius: 30px;
+    font-size: 15px;
+    font-family: 'Poppins';
+    border-color: #D2D2D2;
+    margin: 10px;
+    width: 100%;
+} 
+
+#search_bar:hover{
+    background-color: #ececec;
+}
+
+#left_corner{ 
+    border-radius: 30px 0px 0px 30px;
+}
+
+#right_corner{ 
+    border-radius: 0px 30px 30px 0px;
 }

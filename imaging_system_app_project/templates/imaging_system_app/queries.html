@@ -2,66 +2,61 @@
 {% load static %}
 
 {% block title_block %}
-    - Queries
+Queries
 {% endblock %}
 
 {% block css_block %}
-    <link rel="stylesheet" type="text/css" href="{% static 'content.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'content.css' %}">
 {% endblock %}
 
 {% block pagetitle %}
-	<h1><strong> Queries </strong></h1>
+<h1><strong> Queries </strong></h1>
 {% endblock %}
 
-{% block body_block %}  
-    <ul class="content_list">
-		<form action="{% url 'imaging_system_app:queries' %}" method="post">
-			{% csrf_token %}
-			Customer:
-			{% if query %}
-			<input name="project_customer" id = "project_customer"
-				type="text" value= {{ query }}>
-			{% else %}
-			<input name="project_customer" id = "project_customer"
-				type="text" placeholder="Customer name">
-			{% endif %}
-			
-			From:
-			{% if datefrom %}
-			<input name="project_from" id = "project_from"
-				type="text" value= {{ datefrom }}>
-			{% else %}
-			<input name="project_from" id = "project_from"
-				type="text" placeholder="YYYYMMDD">
-			{% endif %}
-			To:
-			{% if dateto %}
-			<input name="project_to" id = "project_to"
-				type="text" value= {{ dateto }}>
-			{% else %}
-			<input name="project_to" id = "project_to"
-				type="text" placeholder="YYYYMMDD">
-			{% endif %}
-			<button type = "submit" name = "submit">Search</button>
-		</form>
-        {% if projects %}
-            {% for p in projects %}
-                <div class="content_entries">
-                    <li class="content_entry">
-                        <h2>{{ p.project_date}} - {{ p.cust_id.cust_name}}- {{p.num_samples}} samples - {{p.get_status_display}} </h2> <br>  
-                    </li>
-                </div>
-            {% endfor %}
+{% block body_block %}
+<form action="{% url 'imaging_system_app:queries' %}" method="post">
+    {% csrf_token %}
+    Customer:
+    {% if query %}
+    <input name="project_customer" id="project_customer" type="text" value={{ query }}>
+    {% else %}
+    <input name="project_customer" id="project_customer" type="text" placeholder="Customer name">
+    {% endif %}
 
-        {% else %}
-            <a href="/">
-                <div class="content_entry">
-                    <li>
-                    <strong><h2>There are no projects present.</h2></strong> <br>
-                    </li>
-                </div>
-            </a>
-        {% endif %}
-    </ul>
+    From:
+    {% if datefrom %}
+    <input name="project_from" id="project_from" type="text" value={{ datefrom }}>
+    {% else %}
+    <input name="project_from" id="project_from" type="text" placeholder="YYYYMMDD">
+    {% endif %}
+    To:
+    {% if dateto %}
+    <input name="project_to" id="project_to" type="text" value={{ dateto }}>
+    {% else %}
+    <input name="project_to" id="project_to" type="text" placeholder="YYYYMMDD">
+    {% endif %}
+    <button type="submit" name="submit">Search</button>
+</form>
+{% if projects %}
+{% for p in projects %}
+<div class="content_entries">
+    <li class="content_entry">
+        <h2>{{ p.project_date}} - {{ p.cust_id.cust_name}}- {{p.num_samples}} samples - {{p.get_status_display}}
+        </h2> <br>
+    </li>
+</div>
+{% endfor %}
+
+{% else %}
+<a href="/">
+    <div class="content_entry">
+        <li>
+            <strong>
+                <h2>There are no projects present.</h2>
+            </strong> <br>
+        </li>
+    </div>
+</a>
+{% endif %}
 
 {% endblock %}
