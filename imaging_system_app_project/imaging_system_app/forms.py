@@ -47,12 +47,10 @@ class WorkerForm(forms.ModelForm):
                                     help_text = "Worker tel. no")
     worker_email = forms.CharField(max_length = 100,
                                    help_text = "Worker email address")
-    cust_id = forms.ModelChoiceField(queryset = Customer.objects.all(),
-                                     help_text = "Customer Company")
     
     class Meta:
         model = Worker
-        fields = ('worker_name', 'worker_tel_no', 'worker_email', 'cust_id', )
+        fields = ('worker_name', 'worker_tel_no', 'worker_email', )
 
 
 
