@@ -3,10 +3,9 @@ from .models import Customer, Worker, Services, Bill, ProjectBillDetails, Projec
 import datetime
 from imaging_system_app.forms import ServicesForm, CustomerForm, WorkerForm, ProjectForm, WorkerProjectBridgeForm, BillForm, ProjectBillDetailsForm, ProjectBillBridgeForm
 from django.urls import reverse
-
-
-
 from django.http import HttpResponse
+
+from django_xhtml2pdf.utils import generate_pdf
 
 from imaging_system_app.models import Services, Customer, Worker, Project, WorkerProjectBridge, Bill, ProjectBillDetails, ProjectBillBridge
 
@@ -15,6 +14,7 @@ def index(request):
     context_dict['projects'] = Project.objects.order_by('-project_date')[:5]
     context_dict['bills'] = Bill.objects.order_by('-billing_date')[:5]
     return render(request, 'imaging_system_app/index.html', context=context_dict)
+
 
 def services(request):
     context_dict = {}
@@ -96,46 +96,6 @@ def projectDetails(request, project_id):
     context_dict['workers'] = WorkerProjectBridge.objects.filter(project_id = project_id)
     return render(request, 'imaging_system_app/projectdetails.html', context=context_dict)
 
-
-def editProject(request, project_id):
-    context_dict={}
-    try:
-        project = ProjectBillDetails.objects.get(project_id = project_id)
-        context_dict['project'] = project
-        worker = WorkerProjectBridge.objects.filter(project_id = project_id).first().worker_id
-        context_dict['workers'] = worker
-    except ProjectBillDetails.DoesNotExist:
-        project = None
-    
-    if project is None:
-        return redirect('/imaging_system_app/')
-        
-    #fill new form with current instance
-    customerform = CustomerForm(request.POST or None, instance=project.project_id.cust_id)
-    workerform = WorkerForm(request.POST or None, instance=worker)
-    projectform = ProjectForm(request.POST or None, instance=project.project_id)
-    projectbilldetailsform = ProjectBillDetailsForm(request.POST or None, instance=project)
-    context_dict['customerform'] = customerform
-    context_dict['workerform'] = workerform
-    context_dict['projectform'] = projectform
-    context_dict['projectbilldetailsform'] = projectbilldetailsform
-    
-    if request.method == 'POST':
-        customerupdate = CustomerForm(request.POST)
-        workerupdate = WorkerForm(request.POST)
-        projectupdate = ProjectForm(request.POST)
-        projectbilldetailsupdate = ProjectBillDetailsForm(request.POST)
-    
-        
-        if customerupdate.is_valid() and workerupdate.is_valid() and projectupdate.is_valid() and projectbilldetailsupdate.is_valid():
-            customerupdate.save()
-            workerupdate.save()
-            projectform.save()
-            projectbilldetailsform.save()
-            return redirect(reverse('imaging_system_app:project-details', kwargs={"project_id": project_id}))
-    return render(request, 'imaging_system_app/editProject.html', context=context_dict)
-
-
 def addProject(request):
     context_dict = {}
     
@@ -179,6 +139,45 @@ def addProject(request):
                         projectbilldetails.save()
                         return redirect(reverse('imaging_system_app:projects'))
     return render(request, 'imaging_system_app/addProject.html', context=context_dict)
+    
+def editProject(request, project_id):
+    context_dict={}
+    try:
+        project = ProjectBillDetails.objects.get(project_id = project_id)
+        context_dict['project'] = project
+        worker = WorkerProjectBridge.objects.filter(project_id = project_id).first().worker_id
+        context_dict['workers'] = worker
+    except ProjectBillDetails.DoesNotExist:
+        project = None
+    
+    if project is None:
+        return redirect('/imaging_system_app/')
+        
+    #fill new form with current instance
+    customerform = CustomerForm(request.POST or None, instance=project.project_id.cust_id)
+    workerform = WorkerForm(request.POST or None, instance=worker)
+    projectform = ProjectForm(request.POST or None, instance=project.project_id)
+    projectbilldetailsform = ProjectBillDetailsForm(request.POST or None, instance=project)
+    context_dict['customerform'] = customerform
+    context_dict['workerform'] = workerform
+    context_dict['projectform'] = projectform
+    context_dict['projectbilldetailsform'] = projectbilldetailsform
+    
+    if request.method == 'POST':
+        customerupdate = CustomerForm(request.POST)
+        workerupdate = WorkerForm(request.POST)
+        projectupdate = ProjectForm(request.POST)
+        projectbilldetailsupdate = ProjectBillDetailsForm(request.POST)
+    
+        
+        if customerupdate.is_valid() and workerupdate.is_valid() and projectupdate.is_valid() and projectbilldetailsupdate.is_valid():
+            customerupdate.save()
+            workerupdate.save()
+            projectform.save()
+            projectbilldetailsform.save()
+            return redirect(reverse('imaging_system_app:project-details', kwargs={"project_id": project_id}))
+    return render(request, 'imaging_system_app/editProject.html', context=context_dict)
+
 
 def customers(request):
     context_dict={}
@@ -209,6 +208,18 @@ def customerDetails(request, cust_id):
 
     return render(request, 'imaging_system_app/customerdetails.html', context=context_dict)
 
+def addCustomer(request):
+    form = CustomerForm
+    context_dict={'form': form}
+    
+    if request.method == 'POST':
+        form = CustomerForm(request.POST)
+        
+        if form.is_valid():
+            new_customer = form.save()
+            return redirect(reverse('imaging_system_app:customers'))
+    return render(request, 'imaging_system_app/addCustomer.html', context=context_dict)
+    
 def editCustomer(request, cust_id):
     context_dict={}
     try:
@@ -256,18 +267,6 @@ def editWorker(request, worker_id):
             return redirect(reverse('imaging_system_app:customerdetails', kwargs={"cust_id": cust_id}))
     return render(request, 'imaging_system_app/editWorker.html', context=context_dict)
 
-def addCustomer(request):
-    form = CustomerForm
-    context_dict={'form': form}
-    
-    if request.method == 'POST':
-        form = CustomerForm(request.POST)
-        
-        if form.is_valid():
-            new_customer = form.save()
-            return redirect(reverse('imaging_system_app:customers'))
-    return render(request, 'imaging_system_app/addCustomer.html', context=context_dict)
-
 
 def bills(request):
     context_dict={}
@@ -306,7 +305,35 @@ def bills(request):
     context_dict['bills']= bills
 
     return render(request, 'imaging_system_app/bills.html', context=context_dict)
+
+def billDetails(request, bill_id):
+    context_dict = bill_context_dict(bill_id)
+    # TODO: combine bill units and calculate grand total
+    return render(request, 'imaging_system_app/billdetails.html', context=context_dict)
     
+def printBill(request, bill_id):
+    context_dict = bill_context_dict(bill_id)
+    
+    resp = HttpResponse(content_type='application/pdf')
+    result = generate_pdf('imaging_system_app/bill_pdf.html', file_object=resp, context = context_dict)
+    return result
+    
+def bill_context_dict(bill_id):
+    # Helper function to create context_dict for bill
+    context_dict = {}
+    context_dict['bill'] = Bill.objects.get(bill_id=bill_id)
+    projectbillbridge = ProjectBillBridge.objects.filter(bill_id=bill_id)
+    projectbilldetails = ProjectBillDetails.objects.filter(project_bill_id__in=projectbillbridge.values('project_bill_id'))
+    context_dict['projectbilldetails'] = projectbilldetails
+    projects = Project.objects.filter(project_id__in=projectbilldetails.values('project_id'))
+    workerprojectbridge = WorkerProjectBridge.objects.filter(project_id__in=projects.values('project_id'))
+    workers = Worker.objects.filter(worker_id__in=workerprojectbridge.values('worker_id'))
+    context_dict['workers'] = workers
+    context_dict['start_date'] = projects.order_by('project_date').first().project_date
+    context_dict['end_date'] = projects.order_by('project_date').last().project_date
+    return context_dict    
+
+
 def queries(request):
     # sample view for queries in imaging_system_app/queries/
     context_dict={}
