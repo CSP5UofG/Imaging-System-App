@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title_block %}
-    - {{ customer.cust_name }}
+    - Update a worker
 {% endblock %}
 
 {% block css_block %}
@@ -10,13 +10,14 @@
 {% endblock %}
 
 {% block pagetitle %}
-	<h1><strong> Update a customer </strong></h1>
+	<h1><strong> Update a worker </strong></h1>
 {% endblock %}
 
 {% block body_block %}  
     <ul class="content_list">
+		<h1> Customer: {{ worker.cust_id.cust_name }} </h1>
 	     <div>
-            <form id="customer_form" method="post", enctype="multipart/form-data">
+            <form id="worker_form" method="post", enctype="multipart/form-data">
             {% csrf_token %}
             {% for hidden in form.hidden_fields %}
                 {{ hidden }}
@@ -33,7 +34,7 @@
             {% endfor %}
                 <br />
                 <button type="submit" name="submit">
-                        <p class="buttonText">Update Customer</p>
+                        <p class="buttonText">Update Worker</p>
                 </button>
                 <div></div>
         </form>

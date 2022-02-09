@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-from .helper import FieldLookup
 from .models import Customer, Worker, Services, Bill, ProjectBillDetails, ProjectBillBridge, Project, WorkerProjectBridge
 import datetime
 from imaging_system_app.forms import ServicesForm, CustomerForm, WorkerForm, ProjectForm, WorkerProjectBridgeForm, BillForm, ProjectBillDetailsForm, ProjectBillBridgeForm
@@ -21,8 +20,18 @@ def services(request):
     context_dict = {}
     
     services = Services.objects.all()
-    #services.order_by(service_id) TODO: Implement querying based on Service ID
-
+    #services.order_by(service_id) 
+    
+    # search 'name'
+    if request.method == 'POST':
+        q = request.POST.get('query')
+        if q != "":
+            # Allows displaying search string in text box
+            context_dict['q']= q
+        if q:
+            services = Services.objects.filter(name__icontains = q)
+            
+    
     context_dict['services']= services
 
     return render(request, 'imaging_system_app/services.html', context=context_dict)
@@ -46,32 +55,206 @@ def addService(request):
 def projects(request):
     context_dict={}
 
-    
     all_projects = Project.objects.all()
-    #all_projects.order_by(project_date)
+    all_projects.order_by("project_date")
+    
+    # search 'cust_id__cust_name', date filter
+    if request.method == 'POST':
+        q = request.POST.get('query')
+        datefrom = request.POST.get('project_from')
+        dateto = request.POST.get('project_to')
+        if q != "":
+            # Allows displaying search string in text box
+            context_dict['q']= q
+        if q:
+            all_projects = Project.objects.filter(cust_id__cust_name__icontains = q)
+        if datefrom != "":
+            # Allows displaying search string in text box
+            context_dict['datefrom']= datefrom
+        if dateto != "":
+            # Allows displaying search string in text box
+            context_dict['dateto']= dateto
+        if datefrom:
+            try:
+                all_projects  = all_projects.filter(project_date__gte = datetime.date(int(datefrom[0:4]), int(datefrom[4:6]), int(datefrom[6:8])))
+            except:
+                all_projects  = all_projects.none()
+        if dateto:
+            try:
+                all_projects  = all_projects.filter(project_date__lte = datetime.date(int(dateto[0:4]), int(dateto[4:6]), int(dateto[6:8])))
+            except:
+                all_projects = all_projects.none()
+    
 
     context_dict['all_projects']= all_projects
 
     return render(request, 'imaging_system_app/projects.html', context=context_dict)
 
-
-def project_details(request):
-
+def projectDetails(request, project_id):
     context_dict={}
-    return render(request, 'imaging_system_app/project_details.html', context=context_dict)
+    context_dict['project'] = ProjectBillDetails.objects.get(project_id = project_id)
+    context_dict['workers'] = WorkerProjectBridge.objects.filter(project_id = project_id)
+    return render(request, 'imaging_system_app/projectdetails.html', context=context_dict)
 
 
+def editProject(request, project_id):
+    context_dict={}
+    try:
+        project = ProjectBillDetails.objects.get(project_id = project_id)
+        context_dict['project'] = project
+        worker = WorkerProjectBridge.objects.filter(project_id = project_id).first().worker_id
+        context_dict['workers'] = worker
+    except ProjectBillDetails.DoesNotExist:
+        project = None
+    
+    if project is None:
+        return redirect('/imaging_system_app/')
+        
+    #fill new form with current instance
+    customerform = CustomerForm(request.POST or None, instance=project.project_id.cust_id)
+    workerform = WorkerForm(request.POST or None, instance=worker)
+    projectform = ProjectForm(request.POST or None, instance=project.project_id)
+    projectbilldetailsform = ProjectBillDetailsForm(request.POST or None, instance=project)
+    context_dict['customerform'] = customerform
+    context_dict['workerform'] = workerform
+    context_dict['projectform'] = projectform
+    context_dict['projectbilldetailsform'] = projectbilldetailsform
+    
+    if request.method == 'POST':
+        customerupdate = CustomerForm(request.POST)
+        workerupdate = WorkerForm(request.POST)
+        projectupdate = ProjectForm(request.POST)
+        projectbilldetailsupdate = ProjectBillDetailsForm(request.POST)
+    
+        
+        if customerupdate.is_valid() and workerupdate.is_valid() and projectupdate.is_valid() and projectbilldetailsupdate.is_valid():
+            customerupdate.save()
+            workerupdate.save()
+            projectform.save()
+            projectbilldetailsform.save()
+            return redirect(reverse('imaging_system_app:project-details', kwargs={"project_id": project_id}))
+    return render(request, 'imaging_system_app/editProject.html', context=context_dict)
 
+
+def addProject(request):
+    context_dict = {}
+    
+    customerform = CustomerForm
+    workerform = WorkerForm
+    projectform = ProjectForm
+    projectbilldetailsform = ProjectBillDetailsForm
+    
+    context_dict['customerform'] = customerform
+    context_dict['workerform'] = workerform
+    context_dict['projectform'] = projectform
+    context_dict['projectbilldetailsform'] = projectbilldetailsform
+    
+    if request.method == 'POST':
+        customerform = CustomerForm(request.POST)
+        workerform = WorkerForm(request.POST)
+        projectform = ProjectForm(request.POST)
+        projectbilldetailsform = ProjectBillDetailsForm(request.POST)
+        
+        worker = workerform.instance
+        project = projectform.instance
+        projectbilldetails = projectbilldetailsform.instance
+        
+        if customerform.is_valid():
+            customer = customerform.save()
+            
+            # add customer to Worker object
+            worker.cust_id = customer
+            # add customer to Project object
+            project.cust_id = customer
+            if workerform.is_valid():
+                worker.save()
+                if projectform.is_valid():
+                    project.save()
+                    # add project and worker to WorkerProjectBridge
+                    WorkerProjectBridge.objects.create(worker_id=worker, project_id=project)
+                    # add project to ProjectBillDetails object
+                    projectbilldetails.project_id = project
+                    if projectbilldetailsform.is_valid():
+                        projectbilldetails.get_total()
+                        projectbilldetails.save()
+                        return redirect(reverse('imaging_system_app:projects'))
+    return render(request, 'imaging_system_app/addProject.html', context=context_dict)
 
 def customers(request):
     context_dict={}
 
     customers = Customer.objects.all()
+    
+    # search 'cust_name', 'cust_tel_no', 'cust_email', 'cust_budget_code'
+    if request.method == 'POST':
+        q = request.POST.get('query')
+        if q != "":
+            # Allows displaying search string in text box
+            context_dict['q']= q
+        if q:
+            customers = Customer.objects.filter(Q(cust_name__icontains=q) | Q(cust_tel_no__icontains=q) | Q(cust_email__icontains=q) | Q(cust_budget_code__icontains=q))
+        
     customers.order_by("cust_id")
 
     context_dict['customers']= customers
 
     return render(request, 'imaging_system_app/customers.html', context=context_dict)
+    
+def customerDetails(request, cust_id):
+    context_dict={}
+    context_dict['customer']= Customer.objects.get(cust_id = cust_id)
+    context_dict['workers']= Worker.objects.filter(cust_id = cust_id)
+    context_dict['projects']= ProjectBillDetails.objects.filter(project_id__cust_id = cust_id)
+    context_dict['bills']= Bill.objects.filter(cust_id = cust_id)
+
+    return render(request, 'imaging_system_app/customerdetails.html', context=context_dict)
+
+def editCustomer(request, cust_id):
+    context_dict={}
+    try:
+        customer = Customer.objects.get(cust_id = cust_id)
+    except Customer.DoesNotExist:
+        customer = None
+    
+    if customer is None:
+        return redirect('/imaging_system_app/')
+    
+    context_dict['customer']= customer
+    #fill new form with current instance
+    form = CustomerForm(request.POST or None, instance=customer)
+    context_dict['form'] = form
+    
+    if request.method == 'POST':
+        update = CustomerForm(request.POST)
+        
+        if update.is_valid():
+            new_customer = form.save()
+            return redirect(reverse('imaging_system_app:customer-details', kwargs={"cust_id": cust_id}))
+    return render(request, 'imaging_system_app/editCustomer.html', context=context_dict)
+
+def editWorker(request, worker_id):
+    context_dict={}
+    try:
+        worker = Worker.objects.get(worker_id = worker_id)
+    except Worker.DoesNotExist:
+        worker = None
+    
+    if worker is None:
+        return redirect('/imaging_system_app/')
+    
+    context_dict['worker']= worker
+    cust_id = worker.cust_id.cust_id
+    #fill new form with current instance
+    form = WorkerForm(request.POST or None, instance=worker)
+    context_dict['form'] = form
+    
+    if request.method == 'POST':
+        update = WorkerForm(request.POST)
+        
+        if update.is_valid():
+            new_worker = form.save()
+            return redirect(reverse('imaging_system_app:customerdetails', kwargs={"cust_id": cust_id}))
+    return render(request, 'imaging_system_app/editWorker.html', context=context_dict)
 
 def addCustomer(request):
     form = CustomerForm
@@ -85,35 +268,76 @@ def addCustomer(request):
             return redirect(reverse('imaging_system_app:customers'))
     return render(request, 'imaging_system_app/addCustomer.html', context=context_dict)
 
-def editCustomer(request):
-    #find the walk object to edit
-    try:
-        customer = Customer.objects.order_by('cust_id')[:1].first()
-    except Customer.DoesNotExist:
-        customer = None
-    
-    if customer is None:
-        return redirect('/imaging_system_app/')
-    
-    #fill new form with current instance
-    form = CustomerForm(request.POST or None, instance=customer)
-    context_dict={'form': form}
-    
-    if request.method == 'POST':
-        update = CustomerForm(request.POST)
-        
-        if update.is_valid():
-            new_customer = form.save()
-            return redirect(reverse('imaging_system_app:customers'))
-    return render(request, 'imaging_system_app/editCustomer.html', context=context_dict)
-
 
 def bills(request):
     context_dict={}
 
     bills = Bill.objects.all()
+    
+    # search 'cust_id__cust_name', date filter
+    if request.method == 'POST':
+        q = request.POST.get('query')
+        datefrom = request.POST.get('project_from')
+        dateto = request.POST.get('project_to')
+        if q != "":
+            # Allows displaying search string in text box
+            context_dict['q']= q
+        if q:
+            bills = Bill.objects.filter(cust_id__cust_name__icontains = q)
+        if datefrom != "":
+            # Allows displaying search string in text box
+            context_dict['datefrom']= datefrom
+        if dateto != "":
+            # Allows displaying search string in text box
+            context_dict['dateto']= dateto
+        if datefrom:
+            try:
+                bills = bills.filter(project_date__gte = (datetime.dateint(datefrom[0:4]), int(datefrom[4:6]), int(datefrom[6:8])))
+            except:
+                bills = bills.none()
+        if dateto:
+            try:
+                bills = bills.filter(project_date__lte = datetime.date(int(dateto[0:4]), int(dateto[4:6]), int(dateto[6:8])))
+            except:
+                bills = bills.none()
+                
     bills.order_by("bill_id")
 
     context_dict['bills']= bills
 
     return render(request, 'imaging_system_app/bills.html', context=context_dict)
+    
+def queries(request):
+    # sample view for queries in imaging_system_app/queries/
+    context_dict={}
+    projects = Project.objects.all()
+    if request.method == 'POST':
+        query = request.POST.get('project_customer')
+        datefrom = request.POST.get('project_from')
+        dateto = request.POST.get('project_to')
+        if query != "":
+            # Allows displaying search string in text box
+            context_dict['query']= query
+        if query:
+            projects = Project.objects.filter(cust_id__cust_name__icontains = query)
+            
+        if datefrom != "":
+            # Allows displaying search string in text box
+            context_dict['datefrom']= datefrom
+        if dateto != "":
+            # Allows displaying search string in text box
+            context_dict['dateto']= dateto
+        if datefrom:
+            try:
+                projects = projects.filter(project_date__gte = datetime.date(int(datefrom[0:4]), int(datefrom[4:6]), int(datefrom[6:8])))
+            except:
+                projects = projects.none()
+        if dateto:
+            try:
+                projects = projects.filter(project_date__lte = datetime.date(int(dateto[0:4]), int(dateto[4:6]), int(dateto[6:8])))
+            except:
+                projects = projects.none()
+        
+        
+    context_dict['projects']= projects
+    return render(request, 'imaging_system_app/queries.html', context=context_dict)

@@ -1,0 +1,86 @@
+{% extends 'imaging_system_app/base.html' %}
+{% load static %}
+
+{% block title_block %}
+    - Add a Project
+{% endblock %}
+
+{% block css_block %}
+    <link rel="stylesheet" type="text/css" href="{% static 'content.css' %}">
+{% endblock %}
+
+{% block pagetitle %}
+	<h1><strong> Add a Project </strong></h1>
+{% endblock %}
+
+{% block body_block %}  
+    <ul class="content_list">
+	     <div>
+            <form id="project_form" method="post" action="{% url 'imaging_system_app:add-project' %}", enctype="multipart/form-data">
+				{% csrf_token %}
+				<h2>Customer</h2>
+				{% for hidden in customerform.hidden_fields %}
+					{{ hidden }}
+				{% endfor %}
+				{% for field in customerform.visible_fields %}
+					<div>
+						{{ field.errors }}
+						{{ field.help_text }}<br />
+					</div>
+					<div>
+						{{ field }}<br /><br />
+					</div>
+					<div></div>
+				{% endfor %}
+				<h2>Worker</h2>
+				{% for hidden in workerform.hidden_fields %}
+					{{ hidden }}
+				{% endfor %}
+				{% for field in workerform.visible_fields %}
+					<div>
+						{{ field.errors }}
+						{{ field.help_text }}<br />
+					</div>
+					<div>
+						{{ field }}<br /><br />
+					</div>
+					<div></div>
+				{% endfor %}
+				<h2>Specimen preparation record</h2>
+				{% for hidden in projectform.hidden_fields %}
+					{{ hidden }}
+				{% endfor %}
+				{% for field in projectform.visible_fields %}
+					<div>
+						{{ field.errors }}
+						{{ field.help_text }}<br />
+					</div>
+					<div>
+						{{ field }}<br /><br />
+					</div>
+					<div></div>
+				{% endfor %}
+				<h2>Billing</h2>
+				{% for hidden in projectbilldetailsform.hidden_fields %}
+					{{ hidden }}
+				{% endfor %}
+				{% for field in projectbilldetailsform.visible_fields %}
+					<div>
+						{{ field.errors }}
+						{{ field.help_text }}<br />
+					</div>
+					<div>
+						{{ field }}<br /><br />
+					</div>
+					<div></div>
+				{% endfor %}
+				<br />
+				<button type="submit" name="submit">
+						<p class="buttonText">Create New Project</p>
+				</button>
+				<div></div>
+			</form>
+        </div>
+    </ul>
+
+{% endblock %}
