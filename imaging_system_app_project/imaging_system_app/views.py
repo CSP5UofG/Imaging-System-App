@@ -225,11 +225,30 @@ def customers(request):
     context_dict={}
 
     customers = Customer.objects.all()
+    
+    # search 'cust_name', 'cust_tel_no', 'cust_email', 'cust_budget_code'
+    if request.method == 'POST':
+        q = request.POST.get('query')
+        if q != "":
+            # Allows displaying search string in text box
+            context_dict['q']= q
+        if q:
+            customers = Customer.objects.filter(Q(cust_name__icontains=q) | Q(cust_tel_no__icontains=q) | Q(cust_email__icontains=q) | Q(cust_budget_code__icontains=q))
+        
     customers.order_by("cust_id")
 
     context_dict['customers']= customers
 
     return render(request, 'imaging_system_app/customers.html', context=context_dict)
+    
+def customerDetails(request, cust_id):
+    context_dict={}
+    context_dict['customer']= Customer.objects.get(cust_id = cust_id)
+    context_dict['workers']= Worker.objects.filter(cust_id = cust_id)
+    context_dict['projects']= ProjectBillDetails.objects.filter(project_id__cust_id = cust_id)
+    context_dict['bills']= Bill.objects.filter(cust_id = cust_id)
+
+    return render(request, 'imaging_system_app/customerdetails.html', context=context_dict)
 
 def customerDetails(request, id):
     context_dict={}
@@ -263,6 +282,7 @@ def editCustomer(request, id):
     if customer is None:
         return redirect('/imaging_system_app/')
     
+    context_dict['customer']= customer
     #fill new form with current instance
     form = CustomerForm(request.POST or None, instance=customer)
     context_dict ={'form': form, 'id': id}
@@ -272,7 +292,7 @@ def editCustomer(request, id):
         
         if update.is_valid():
             new_customer = form.save()
-            return redirect(reverse('imaging_system_app:customers'))
+            return redirect(reverse('imaging_system_app:customer-details', kwargs={"cust_id": cust_id}))
     return render(request, 'imaging_system_app/editCustomer.html', context=context_dict)
 
 # ===================== WORKER =====================  #
