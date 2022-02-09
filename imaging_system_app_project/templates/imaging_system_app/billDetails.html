@@ -1,0 +1,89 @@
+{% extends 'imaging_system_app/base.html' %}
+{% load static %}
+
+{% block title_block %}
+    Bill {{ bill.bill_id }}
+{% endblock %}
+
+{% block css_block %}
+<link rel="stylesheet" type="text/css" href="{% static 'content.css' %}">
+{% endblock %}
+
+{% block pagetitle %}
+<h1><strong> Bill #{{ bill.bill_id }} </strong></h1>
+{% endblock %}
+
+{% block body_block %}
+<ul class="content_list">
+    <div>
+        <h2>{{ bill.billing_date }}</h2>
+    </div>
+    {% if bill.billing_address %}
+    <div>
+        <strong>Billing address</strong>
+        </br>
+        {{ bill.cust_id.cust_name }}
+        </br>
+        {{ bill.billing_address }}
+        </br>
+    </div>
+    </br>
+    {% endif %}
+    <div>
+        {% if not bill.billing_address %}
+        Budget holder: {{ bill.cust_id.cust_name }}
+        </br>
+        {% endif %}
+        Period: {{start_date}} to {{end_date}}
+        </br>
+        Budget code: {{ bill.cust_id.budget_code }}
+    </div>
+    </br>
+    <div>
+        <strong>Workers</strong>
+        </br>
+        {% for w in workers %}
+        {{ w.worker_name }}
+        </br>
+        {% endfor %}
+        </br>
+    </div>
+    <div>
+        <table>
+            <tr>
+                <th>Projects</th>
+                <th>Project date</th>
+                <th>Total</th>
+            </tr>
+            {% for p in projectbilldetails %}
+            <tr>
+                <td>{{ p.project_id.project_id }}</td>
+                <td>{{ p.project_id.project_date }}</td>
+                <td>{{ p.total }}</td>
+                {% endfor %}
+            </tr>
+        </table>
+    </div>
+    </br>
+    <div>
+        <table>
+            {% for p in projectbilldetails %}
+            {% for name, value in p.get_fields %}
+            {% if name != "project_bill_id" and name != "project_id" and value != "None" and value != "total" and name != "total" %}
+            <tr>
+                <th>{{ name }}</th>
+                <td>{{ value }}</td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+            {% endfor %}
+        </table>
+    </div>
+    <div>
+        <strong>
+            <h1>Grand Total: {{ bill.total_cost }}</h1>
+        </strong>
+    </div>
+</ul>
+
+{% endblock %}

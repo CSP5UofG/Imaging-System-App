@@ -19,7 +19,7 @@
 {% block body_block %}
 <div class="action_bar">
     <div class="new_entry">
-        <a href="/imaging_system_app/add-project">New project</a><br />
+        <a href="/imaging_system_app/add-project">New Project</a><br />
     </div>
     <div class="search_bar">
         <input type="text" id="search_bar" placeholder="Search projects" id>
@@ -43,8 +43,8 @@
         <td> {{p.num_samples}} </td>
         <td> {{p.get_status_display}} </td>
         <td></td>
-        <td> <a href="" class="table_buttons"> Edit</a></td>
-        <td id="right_corner"> <a href="" class="table_buttons"> View </a></td>
+        <td> <a href="{% url 'imaging_system_app:edit-project' p.project_id %}" class="table_buttons"> Edit</a></td>
+        <td id="right_corner"> <a href="{% url 'imaging_system_app:project-details' p.project_id %}" class="table_buttons"> View </a></td>
     </tr>
     {% endfor %}
 

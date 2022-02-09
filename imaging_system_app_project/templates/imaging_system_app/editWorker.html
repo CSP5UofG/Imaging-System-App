@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title_block %}
-    - Update a Customer
+     Update a worker
 {% endblock %}
 
 {% block css_block %}
@@ -10,13 +10,13 @@
 {% endblock %}
 
 {% block pagetitle %}
-	<h1><strong> Update Customer </strong></h1>
+	<h1><strong> Update Worker </strong></h1>
 {% endblock %}
 
-{% block body_block %}  
-    <ul class="content_list">
+{% block body_block %} 
+		<h1> Customer: {{ worker.cust_id.cust_name }} </h1>
 	     <div>
-            <form id="customer_form" method="post" action="{% url 'imaging_system_app:edit-customer' id %}", enctype="multipart/form-data">
+            <form id="worker_form" method="post", enctype="multipart/form-data">
             {% csrf_token %}
             {% for hidden in form.hidden_fields %}
                 {{ hidden }}
@@ -32,12 +32,11 @@
                 <div></div>
             {% endfor %}
                 <br />
-                <button type="submit" name="submit">
-                        <p class="buttonText">Update Customer</p>
+                <button type="submit" name="submit" class="submit_button">
+                        <p class="buttonText">Update Worker</p>
                 </button>
                 <div></div>
         </form>
         </div>
-    </ul>
 
 {% endblock %}

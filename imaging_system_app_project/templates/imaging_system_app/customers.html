@@ -40,7 +40,7 @@
                         <td> +{{c.cust_tel_no}} </td>
                         <td> {{c.cust_budget_code}} </td>
                         <td> <a href="{% url 'imaging_system_app:edit-customer' c.cust_id %}" class="table_buttons"> Edit</a></td>
-                        <td id="right_corner"> <a href="" class="table_buttons"> View </a></td>
+                        <td id="right_corner"> <a href="{% url 'imaging_system_app:customer-details' c.cust_id %}" class="table_buttons"> View </a></td>
 
                     </tr>  
                 {% endfor %}

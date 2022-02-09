@@ -37,8 +37,8 @@
                         <td> {{ bill.billing_date}} </td>
                         <td> {{bill.cust_id}} </td>
                         <td> £{{bill.total_cost}}</td>
-                        <td> <a href="" class="table_buttons"> Edit</a></td>
-                        <td id="right_corner"> <a href="" class="table_buttons"> View </a></td>
+                        <td> <a href="{% url 'imaging_system_app:bill-details' bill.bill_id  %}" class="table_buttons"> View</a></td>
+                        <td id="right_corner"> <a href="{% url 'imaging_system_app:print-bill' bill.bill_id  %}" class="table_buttons"> Print </a></td>
 
                     </tr>  
                 {% endfor %}

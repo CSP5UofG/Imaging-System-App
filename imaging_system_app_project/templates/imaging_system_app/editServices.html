@@ -16,7 +16,7 @@
 {% block body_block %}  
     <ul class="content_list">
 	     <div>
-            <form id="service_form" method="post" action="{% url 'imaging_system_app:edit-service' pk %}", enctype="multipart/form-data">
+            <form id="service_form" method="post" action="{% url 'imaging_system_app:edit-service' id %}", enctype="multipart/form-data">
             {% csrf_token %}
             {% for hidden in form.hidden_fields %}
                 {{ hidden }}

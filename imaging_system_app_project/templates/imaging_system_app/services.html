@@ -17,7 +17,7 @@
 
 <div class="action_bar">
 	<div class="new_entry">
-		<a href="">New service</a><br />
+		<a href="/imaging_system_app/add-service">New service</a><br />
 	</div>
 
 	<div class="search_bar">
@@ -41,7 +41,6 @@
 			<td>{{ s.outside_price }}</td>
 			<td> <a href="{% url 'imaging_system_app:edit-service' s.service_id %}" class="table_buttons"> Edit</a>
 			</td>
-			<td id="right_corner"> <a href="" class="table_buttons"> View </a></td>
 		</tr>
 		{% endfor %}
 	</table>
