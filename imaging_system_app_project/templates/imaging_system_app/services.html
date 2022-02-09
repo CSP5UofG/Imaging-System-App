@@ -39,7 +39,7 @@
 			<td>{{ s.in_house_price }}</td>
 			<td>{{ s.normal_price }}</td>
 			<td>{{ s.outside_price }}</td>
-			<td> <a href="{% url 'imaging_system_app:edit-service' s.service_id %}" class="table_buttons"> Edit</a>
+			<td id="right_corner"> <a href="{% url 'imaging_system_app:edit-service' s.service_id %}" class="table_buttons"> Edit</a>
 			</td>
 		</tr>
 		{% endfor %}
