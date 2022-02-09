@@ -19,7 +19,7 @@
             {% for bill in bills %}
                 <div class="content_entries">
                     <li class="content_entry">
-                        <h2>{{ bill.bill_id}} - {{ bill.billing_date}}- £{{bill.total_cost}}  <br /> 
+                        <h2>{{ bill.bill_id }} - {{ bill.billing_date}}- £{{ bill.total_cost }} - Customer: {{ bill.cust_id }}  <br /> 
                     </li>
                 </div>
             {% endfor %}
