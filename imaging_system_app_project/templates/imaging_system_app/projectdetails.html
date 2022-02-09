@@ -111,7 +111,7 @@ Project {{ project.project_id.project_id }}
     <h2>Billing</h2>
     <table>
         {% for name, value in project.get_fields %}
-        {% if not name == "project_bill_id" and not name == "project_id" and not value == "None" and valued %}
+        {% if not name == "project_bill_id" and not name == "project_id" and not value == "None" and value %}
         <tr>
             <th>{{ name }}</th>
             <td>{{ value }}</td>
