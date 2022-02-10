@@ -61,11 +61,11 @@
 </div>
 <div>
 	{% if bill.extra1_cost %}
-		{{ bill.extra1_name }}: £{{ bill.extra1_cost }}
+		{{ bill.extra1_name }}: £{{ bill.extra1_cost|floatformat:"2" }}
 		</br>
 	{% endif %}
 	{% if bill.extra2_cost %}
-		{{ bill.extra2_name }}: £{{ bill.extra2_cost }}
+		{{ bill.extra2_name }}: £{{ bill.extra2_cost|floatformat:"2" }}
 		</br>
 	{% endif %}
 </div>
