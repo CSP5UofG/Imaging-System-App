@@ -136,7 +136,7 @@
             "cust_tel_no": "44734567891",
             "cust_email": "One@dummy-mail.com",
             "cust_budget_code": 102,
-            "cust_type": 0.5
+            "cust_type": 1.0
         }
     }, {
         "model": "imaging_system_app.customer",
@@ -146,7 +146,7 @@
             "cust_tel_no": "44734567891",
             "cust_email": "CompanyTwo@dummy-mail.com",
             "cust_budget_code": 103,
-            "cust_type": 0.5
+            "cust_type": 1.0
         }
     }, {
         "model": "imaging_system_app.customer",
@@ -484,7 +484,8 @@
         "fields": {
             "project_id": 1,
             "service_id": 1,
-            "units": 1.0
+            "units": 1.0,
+            "cost": 50.0
         }
     }, {
         "model": "imaging_system_app.projectservicesbridge",
@@ -492,7 +493,8 @@
         "fields": {
             "project_id": 2,
             "service_id": 2,
-            "units": 1.0
+            "units": 1.0,
+            "cost": 55.0
         }
     }, {
         "model": "imaging_system_app.projectservicesbridge",
@@ -500,7 +502,8 @@
         "fields": {
             "project_id": 3,
             "service_id": 1,
-            "units": 1.5
+            "units": 1.5,
+            "cost": 75.0
         }
     }, {
         "model": "imaging_system_app.projectservicesbridge",
@@ -508,7 +511,8 @@
         "fields": {
             "project_id": 4,
             "service_id": 2,
-            "units": 1.5
+            "units": 1.5,
+            "cost": 82.5
         }
     }, {
         "model": "imaging_system_app.projectservicesbridge",
@@ -516,7 +520,8 @@
         "fields": {
             "project_id": 5,
             "service_id": 1,
-            "units": 2.0
+            "units": 2.0,
+            "cost": 100.0
         }
     }, {
         "model": "imaging_system_app.projectservicesbridge",
@@ -524,7 +529,8 @@
         "fields": {
             "project_id": 6,
             "service_id": 2,
-            "units": 2.0
+            "units": 2.0,
+            "cost": 110.0
         }
     }, {
         "model": "imaging_system_app.projectbillbridge",
