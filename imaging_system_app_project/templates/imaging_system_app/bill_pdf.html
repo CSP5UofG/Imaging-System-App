@@ -70,6 +70,16 @@
 			</table>
 		</div>
 		<div>
+			{% if bill.extra1_cost %}
+				{{ bill.extra1_name }}: £{{ bill.extra1_cost }}
+				</br>
+			{% endif %}
+			{% if bill.extra2_cost %}
+				{{ bill.extra2_name }}: £{{ bill.extra2_cost }}
+				</br>
+			{% endif %}
+		</div>
+		<div>
 			<strong><h1>Grand Total: £{{ bill.total_cost|floatformat:"2" }}</h1></strong>
 		</div>
 		{% endblock %}

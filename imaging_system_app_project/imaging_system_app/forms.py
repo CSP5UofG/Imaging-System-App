@@ -145,8 +145,8 @@ class BillForm(forms.ModelForm):
     
     class Meta:
         model = Bill
-        fields = ('billing_date', 'billing_address', 'extra1_name', 'extra1_cost',
-                  'extra2_name', 'extra2_cost', 'cust_id')
+        fields = ('cust_id', 'billing_date', 'billing_address', 'extra1_name', 'extra1_cost',
+                  'extra2_name', 'extra2_cost')
 
 
 class ProjectServicesBridgeForm(forms.ModelForm):
@@ -171,14 +171,12 @@ class ProjectServicesBridgeForm(forms.ModelForm):
 
 
 class ProjectBillBridgeForm(forms.ModelForm):
-    bill_id =  forms.ModelChoiceField(queryset = Bill.objects.all(),
-                                     help_text = "Choose Bill")
     project_id =  forms.ModelChoiceField(queryset = Project.objects.all(),
                                      help_text = "Choose Project")
     
     class Meta:
         model = ProjectBillBridge
-        fields = ('bill_id', 'project_id')
+        fields = ('project_id', )
  
 
 

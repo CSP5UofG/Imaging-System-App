@@ -1,0 +1,43 @@
+{% extends 'imaging_system_app/base.html' %}
+{% load static %}
+
+{% block title_block %}
+    - Update Bill
+{% endblock %}
+
+{% block css_block %}
+    <link rel="stylesheet" type="text/css" href="{% static 'content.css' %}">
+{% endblock %}
+
+{% block pagetitle %}
+	<h1><strong> Update Bill </strong></h1>
+{% endblock %}
+
+{% block body_block %}  
+    <ul class="content_list">
+	     <div>
+            <form id="service_form" method="post" action="{% url 'imaging_system_app:edit-bill' id %}", enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for hidden in billform.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+            {% for field in billform.visible_fields %}
+                <div class="form_header">
+                    {{ field.errors }}
+                    {{ field.help_text }}<br />
+                </div>
+                <div class="form_header">
+                    {{ field }}<br /><br />
+                </div>
+                <div></div>
+            {% endfor %}
+                <br />
+                <button type="submit" name="submit" class="submit_button">
+                        <p class="buttonText">Update Bill</p>
+                </button>
+                <div></div>
+        </form>
+        </div>
+    </ul>
+
+{% endblock %}

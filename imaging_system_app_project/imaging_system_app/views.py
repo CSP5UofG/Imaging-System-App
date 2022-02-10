@@ -350,7 +350,50 @@ def billDetails(request, id):
     context_dict = bill_context_dict(id)
     # TODO: combine bill units and calculate grand total
     return render(request, 'imaging_system_app/billDetails.html', context=context_dict)
+
+def addBill(request):
+    context_dict = {}
+    billform = BillForm
+    projectbillbridgeform = ProjectBillBridgeForm
+    context_dict['billform'] = billform
+    context_dict['projectbillbridgeform'] = ProjectBillBridgeForm
     
+    if request.method == 'POST':
+        billform = BillForm(request.POST)
+        projectbillbridgeform = ProjectBillBridgeForm(request.POST)
+        
+        if billform.is_valid() and projectbillbridgeform.is_valid():
+            bill = billform.save()
+            projectbillbridge = projectbillbridgeform.save(commit = False)
+            projectbillbridge.bill_id = bill
+            projectbillbridge.save()
+            calculate_bill(bill)
+            return redirect(reverse('imaging_system_app:bills'))
+    return render(request, 'imaging_system_app/addBill.html', context=context_dict)
+    
+def editBill(request, id):
+    context_dict={}
+    try:
+        bill = Bill.objects.get(bill_id = id)
+        context_dict['bill'] = bill
+    except Bill.DoesNotExist:
+        bill = None
+    
+    if bill is None:
+        return redirect('/imaging_system_app/')
+        
+    #fill new form with current instance
+    billform = BillForm(request.POST or None, instance=bill)
+    context_dict['billform'] = billform
+    context_dict['id'] = id
+    
+    if request.method == 'POST':
+        if billform.is_valid():
+            billform.save()
+            calculate_bill(bill)
+            return redirect(reverse('imaging_system_app:bill-details', kwargs={"id": id}))
+    return render(request, 'imaging_system_app/editBill.html', context=context_dict)
+
 def printBill(request, id):
     context_dict = bill_context_dict(id)
     
@@ -400,6 +443,10 @@ def calculate_bill(bill):
     projectbillbridge = ProjectBillBridge.objects.filter(bill_id=bill.bill_id)
     for pbb in projectbillbridge:
         tot += pbb.project_id.total
+    if bill.extra1_cost:
+        tot += bill.extra1_cost
+    if bill.extra2_cost:
+        tot += bill.extra2_cost
     bill.total_cost = tot
     bill.save()
     

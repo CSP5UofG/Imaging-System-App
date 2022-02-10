@@ -23,6 +23,8 @@ urlpatterns = [
     path('workers/<id>/edit/', views.editWorker, name='edit-worker'),
     
     path('bills/<id>/', views.billDetails, name='bill-details'),
+    path('add-bill/', views.addBill, name='add-bill'),
+    path('bills/<id>/edit/', views.editBill, name='edit-bill'),
     path('bills/<id>/print/', views.printBill, name='print-bill'),
     
     # sample view for queries

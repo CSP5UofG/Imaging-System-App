@@ -104,7 +104,7 @@ class Bill(models.Model):
     extra1_cost = models.FloatField(blank=True, null = True)
     extra2_name = models.CharField(max_length = 100, blank=True)
     extra2_cost = models.FloatField(blank=True, null = True)
-    total_cost = models.FloatField()
+    total_cost = models.FloatField(default=0)
     cust_id = models.ForeignKey(Customer, on_delete=models.CASCADE)
     
     def __str__(self):
@@ -124,7 +124,7 @@ class ProjectServicesBridge(models.Model):
    
 class ProjectBillBridge(models.Model):
     project_bill_bridge_id = models.AutoField(primary_key = True)
-    bill_id = models.ForeignKey(Bill, on_delete=models.CASCADE)
+    bill_id = models.ForeignKey(Bill, on_delete=models.CASCADE, null=True, blank=True)
     project_id = models.ForeignKey(Project, on_delete=models.CASCADE)
     
     def __str__(self):
