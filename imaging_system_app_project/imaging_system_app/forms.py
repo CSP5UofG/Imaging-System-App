@@ -1,6 +1,7 @@
 from django import forms
-from imaging_system_app.models import Customer, Worker, Services, Bill, ProjectBillDetails, ProjectBillBridge, Project, WorkerProjectBridge
+from imaging_system_app.models import Customer, Worker, Services, Bill, ProjectServicesBridge, ProjectBillBridge, Project, WorkerProjectBridge
 from django.utils import timezone
+from django.core.exceptions import ValidationError
 import datetime
 
 
@@ -10,10 +11,11 @@ class ServicesForm(forms.ModelForm):
     normal_price = forms.FloatField(help_text = "Price of Service")
     in_house_price = forms.FloatField(widget=forms.HiddenInput(), required = False)
     outside_price = forms.FloatField(widget=forms.HiddenInput(), required = False)
+    unit_name = forms.CharField(max_length = 20, help_text = "Unit name of Service")
     
     class Meta:
         model = Services
-        fields = ('name', 'normal_price', )
+        fields = ('name', 'normal_price', 'unit_name')
 
 
 class CustomerForm(forms.ModelForm):
@@ -69,9 +71,9 @@ class ProjectForm(forms.ModelForm):
     num_samples = forms.IntegerField(help_text = "Number of Samples",
                                      min_value = 0)
     specimen_procedure = forms.CharField(max_length = 500,
-                                         help_text = "Specimen procedure", required = False)
+                                         help_text = "Specimen/procedure", required = False)
     chemical_fixation = forms.CharField(max_length = 100,
-                                        help_text = "Chemical fixation", required = False)
+                                        help_text = "Chemical Fixation", required = False)
     neg_staining = forms.CharField(max_length = 100,
                                    help_text = "Negative Staining", required = False)
     cryofixation = forms.CharField(max_length = 100,
@@ -85,25 +87,25 @@ class ProjectForm(forms.ModelForm):
     sem = forms.CharField(max_length = 3,
                           help_text = "SEM", required = False)
     sem_mount = forms.CharField(max_length = 50,
-                                help_text = "SEM mount", required = False)
+                                help_text = "SEM Mount", required = False)
     fd = forms.CharField(max_length = 50,
-                         help_text = "fd", required = False)
+                         help_text = "FD", required = False)
     cpd = forms.CharField(max_length = 50,
-                          help_text = "cpd", required = False)
+                          help_text = "CPD", required = False)
     sem_cost = forms.CharField(max_length = 50,
-                          help_text = "sem cost", required = False)
+                          help_text = "SEM Cost", required = False)
     temp_time = forms.CharField(max_length = 50,
-                                help_text = "temp time", required = False)
+                                help_text = "Temp/Time", required = False)
     immunolabelling = forms.CharField(max_length = 100,
                                       help_text = "Immunolabelling", required = False)
     first_dilution_time = forms.CharField(max_length = 100,
-                                          help_text = "First dilution time", required = False)
+                                          help_text = "1°Ab/dilution/time", required = False)
     second_dilution_time = forms.CharField(max_length = 100,
-                                           help_text = "Second dilution time", required = False)
+                                           help_text = "2°Ab-gold/dilution/time", required = False)
     contrast_staining = forms.CharField(max_length = 100,
                                         help_text = "Contrast staining", required = False)
     comments_results = forms.CharField(max_length = 500,
-                                       help_text = "Comments and results", required = False)
+                                       help_text = "Comments/Results", required = False)
     
     class Meta:
         model = Project
@@ -130,44 +132,6 @@ class BillForm(forms.ModelForm):
                                    help_text = "Date", initial=datetime.date.today)
     billing_address = forms.CharField(max_length = 100,
                                       help_text = "Billing Address")
-    total_cost = forms.FloatField(help_text = "Total Cost",
-                                  min_value = 0)
-    cust_id = forms.ModelChoiceField(queryset = Customer.objects.all(),
-                                     help_text = "Customer Company")
-    
-    class Meta:
-        model = Bill
-        fields = ('billing_date', 'billing_address', 'total_cost', 'cust_id')
-
-
-class ProjectBillDetailsForm(forms.ModelForm):
-    jeol1200tem_unit = forms.FloatField(help_text = "jeol1200tem unit",
-                                        min_value = 0, required = False)
-    jeol100sem_unit = forms.FloatField(help_text = "jeol100sem unit",
-                                       min_value = 0, required = False)
-    tem_processing_unit = forms.IntegerField(help_text = "TEM processing unit",
-                                             min_value = 0, required = False)
-    sectioning_stained_unit = forms.IntegerField(help_text = "Sectioning stained unit",
-                                                 min_value = 0, required = False)
-    sectioning_contrast_stained_unit = forms.IntegerField(help_text = "Sectioning contrast stained unit",
-                                                          min_value = 0, required = False)
-    negative_staining_unit = forms.IntegerField(help_text = "Negative staining unit",
-                                                min_value = 0, required = False)
-    sem_processing_mounting_unit = forms.IntegerField(help_text = "SEM processing mounting unit",
-                                                      min_value = 0, required = False)
-    sem_processing_fd_unit = forms.IntegerField(help_text = "SEM processing fd unit",
-                                                min_value = 0, required = False)
-    sem_unit = forms.IntegerField(help_text = "SEM unit",
-                                  min_value = 0, required = False)
-    immunolabelling_unit = forms.IntegerField(help_text = "Immunolabelling unit",
-                                              min_value = 0, required = False)
-    cryosectioning_unit = forms.IntegerField(help_text = "Cryosectioning unit",
-                                             min_value = 0, required = False)
-    freeze_fracture_unit = forms.IntegerField(help_text = "Freeze fracture unit",
-                                              min_value = 0, required = False)
-    ir_white_unit = forms.IntegerField(help_text = "ir white unit",
-                                       min_value = 0, required = False)
-    
     extra1_name = forms.CharField(max_length = 100,
                                   help_text = "First extra service name", required = False)
     extra1_cost = forms.FloatField(min_value = 0,
@@ -176,31 +140,45 @@ class ProjectBillDetailsForm(forms.ModelForm):
                                   help_text = "Second extra service name", required = False)
     extra2_cost = forms.FloatField(min_value = 0,
                                    help_text = "Second extra service cost", required = False)
-    extra3_name = forms.CharField(max_length = 100,
-                                  help_text = "Third extra service name", required = False)
-    extra3_cost = forms.FloatField(min_value = 0,
-                                   help_text = "Third extra service cost", required = False)
+    cust_id = forms.ModelChoiceField(queryset = Customer.objects.all(),
+                                     help_text = "Customer Company")
     
     class Meta:
-        model = ProjectBillDetails
-        fields = ('jeol1200tem_unit', 'jeol100sem_unit', 'tem_processing_unit',
-                  'sectioning_stained_unit', 'sectioning_contrast_stained_unit',
-                  'negative_staining_unit', 'sem_processing_mounting_unit', 
-                  'sem_processing_fd_unit', 'sem_unit', 'immunolabelling_unit',
-                  'cryosectioning_unit', 'freeze_fracture_unit', 'ir_white_unit',
-                  'extra1_name', 'extra1_cost', 'extra2_name', 'extra2_cost',
-                  'extra3_name', 'extra3_cost', )
+        model = Bill
+        fields = ('billing_date', 'billing_address', 'extra1_name', 'extra1_cost',
+                  'extra2_name', 'extra2_cost', 'cust_id')
+
+
+class ProjectServicesBridgeForm(forms.ModelForm):
+    service_id = forms.ModelChoiceField(queryset = Services.objects.all(),
+                                     help_text = "Service", initial=Services.__dict__)
+    units = forms.FloatField(help_text = "Units", min_value = 0)
+    
+    def clean_units(self):
+        form_data = self.cleaned_data
+        if not form_data['units'].is_integer():
+            if form_data['service_id'].unit_name != 'hour':
+                raise ValidationError("Value must be an integer. ")
+            elif not (form_data['units'] + .5).is_integer():
+                raise ValidationError("Value must be in .5 increments. ")
+        return float(form_data['units'])
+    
+    
+    
+    class Meta:
+        model = ProjectServicesBridge
+        fields = ('service_id', 'units', )
 
 
 class ProjectBillBridgeForm(forms.ModelForm):
     bill_id =  forms.ModelChoiceField(queryset = Bill.objects.all(),
                                      help_text = "Choose Bill")
-    project_bill_id =  forms.ModelChoiceField(queryset = ProjectBillDetails.objects.all(),
-                                     help_text = "Choose Project Bill")
+    project_id =  forms.ModelChoiceField(queryset = Project.objects.all(),
+                                     help_text = "Choose Project")
     
     class Meta:
         model = ProjectBillBridge
-        fields = ('bill_id', 'project_bill_id')
+        fields = ('bill_id', 'project_id')
  
 
 

@@ -43,15 +43,15 @@ Project {{ project.project_id.project_id }}
 <div class="project_info">
     <div class="project_info_column">
         <div class="project_info_header">Project date</div>
-        <div>{{ project.project_id.project_date }}</div>
+        <div>{{ project.project_date }}</div>
     </div>
     <div class="project_info_column">
         <div class="project_info_header">Status</div>
-        <div>{{ project.project_id.get_status_display }}</div>
+        <div>{{ project.get_status_display }}</div>
     </div>
     <div class="project_info_column">
         <div class="project_info_header">Number of samples</div>
-        <div>{{ project.project_id.num_samples }}</div>
+        <div>{{ project.num_samples }}</div>
     </div>
 </div>
 
@@ -63,21 +63,21 @@ Project {{ project.project_id.project_id }}
     </div>
     <div class="project_info_column">
         <div class="project_info_header">Name</div>
-        <div>{{ project.project_id.cust_id.cust_name }}</div>
+        <div>{{ project.cust_id.cust_name }}</div>
         {% for w in workers %}
             <div>{{ w.worker_id.worker_name }}</div>
         {% endfor %}
     </div>
     <div class="project_info_column">
         <div class="project_info_header">Contact telephone number</div>
-        <div>+{{ project.project_id.cust_id.cust_tel_no }}</div>
+        <div>+{{ project.cust_id.cust_tel_no }}</div>
         {% for w in workers %}
             <div>+{{ w.worker_id.worker_tel_no }}</div>
         {% endfor %}
     </div>
     <div class="project_info_column">
         <div class="project_info_header">Email</div>
-        <div>{{ project.project_id.cust_id.email }}</div>
+        <div>{{ project.cust_id.email }}</div>
         {% for w in workers %}
             <div>{{ w.worker_id.worker_email }}</div>
         {% endfor %}
@@ -87,18 +87,18 @@ Project {{ project.project_id.project_id }}
 <div class="project_info">
     <div class="project_info_column">
         <div class="project_info_header">Budget Code</div>
-        <div>{{ project.project_id.cust_id.budget_code }}</div>
+        <div>{{ project.cust_id.cust_budget_code }}</div>
     </div>
     <div class="project_info_column">
         <div class="project_info_header">Customer Type</div>
-        <div>{{ project.project_id.cust_id.get_cust_type_display }}</div>
+        <div>{{ project.cust_id.get_cust_type_display }}</div>
     </div>
 </div>
 
     <h2>Specimen preparation record</h2>
     <table>
-        {% for name, value in project.project_id.get_fields %}
-        {% if name != "project_id" and name != "cust_id" and name != "project_date" and name != "num_samples" and name != "status" %}
+        {% for name, value in project.get_fields %}
+        {% if name != "project id" and name != "cust id" and name != "project date" and name != "num samples" and name != "status" and name != "total" %}
         <tr>
             <th>{{ name }}</th>
             <td>{{ value }}</td>
@@ -110,14 +110,24 @@ Project {{ project.project_id.project_id }}
 <div>
     <h2>Billing</h2>
     <table>
-        {% for name, value in project.get_fields %}
-        {% if not name == "project_bill_id" and not name == "project_id" and not value == "None" and value %}
+        {% for s in services %}
         <tr>
-            <th>{{ name }}</th>
-            <td>{{ value }}</td>
+            <td>{{ s.service_id.name }}</td>
+			{% if s.units == 1.0 %}
+				<td>{{ s.units|floatformat:"0" }} {{ s.service_id.unit_name }}</td>
+			{% else %}
+				{% if s.service_id.unit_name == "hour" %}
+					<td>{{ s.units }} {{ s.service_id.unit_name }}s</td>
+				{% else %}
+					<td>{{ s.units|floatformat:"0" }} {{ s.service_id.unit_name }}s </td>
+				{% endif %}
+			{% endif %}
+			<td>£{{ s.cost|floatformat:"2" }}</td>
         </tr>
-        {% endif %}
         {% endfor %}
+		
+			
+			
     </table>
 </div>
 

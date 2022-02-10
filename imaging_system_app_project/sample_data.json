@@ -2,120 +2,133 @@
         "model": "imaging_system_app.services",
         "pk": 1,
         "fields": {
-            "name": "jeol1200tem",
+            "name": "Jeol 1200 TEM",
             "normal_price": 50.0,
-			"in_house_price": 25.0,
-			"outside_price": 75.0
+            "in_house_price": 25.0,
+            "outside_price": 75.0,
+            "unit_name": "hour"
         }
     }, {
         "model": "imaging_system_app.services",
         "pk": 2,
         "fields": {
-            "name": "jeol100sem",
+            "name": "JEOL IT 100 SEM",
             "normal_price": 55.0,
-			"in_house_price": 27.5,
-			"outside_price": 82.5
+            "in_house_price": 27.5,
+            "outside_price": 82.5,
+            "unit_name": "hour"
         }
-    },{
+    }, {
         "model": "imaging_system_app.services",
         "pk": 3,
         "fields": {
-            "name": "tem processing",
+            "name": "TEM processing (morphology)",
             "normal_price": 100.0,
-			"in_house_price": 50.0 ,
-			"outside_price": 150.0
+            "in_house_price": 50.0,
+            "outside_price": 150.0,
+            "unit_name": "sample"
         }
-    },{
+    }, {
         "model": "imaging_system_app.services",
         "pk": 4,
         "fields": {
-            "name": "sectioning stained",
+            "name": "Sectioning only: stained",
             "normal_price": 40.0,
-			"in_house_price": 20.0,
-			"outside_price": 60.0
+            "in_house_price": 20.0,
+            "outside_price": 60.0,
+            "unit_name": "session"
         }
     }, {
         "model": "imaging_system_app.services",
         "pk": 5,
         "fields": {
-            "name": "sectioning contrast stained",
+            "name": "Sectioning only: contrast stained",
             "normal_price": 50.0,
-			"in_house_price": 25.0,
-			"outside_price": 75.0
+            "in_house_price": 25.0,
+            "outside_price": 75.0,
+            "unit_name": "session"
         }
-    },{
+    }, {
         "model": "imaging_system_app.services",
         "pk": 6,
         "fields": {
-            "name": "negative staining",
+            "name": "Negative staining",
             "normal_price": 10.0,
-			"in_house_price": 5.0,
-			"outside_price": 15.0
+            "in_house_price": 5.0,
+            "outside_price": 15.0,
+            "unit_name": "sample"
         }
-    },{
+    }, {
         "model": "imaging_system_app.services",
         "pk": 7,
         "fields": {
-            "name": "sem processing mounting",
+            "name": "SEM processing: mounting",
             "normal_price": 100.0,
-			"in_house_price": 50.0,
-			"outside_price": 150.0
+            "in_house_price": 50.0,
+            "outside_price": 150.0,
+            "unit_name": "sample"
         }
-    },{
-        "model": "imaging_system_app.services",
-        "pk": 8,
-        "fields": {
-            "name": "sem processing fd",
-            "normal_price": 200.0,
-			"in_house_price": 100.0,
-			"outside_price": 300.0
-        }
-    },{
+    }, {
         "model": "imaging_system_app.services",
         "pk": 9,
         "fields": {
-            "name": "sem",
-            "normal_price": 40.0,
-			"in_house_price": 20.0,
-			"outside_price": 60.0
+            "name": "SEM processing: freeze drying",
+            "normal_price": 200.0,
+            "in_house_price": 100.0,
+            "outside_price": 300.0,
+            "unit_name": "run"
         }
-    },{
+    }, {
+        "model": "imaging_system_app.services",
+        "pk": 10,
+        "fields": {
+            "name": "SEM (mounting/coating only)",
+            "normal_price": 40.0,
+            "in_house_price": 20.0,
+            "outside_price": 60.0,
+            "unit_name": "run"
+        }
+    }, {
         "model": "imaging_system_app.services",
         "pk": 11,
         "fields": {
-            "name": "immunolabelling",
+            "name": "Immuno-labelling (TEM and SEM)",
             "normal_price": 70.0,
-			"in_house_price": 35.0,
-			"outside_price": 105.0
+            "in_house_price": 35.0,
+            "outside_price": 105.0,
+            "unit_name": "sample"
         }
-    },{
+    }, {
         "model": "imaging_system_app.services",
         "pk": 12,
         "fields": {
-            "name": "cryosectioning",
-            "normal_price": 150,
-			"in_house_price": 75.0,
-			"outside_price": 225.0
+            "name": "Cryopreparation: cryosectioning",
+            "normal_price": 150.0,
+            "in_house_price": 75.0,
+            "outside_price": 225.0,
+            "unit_name": "session"
         }
-    },{
+    }, {
         "model": "imaging_system_app.services",
         "pk": 13,
         "fields": {
-            "name": "freeze fracture",
+            "name": "Cryopreparation: freeze-fracture",
             "normal_price": 100.0,
-			"in_house_price": 50.0,
-			"outside_price": 50.0
+            "in_house_price": 50.0,
+            "outside_price": 150.0,
+            "unit_name": "sample"
         }
-    },{
+    }, {
         "model": "imaging_system_app.services",
         "pk": 14,
         "fields": {
-            "name": "ir white",
+            "name": "Cryopreparation: LR white",
             "normal_price": 80.0,
-			"in_house_price": 40.0,
-			"outside_price": 120.0
+            "in_house_price": 40.0,
+            "outside_price": 120.0,
+            "unit_name": "sample"
         }
-    },{
+    }, {
         "model": "imaging_system_app.customer",
         "pk": 1,
         "fields": {
@@ -123,7 +136,7 @@
             "cust_tel_no": "44734567891",
             "cust_email": "One@dummy-mail.com",
             "cust_budget_code": 102,
-			"cust_type": 0.5
+            "cust_type": 0.5
         }
     }, {
         "model": "imaging_system_app.customer",
@@ -133,7 +146,7 @@
             "cust_tel_no": "44734567891",
             "cust_email": "CompanyTwo@dummy-mail.com",
             "cust_budget_code": 103,
-			"cust_type": 0.5
+            "cust_type": 0.5
         }
     }, {
         "model": "imaging_system_app.customer",
@@ -143,7 +156,7 @@
             "cust_tel_no": "44734567891",
             "cust_email": "ThirdC@dummy-mail.com",
             "cust_budget_code": 112,
-			"cust_type": 1.0
+            "cust_type": 1.0
         }
     }, {
         "model": "imaging_system_app.customer",
@@ -153,7 +166,7 @@
             "cust_tel_no": "44734567891",
             "cust_email": "4company@dummy-mail.com",
             "cust_budget_code": 105,
-			"cust_type": 1.0
+            "cust_type": 1.0
         }
     }, {
         "model": "imaging_system_app.customer",
@@ -163,7 +176,7 @@
             "cust_tel_no": "44734567891",
             "cust_email": "FiveGuys@dummy-mail.com",
             "cust_budget_code": 121,
-			"cust_type": 1.5
+            "cust_type": 1.5
         }
     }, {
         "model": "imaging_system_app.customer",
@@ -173,7 +186,7 @@
             "cust_tel_no": "44734567891",
             "cust_email": "6andCo@dummy-mail.com",
             "cust_budget_code": 116,
-			"cust_type": 1.5
+            "cust_type": 1.5
         }
     }, {
         "model": "imaging_system_app.worker",
@@ -254,7 +267,8 @@
             "second_dilution_time": "",
             "contrast_staining": "",
             "comments_results": "",
-            "status": 1
+            "status": 0,
+            "total": 50.0
         }
     }, {
         "model": "imaging_system_app.project",
@@ -281,7 +295,8 @@
             "second_dilution_time": "",
             "contrast_staining": "",
             "comments_results": "",
-            "status": 2
+            "status": 1,
+            "total": 55.0
         }
     }, {
         "model": "imaging_system_app.project",
@@ -308,7 +323,8 @@
             "second_dilution_time": "",
             "contrast_staining": "",
             "comments_results": "",
-            "status": 3
+            "status": 2,
+            "total": 75.0
         }
     }, {
         "model": "imaging_system_app.project",
@@ -335,7 +351,8 @@
             "second_dilution_time": "",
             "contrast_staining": "",
             "comments_results": "",
-            "status": 1
+            "status": 0,
+            "total": 82.5
         }
     }, {
         "model": "imaging_system_app.project",
@@ -362,7 +379,8 @@
             "second_dilution_time": "",
             "contrast_staining": "",
             "comments_results": "",
-            "status": 2
+            "status": 1,
+            "total": 100.0
         }
     }, {
         "model": "imaging_system_app.project",
@@ -389,7 +407,8 @@
             "second_dilution_time": "",
             "contrast_staining": "",
             "comments_results": "",
-            "status": 3
+            "status": 2,
+            "total": 110.0
         }
     }, {
         "model": "imaging_system_app.workerprojectbridge",
@@ -439,6 +458,10 @@
         "fields": {
             "billing_date": "2021-11-12",
             "billing_address": "143, Fake street, Glasg",
+            "extra1_name": "",
+            "extra1_cost": null,
+            "extra2_name": "",
+            "extra2_cost": null,
             "total_cost": 180.0,
             "cust_id": 1
         }
@@ -448,206 +471,102 @@
         "fields": {
             "billing_date": "2021-11-22",
             "billing_address": "111, DumDum street, Dum City",
+            "extra1_name": "",
+            "extra1_cost": null,
+            "extra2_name": "",
+            "extra2_cost": null,
             "total_cost": 292.5,
             "cust_id": 2
         }
     }, {
-        "model": "imaging_system_app.projectbilldetails",
+        "model": "imaging_system_app.projectservicesbridge",
         "pk": 1,
         "fields": {
             "project_id": 1,
-            "jeol1200tem_unit": 1.0,
-            "jeol100sem_unit": null,
-            "tem_processing_unit": null,
-            "sectioning_stained_unit": null,
-            "sectioning_contrast_stained_unit": null,
-            "negative_staining_unit": null,
-            "sem_processing_mounting_unit": null,
-            "sem_processing_fd_unit": null,
-            "sem_unit": null,
-            "immunolabelling_unit": null,
-            "cryosectioning_unit": null,
-            "freeze_fracture_unit": null,
-            "ir_white_unit": null,
-            "extra1_name": "",
-            "extra1_cost": null,
-            "extra2_name": "",
-            "extra2_cost": null,
-            "extra3_name": "",
-            "extra3_cost": null,
-            "total": 50.0
+            "service_id": 1,
+            "units": 1.0
         }
     }, {
-        "model": "imaging_system_app.projectbilldetails",
+        "model": "imaging_system_app.projectservicesbridge",
         "pk": 2,
         "fields": {
             "project_id": 2,
-            "jeol1200tem_unit": null,
-            "jeol100sem_unit": 1.0,
-            "tem_processing_unit": null,
-            "sectioning_stained_unit": null,
-            "sectioning_contrast_stained_unit": null,
-            "negative_staining_unit": null,
-            "sem_processing_mounting_unit": null,
-            "sem_processing_fd_unit": null,
-            "sem_unit": null,
-            "immunolabelling_unit": null,
-            "cryosectioning_unit": null,
-            "freeze_fracture_unit": null,
-            "ir_white_unit": null,
-            "extra1_name": "",
-            "extra1_cost": null,
-            "extra2_name": "",
-            "extra2_cost": null,
-            "extra3_name": "",
-            "extra3_cost": null,
-            "total": 55.0
+            "service_id": 2,
+            "units": 1.0
         }
     }, {
-        "model": "imaging_system_app.projectbilldetails",
+        "model": "imaging_system_app.projectservicesbridge",
         "pk": 3,
         "fields": {
             "project_id": 3,
-            "jeol1200tem_unit": 1.5,
-            "jeol100sem_unit": null,
-            "tem_processing_unit": null,
-            "sectioning_stained_unit": null,
-            "sectioning_contrast_stained_unit": null,
-            "negative_staining_unit": null,
-            "sem_processing_mounting_unit": null,
-            "sem_processing_fd_unit": null,
-            "sem_unit": null,
-            "immunolabelling_unit": null,
-            "cryosectioning_unit": null,
-            "freeze_fracture_unit": null,
-            "ir_white_unit": null,
-            "extra1_name": "",
-            "extra1_cost": null,
-            "extra2_name": "",
-            "extra2_cost": null,
-            "extra3_name": "",
-            "extra3_cost": null,
-            "total": 75.0
+            "service_id": 1,
+            "units": 1.5
         }
     }, {
-        "model": "imaging_system_app.projectbilldetails",
+        "model": "imaging_system_app.projectservicesbridge",
         "pk": 4,
         "fields": {
             "project_id": 4,
-            "jeol1200tem_unit": null,
-            "jeol100sem_unit": 1.5,
-            "tem_processing_unit": null,
-            "sectioning_stained_unit": null,
-            "sectioning_contrast_stained_unit": null,
-            "negative_staining_unit": null,
-            "sem_processing_mounting_unit": null,
-            "sem_processing_fd_unit": null,
-            "sem_unit": null,
-            "immunolabelling_unit": null,
-            "cryosectioning_unit": null,
-            "freeze_fracture_unit": null,
-            "ir_white_unit": null,
-            "extra1_name": "",
-            "extra1_cost": null,
-            "extra2_name": "",
-            "extra2_cost": null,
-            "extra3_name": "",
-            "extra3_cost": null,
-            "total": 82.5
+            "service_id": 2,
+            "units": 1.5
         }
     }, {
-        "model": "imaging_system_app.projectbilldetails",
+        "model": "imaging_system_app.projectservicesbridge",
         "pk": 5,
         "fields": {
             "project_id": 5,
-            "jeol1200tem_unit": 2.0,
-            "jeol100sem_unit": null,
-            "tem_processing_unit": null,
-            "sectioning_stained_unit": null,
-            "sectioning_contrast_stained_unit": null,
-            "negative_staining_unit": null,
-            "sem_processing_mounting_unit": null,
-            "sem_processing_fd_unit": null,
-            "sem_unit": null,
-            "immunolabelling_unit": null,
-            "cryosectioning_unit": null,
-            "freeze_fracture_unit": null,
-            "ir_white_unit": null,
-            "extra1_name": "",
-            "extra1_cost": null,
-            "extra2_name": "",
-            "extra2_cost": null,
-            "extra3_name": "",
-            "extra3_cost": null,
-            "total": 100.0
+            "service_id": 1,
+            "units": 2.0
         }
     }, {
-        "model": "imaging_system_app.projectbilldetails",
+        "model": "imaging_system_app.projectservicesbridge",
         "pk": 6,
         "fields": {
             "project_id": 6,
-            "jeol1200tem_unit": null,
-            "jeol100sem_unit": 2.0,
-            "tem_processing_unit": null,
-            "sectioning_stained_unit": null,
-            "sectioning_contrast_stained_unit": null,
-            "negative_staining_unit": null,
-            "sem_processing_mounting_unit": null,
-            "sem_processing_fd_unit": null,
-            "sem_unit": null,
-            "immunolabelling_unit": null,
-            "cryosectioning_unit": null,
-            "freeze_fracture_unit": null,
-            "ir_white_unit": null,
-            "extra1_name": "",
-            "extra1_cost": null,
-            "extra2_name": "",
-            "extra2_cost": null,
-            "extra3_name": "",
-            "extra3_cost": null,
-            "total": 110.0
+            "service_id": 2,
+            "units": 2.0
         }
     }, {
         "model": "imaging_system_app.projectbillbridge",
         "pk": 1,
         "fields": {
             "bill_id": 1,
-            "project_bill_id": 1
+            "project_id": 1
         }
     }, {
         "model": "imaging_system_app.projectbillbridge",
         "pk": 2,
         "fields": {
             "bill_id": 1,
-            "project_bill_id": 2
+            "project_id": 2
         }
     }, {
         "model": "imaging_system_app.projectbillbridge",
         "pk": 3,
         "fields": {
             "bill_id": 1,
-            "project_bill_id": 3
+            "project_id": 3
         }
     }, {
         "model": "imaging_system_app.projectbillbridge",
         "pk": 4,
         "fields": {
             "bill_id": 2,
-            "project_bill_id": 4
+            "project_id": 4
         }
     }, {
         "model": "imaging_system_app.projectbillbridge",
         "pk": 5,
         "fields": {
             "bill_id": 2,
-            "project_bill_id": 5
+            "project_id": 5
         }
     }, {
         "model": "imaging_system_app.projectbillbridge",
         "pk": 6,
         "fields": {
             "bill_id": 2,
-            "project_bill_id": 6
+            "project_id": 6
         }
     }
 ]
