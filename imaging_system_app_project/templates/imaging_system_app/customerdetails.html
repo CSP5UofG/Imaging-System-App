@@ -58,9 +58,9 @@
     </tr>
     {% for p in projects %}
     <tr>
-        <td>{{ p.project_id.project_date }}</td>
-        <td>{{ p.project_id.get_status_display }}</td>
-        <td>{{ p.total }}</td>
+        <td>{{ p.project_date }}</td>
+        <td>{{ p.get_status_display }}</td>
+        <td>£{{ p.total|floatformat:"2" }}</td>
     </tr>
     {% endfor %}
 </table>
@@ -75,7 +75,7 @@
     {% for b in bills %}
     <tr>
         <td>{{ b.billing_date }}</td>
-        <td>{{ b.total_cost }}</td>
+        <td>£{{ b.total_cost|floatformat:"2" }}</td>
     </tr>
     {% endfor %}
 </table>

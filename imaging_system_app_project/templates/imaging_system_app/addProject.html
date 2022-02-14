@@ -62,10 +62,10 @@
             <div></div>
             {% endfor %}
             <h2>Billing</h2>
-            {% for hidden in projectbilldetailsform.hidden_fields %}
+            {% for hidden in projectservicesbridgeform.hidden_fields %}
             {{ hidden }}
             {% endfor %}
-            {% for field in projectbilldetailsform.visible_fields %}
+            {% for field in projectservicesbridgeform.visible_fields %}
             <div>
                 {{ field.errors }}
                 {{ field.help_text }}<br />

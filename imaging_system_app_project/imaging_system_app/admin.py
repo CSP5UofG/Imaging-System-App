@@ -1,9 +1,9 @@
 from django.contrib import admin
 
-from .models import Customer, Worker, Services, Bill, ProjectBillDetails, ProjectBillBridge, Project, WorkerProjectBridge
+from .models import Customer, Worker, Services, Bill, ProjectServicesBridge, ProjectBillBridge, Project, WorkerProjectBridge
 
 class ServicesAdmin(admin.ModelAdmin):
-    list_display = ('name', 'normal_price', 'in_house_price', 'outside_price')
+    list_display = ('name', 'normal_price', 'in_house_price', 'outside_price', 'unit_name')
 
 
 admin.site.register(Services, ServicesAdmin)
@@ -46,32 +46,28 @@ class BillAdmin(admin.ModelAdmin):
 admin.site.register(Bill, BillAdmin)
 
 
-class ProjectBillDetailsAdmin(admin.ModelAdmin):
-    list_display = ('get_proj_id', 'get_proj_date', 'get_cust_id', 'get_cust_name', 'get_proj_samples', 'total', )
+class ProjectServicesBridgeAdmin(admin.ModelAdmin):
+    list_display = ('get_project_id', 'get_cust_name', 'get_project_total', 'get_service_name', 'units', 'cost')
     search_fields = ('project_id__cust_id__cust_name', )
     date_hierarchy = 'project_id__project_date'
-    def get_proj_id(self, obj): # Allows displaying project id
+    def get_project_id(self, obj): # Allows displaying project id
         return obj.project_id.project_id
-    get_proj_id.admin_order_field  = 'project_id__project_id'
-    get_proj_id.short_description = 'Project id'
-    def get_proj_date(self, obj): # Allows displaying project date
-        return obj.project_id.project_date
-    get_proj_date.admin_order_field  = 'project_id__project_date'
-    get_proj_date.short_description = 'Project date'
-    def get_proj_samples(self, obj): # Allows displaying number of samples
-        return obj.project_id.num_samples
-    get_proj_samples.admin_order_field  = 'project_id__num_samples'
-    get_proj_samples.short_description = 'Samples'
-    def get_cust_id(self, obj): # Allows displaying customer id
-        return obj.project_id.cust_id.cust_id
-    get_cust_id.admin_order_field  = 'project_id__cust_id__cust_id'
-    get_cust_id.short_description = 'Customer id'
+    get_project_id.admin_order_field  = 'project_id__project_id'
+    get_project_id.short_description = 'Project id'
     def get_cust_name(self, obj): # Allows displaying customer name
         return obj.project_id.cust_id.cust_name
     get_cust_name.admin_order_field  = 'project_id__cust_id__cust_name'
     get_cust_name.short_description = 'Customer'
+    def get_project_total(self, obj): # Allows displaying project total
+        return obj.project_id.total
+    get_project_total.admin_order_field  = 'project_id__total'
+    get_project_total.short_description = 'Project cost'
+    def get_service_name(self, obj): # Allows displaying service name
+        return obj.service_id.name
+    get_service_name.admin_order_field  = 'service_id__name'
+    get_service_name.short_description = 'Service name'
 
-admin.site.register(ProjectBillDetails, ProjectBillDetailsAdmin)
+admin.site.register(ProjectServicesBridge, ProjectServicesBridgeAdmin)
 
 
 class ProjectBillBridgeAdmin(admin.ModelAdmin):
@@ -97,21 +93,21 @@ class ProjectBillBridgeAdmin(admin.ModelAdmin):
     def get_bill_cost(self, obj): # Allows displaying bill cost
         return obj.bill_id.total_cost
     get_bill_cost.admin_order_field  = 'bill_id__total_cost'
-    get_bill_cost.short_description = 'Total cost'
+    get_bill_cost.short_description = 'Bill cost'
     def get_proj_id(self, obj): # Allows displaying project id
-        return obj.project_bill_id.project_id.project_id
-    get_proj_id.admin_order_field  = 'project_bill_id__project_id__project_id'
+        return obj.project_id.project_id
+    get_proj_id.admin_order_field  = 'project_id__project_id'
     get_proj_id.short_description = 'Project id'
     def get_proj_cost(self, obj): # Allows displaying project cost
-        return obj.project_bill_id.total
-    get_proj_cost.admin_order_field  = 'project_bill_id__total'
+        return obj.project_id.total
+    get_proj_cost.admin_order_field  = 'project_id__total'
     get_proj_cost.short_description = 'Project cost'
     
 admin.site.register(ProjectBillBridge, ProjectBillBridgeAdmin)
 
 
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ('project_id', 'project_date', 'get_cust_id', 'get_cust_name', 'num_samples', 'status')
+    list_display = ('project_id', 'project_date', 'get_cust_id', 'get_cust_name', 'num_samples', 'status', 'total')
     list_filter = ('status', )
     search_fields = ('cust_id__cust_name', )
     date_hierarchy = 'project_date'

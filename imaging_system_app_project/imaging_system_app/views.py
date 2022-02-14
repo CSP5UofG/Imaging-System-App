@@ -1,14 +1,11 @@
 from django.shortcuts import render, redirect
-from .models import Customer, Worker, Services, Bill, ProjectBillDetails, ProjectBillBridge, Project, WorkerProjectBridge
+from imaging_system_app.models import Customer, Worker, Services, Bill, ProjectServicesBridge, ProjectBillBridge, Project, WorkerProjectBridge
 import datetime
-from imaging_system_app.forms import ServicesForm, CustomerForm, WorkerForm, ProjectForm, WorkerProjectBridgeForm, BillForm, ProjectBillDetailsForm, ProjectBillBridgeForm
+from imaging_system_app.forms import ServicesForm, CustomerForm, WorkerForm, ProjectForm, WorkerProjectBridgeForm, BillForm, ProjectServicesBridgeForm, ProjectBillBridgeForm
 from django.urls import reverse
 from django.http import HttpResponse
 
 from django_xhtml2pdf.utils import generate_pdf
-
-from imaging_system_app.models import Services, Customer, Worker, Project, WorkerProjectBridge, Bill, ProjectBillDetails, ProjectBillBridge
-
 
 def index(request):
     context_dict = {}
@@ -120,7 +117,8 @@ def projects(request):
 
 def projectDetails(request, id):
     context_dict={}
-    context_dict['project'] = ProjectBillDetails.objects.get(project_id = id)
+    context_dict['project'] = Project.objects.get(project_id = id)
+    context_dict['services'] = ProjectServicesBridge.objects.filter(project_id = id)
     context_dict['workers'] = WorkerProjectBridge.objects.filter(project_id = id)
     return render(request, 'imaging_system_app/projectDetails.html', context=context_dict)
 
@@ -142,82 +140,77 @@ def addProject(request):
     customerform = CustomerForm
     workerform = WorkerForm
     projectform = ProjectForm
-    projectbilldetailsform = ProjectBillDetailsForm
+    projectservicesbridgeform = ProjectServicesBridgeForm
     
     context_dict['customerform'] = customerform
     context_dict['workerform'] = workerform
     context_dict['projectform'] = projectform
-    context_dict['projectbilldetailsform'] = projectbilldetailsform
+    context_dict['projectservicesbridgeform'] = projectservicesbridgeform
     
     if request.method == 'POST':
         customerform = CustomerForm(request.POST)
         workerform = WorkerForm(request.POST)
         projectform = ProjectForm(request.POST)
-        projectbilldetailsform = ProjectBillDetailsForm(request.POST)
+        projectservicesbridgeform = ProjectServicesBridgeForm(request.POST)
         
-        worker = workerform.instance
-        project = projectform.instance
-        projectbilldetails = projectbilldetailsform.instance
-        
-        if customerform.is_valid():
+        if customerform.is_valid() and workerform.is_valid() and projectform.is_valid() and projectservicesbridgeform.is_valid():
             customer = customerform.save()
+            worker = workerform.save(commit = False)
+            project = projectform.save(commit = False)
+            projectservicesbridge = projectservicesbridgeform.save(commit = False)
             
             # add customer to Worker object
             worker.cust_id = customer
+            worker.save()
             # add customer to Project object
             project.cust_id = customer
-            if workerform.is_valid():
-                worker.save()
-                if projectform.is_valid():
-                    project.save()
-                    # add project and worker to WorkerProjectBridge
-                    WorkerProjectBridge.objects.create(worker_id=worker, project_id=project)
-                    # add project to ProjectBillDetails object
-                    projectbilldetails.project_id = project
-                    if projectbilldetailsform.is_valid():
-                        projectbilldetails.get_total()
-                        projectbilldetails.save()
-                        return redirect(reverse('imaging_system_app:projects'))
+            project.save()
+            # add project to ProjectServicesBridge object
+            projectservicesbridge.project_id = project
+            projectservicesbridge.save()
+            # add project and worker to WorkerProjectBridge
+            WorkerProjectBridge.objects.create(worker_id=worker, project_id=project)
+            # calculate cost of project and its services
+            calculate_project(project, customer.cust_type)
+            return redirect(reverse('imaging_system_app:projects'))
     return render(request, 'imaging_system_app/addProject.html', context=context_dict)
+    
 
 def editProject(request, id):
     context_dict={}
     try:
-        project = ProjectBillDetails.objects.get(project_id = id)
+        project = Project.objects.get(project_id = id)
         context_dict['project'] = project
+        projectservicesbridge = ProjectServicesBridge.objects.filter(project_id = id).first()
         worker = WorkerProjectBridge.objects.filter(project_id = id).first().worker_id
         context_dict['workers'] = worker
-    except ProjectBillDetails.DoesNotExist:
+    except Project.DoesNotExist:
         project = None
     
     if project is None:
         return redirect('/imaging_system_app/')
         
     #fill new form with current instance
-    customerform = CustomerForm(request.POST or None, instance=project.project_id.cust_id)
+    customerform = CustomerForm(request.POST or None, instance=project.cust_id)
     workerform = WorkerForm(request.POST or None, instance=worker)
-    projectform = ProjectForm(request.POST or None, instance=project.project_id)
-    projectbilldetailsform = ProjectBillDetailsForm(request.POST or None, instance=project)
+    projectform = ProjectForm(request.POST or None, instance=project)
+    projectservicesbridgeform = ProjectServicesBridgeForm(request.POST or None, instance=projectservicesbridge)
     context_dict['customerform'] = customerform
     context_dict['workerform'] = workerform
     context_dict['projectform'] = projectform
-    context_dict['projectbilldetailsform'] = projectbilldetailsform
+    context_dict['projectservicesbridgeform'] = projectservicesbridgeform
     context_dict['id'] = id
     
     if request.method == 'POST':
-        customerupdate = CustomerForm(request.POST)
-        workerupdate = WorkerForm(request.POST)
-        projectupdate = ProjectForm(request.POST)
-        projectbilldetailsupdate = ProjectBillDetailsForm(request.POST)
-    
-        
-        if customerupdate.is_valid() and workerupdate.is_valid() and projectupdate.is_valid() and projectbilldetailsupdate.is_valid():
-            customerupdate.save()
-            workerupdate.save()
+        if customerform.is_valid() and workerform.is_valid() and projectform.is_valid() and projectservicesbridgeform.is_valid():
+            customerform.save()
+            workerform.save()
             projectform.save()
-            projectbilldetailsform.save()
-            return redirect(reverse('imaging_system_app:project-details', kwargs={"project_id": id}))
+            projectservicesbridgeform.save()
+            calculate_costs(project)
+            return redirect(reverse('imaging_system_app:project-details', kwargs={"id": id}))
     return render(request, 'imaging_system_app/editProject.html', context=context_dict)
+
 
 # ===================== CUSTOMERS =====================  #
 
@@ -241,20 +234,11 @@ def customers(request):
 
     return render(request, 'imaging_system_app/customers.html', context=context_dict)
     
-def customerDetails(request, cust_id):
-    context_dict={}
-    context_dict['customer']= Customer.objects.get(cust_id = cust_id)
-    context_dict['workers']= Worker.objects.filter(cust_id = cust_id)
-    context_dict['projects']= ProjectBillDetails.objects.filter(project_id__cust_id = cust_id)
-    context_dict['bills']= Bill.objects.filter(cust_id = cust_id)
-
-    return render(request, 'imaging_system_app/customerdetails.html', context=context_dict)
-
 def customerDetails(request, id):
     context_dict={}
     context_dict['customer']= Customer.objects.get(cust_id = id)
     context_dict['workers']= Worker.objects.filter(cust_id = id)
-    context_dict['projects']= ProjectBillDetails.objects.filter(project_id__cust_id = id)
+    context_dict['projects']= Project.objects.filter(cust_id__cust_id = id)
     context_dict['bills']= Bill.objects.filter(cust_id = id)
 
     return render(request, 'imaging_system_app/customerDetails.html', context=context_dict)
@@ -285,7 +269,8 @@ def editCustomer(request, id):
     context_dict = {'customer': customer}
     #fill new form with current instance
     form = CustomerForm(request.POST or None, instance=customer)
-    context_dict ={'form': form, 'id': id}
+    context_dict['form'] = form
+    context_dict['id'] = id
     
     if request.method == 'POST':
         update = CustomerForm(request.POST)
@@ -365,7 +350,50 @@ def billDetails(request, id):
     context_dict = bill_context_dict(id)
     # TODO: combine bill units and calculate grand total
     return render(request, 'imaging_system_app/billDetails.html', context=context_dict)
+
+def addBill(request):
+    context_dict = {}
+    billform = BillForm
+    projectbillbridgeform = ProjectBillBridgeForm
+    context_dict['billform'] = billform
+    context_dict['projectbillbridgeform'] = ProjectBillBridgeForm
     
+    if request.method == 'POST':
+        billform = BillForm(request.POST)
+        projectbillbridgeform = ProjectBillBridgeForm(request.POST)
+        
+        if billform.is_valid() and projectbillbridgeform.is_valid():
+            bill = billform.save()
+            projectbillbridge = projectbillbridgeform.save(commit = False)
+            projectbillbridge.bill_id = bill
+            projectbillbridge.save()
+            calculate_bill(bill)
+            return redirect(reverse('imaging_system_app:bills'))
+    return render(request, 'imaging_system_app/addBill.html', context=context_dict)
+    
+def editBill(request, id):
+    context_dict={}
+    try:
+        bill = Bill.objects.get(bill_id = id)
+        context_dict['bill'] = bill
+    except Bill.DoesNotExist:
+        bill = None
+    
+    if bill is None:
+        return redirect('/imaging_system_app/')
+        
+    #fill new form with current instance
+    billform = BillForm(request.POST or None, instance=bill)
+    context_dict['billform'] = billform
+    context_dict['id'] = id
+    
+    if request.method == 'POST':
+        if billform.is_valid():
+            billform.save()
+            calculate_bill(bill)
+            return redirect(reverse('imaging_system_app:bill-details', kwargs={"id": id}))
+    return render(request, 'imaging_system_app/editBill.html', context=context_dict)
+
 def printBill(request, id):
     context_dict = bill_context_dict(id)
     
@@ -376,18 +404,68 @@ def printBill(request, id):
 def bill_context_dict(bill_id):
     # Helper function to create context_dict for bill
     context_dict = {}
+    
     context_dict['bill'] = Bill.objects.get(bill_id=bill_id)
+    
     projectbillbridge = ProjectBillBridge.objects.filter(bill_id=bill_id)
-    projectbilldetails = ProjectBillDetails.objects.filter(project_bill_id__in=projectbillbridge.values('project_bill_id'))
-    context_dict['projectbilldetails'] = projectbilldetails
-    projects = Project.objects.filter(project_id__in=projectbilldetails.values('project_id'))
+    projects = Project.objects.filter(project_id__in=projectbillbridge.values('project_id'))
+    context_dict['projects'] = projects
+    services = ProjectServicesBridge.objects.filter(project_id__in=projects.values('project_id')).order_by('service_id', 'project_id__project_id')
+    context_dict['services'] = services
+    
     workerprojectbridge = WorkerProjectBridge.objects.filter(project_id__in=projects.values('project_id'))
-    workers = Worker.objects.filter(worker_id__in=workerprojectbridge.values('worker_id'))
+    workers = list(Worker.objects.filter(worker_id__in=workerprojectbridge.values('worker_id')).values_list('worker_name', flat=True).distinct())
     context_dict['workers'] = workers
     context_dict['start_date'] = projects.order_by('project_date').first().project_date
     context_dict['end_date'] = projects.order_by('project_date').last().project_date
+    
     return context_dict    
 
+# ===================== COST CALCULATION =====================  #
+def calculate_service(projectservicesbridge, discount):
+    cost = float(discount) * float(projectservicesbridge.service_id.normal_price) * float(projectservicesbridge.units)
+    projectservicesbridge.cost = cost
+    projectservicesbridge.save()
+    return cost
+
+def calculate_project(project, discount):
+    tot = 0
+    projectservicesbridge = ProjectServicesBridge.objects.filter(project_id=project.project_id)
+    services = Services.objects.filter(service_id__in=projectservicesbridge.values('service_id'))
+    for pss in projectservicesbridge:
+        cost = calculate_service(pss, discount)
+        tot += cost
+    project.total = tot
+    project.save()
+    
+def calculate_bill(bill):
+    tot = 0
+    projectbillbridge = ProjectBillBridge.objects.filter(bill_id=bill.bill_id)
+    for pbb in projectbillbridge:
+        tot += pbb.project_id.total
+    if bill.extra1_cost:
+        tot += bill.extra1_cost
+    if bill.extra2_cost:
+        tot += bill.extra2_cost
+    bill.total_cost = tot
+    bill.save()
+    
+def calculate_costs(project):
+    discount = project.cust_id.cust_type
+    # adjust cost of the project
+    calculate_project(project, discount)
+    bill = ProjectBillBridge.objects.get(project_id=project.project_id).bill_id
+    projectbillbridge = ProjectBillBridge.objects.filter(bill_id=bill.bill_id)
+    bills = []
+    for pbb in projectbillbridge:
+        # adjust projects in the same bill
+        calculate_project(pbb.project_id, discount)
+        if pbb.bill_id not in bills:
+            bills.append(pbb.bill_id)
+    for bill in bills:
+        # adjust cost of bills the project is in
+        calculate_bill(bill)
+    
 # ===================== QUERIES =====================  #
 
 def queries(request):

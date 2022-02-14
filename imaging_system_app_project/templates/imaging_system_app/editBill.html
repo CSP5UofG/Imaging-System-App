@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title_block %}
-    - Add a Customer
+    - Update Bill
 {% endblock %}
 
 {% block css_block %}
@@ -10,30 +10,30 @@
 {% endblock %}
 
 {% block pagetitle %}
-	<h1><strong> Add a Service </strong></h1>
+	<h1><strong> Update Bill </strong></h1>
 {% endblock %}
 
 {% block body_block %}  
     <ul class="content_list">
 	     <div>
-            <form id="customer_form" method="post" action="{% url 'imaging_system_app:add-service' %}", enctype="multipart/form-data">
+            <form id="service_form" method="post" action="{% url 'imaging_system_app:edit-bill' id %}", enctype="multipart/form-data">
             {% csrf_token %}
-            {% for hidden in form.hidden_fields %}
+            {% for hidden in billform.hidden_fields %}
                 {{ hidden }}
             {% endfor %}
-            {% for field in form.visible_fields %}
-                <div>
+            {% for field in billform.visible_fields %}
+                <div class="form_header">
                     {{ field.errors }}
                     {{ field.help_text }}<br />
                 </div>
-                <div>
+                <div class="form_header">
                     {{ field }}<br /><br />
                 </div>
                 <div></div>
             {% endfor %}
                 <br />
-                <button type="submit" name="submit">
-                        <p class="buttonText">Create New Service</p>
+                <button type="submit" name="submit" class="submit_button">
+                        <p class="buttonText">Update Bill</p>
                 </button>
                 <div></div>
         </form>

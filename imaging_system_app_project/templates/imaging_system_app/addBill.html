@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title_block %}
-    - Add a Customer
+    - Add a Bill
 {% endblock %}
 
 {% block css_block %}
@@ -10,18 +10,18 @@
 {% endblock %}
 
 {% block pagetitle %}
-	<h1><strong> Add a Service </strong></h1>
+	<h1><strong> Add a Bill </strong></h1>
 {% endblock %}
 
 {% block body_block %}  
     <ul class="content_list">
 	     <div>
-            <form id="customer_form" method="post" action="{% url 'imaging_system_app:add-service' %}", enctype="multipart/form-data">
+            <form id="customer_form" method="post" action="{% url 'imaging_system_app:add-bill' %}", enctype="multipart/form-data">
             {% csrf_token %}
-            {% for hidden in form.hidden_fields %}
+            {% for hidden in billform.hidden_fields %}
                 {{ hidden }}
             {% endfor %}
-            {% for field in form.visible_fields %}
+            {% for field in billform.visible_fields %}
                 <div>
                     {{ field.errors }}
                     {{ field.help_text }}<br />
@@ -32,8 +32,21 @@
                 <div></div>
             {% endfor %}
                 <br />
+			{% for hidden in projectbillbridgeform.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+            {% for field in projectbillbridgeform.visible_fields %}
+                <div>
+                    {{ field.errors }}
+                    {{ field.help_text }}<br />
+                </div>
+                <div>
+                    {{ field }}<br /><br />
+                </div>
+                <div></div>
+            {% endfor %}
                 <button type="submit" name="submit">
-                        <p class="buttonText">Create New Service</p>
+                        <p class="buttonText">Create New Bill</p>
                 </button>
                 <div></div>
         </form>

@@ -5,11 +5,10 @@
 
 <head lang="en">
 
-    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
     <meta charset="UTF-8" />
 
     <title>
-        GIF - {{ bill.project_id.cust_id.cust_name }} bill {{ bill.bill_id }}
+        GIF - Bill {{ bill.bill_id }}
     </title>
 
 </head>
@@ -49,47 +48,38 @@
 		</div>
 		</br>
 		<div>
-			<strong>Workers</strong>
-			</br>
-			{% for w in workers %}
-				{{ w.worker_name }}
-				</br>
-			{% endfor %}
-			</br>
-		</div>
-		<div>
-			<table>
-				<tr>
-					<th>Projects</th>
-					<th>Project date</th>
-					<th>Total</th>
-				</tr>
-				{% for p in projectbilldetails %}
-				<tr>
-					<td>{{ p.project_id.project_id }}</td>
-					<td>{{ p.project_id.project_date }}</td>
-					<td>{{ p.total }}</td>
-				{% endfor %}
-				</tr>
-			</table>
+			Workers: {{ workers|join:" , " }}
 		</div>
 		</br>
 		<div>
 			<table>
-			{% for p in projectbilldetails %}
-				{% for name, value in p.get_fields %}
-					{% if not name == "project_bill_id" and not name == "project_id" and not value == "None" and value and not name == "total"%}
-						<tr>
-							<th>{{ name }}</th>
-							<td>{{ value }}</td>
-						</tr>
+				{% for s in services %}
+				<tr>
+					{% if s.units == 1.0 %}
+						<td>{{ s.project_id.project_id }} - {{ s.service_id.name }} - {{ s.units|floatformat:"0" }} {{s.service_id.unit_name}}: £{{ s.cost|floatformat:"2" }}</td>
+					{% else %}
+						{% if s.service_id.unit_name == "hour" %}
+							<td>{{ s.project_id.project_id }} - {{ s.service_id.name }} - {{ s.units }} {{s.service_id.unit_name}}s: £{{ s.cost|floatformat:"2" }}</td>
+						{% else %}
+							<td>{{ s.project_id.project_id }} - {{ s.service_id.name }} - {{ s.units|floatformat:"0" }} {{s.service_id.unit_name}}s: £{{ s.cost|floatformat:"2" }}</td>
+						{% endif %}
 					{% endif %}
+				</tr>
 				{% endfor %}
-			{% endfor %}
 			</table>
 		</div>
 		<div>
-			<strong><h1>Grand Total: {{ bill.total_cost }}</h1></strong>
+			{% if bill.extra1_cost %}
+				{{ bill.extra1_name }}: £{{ bill.extra1_cost|floatformat:"2" }}
+				</br>
+			{% endif %}
+			{% if bill.extra2_cost %}
+				{{ bill.extra2_name }}: £{{ bill.extra2_cost|floatformat:"2" }}
+				</br>
+			{% endif %}
+		</div>
+		<div>
+			<strong><h1>Total - £{{ bill.total_cost|floatformat:"2" }}</h1></strong>
 		</div>
 		{% endblock %}
 	</div>
