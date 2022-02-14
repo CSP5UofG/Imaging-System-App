@@ -2,7 +2,7 @@
         "model": "imaging_system_app.services",
         "pk": 1,
         "fields": {
-            "name": "Jeol 1200 TEM",
+            "name": "JEOL 1200 TEM",
             "normal_price": 50.0,
             "in_house_price": 25.0,
             "outside_price": 75.0,
