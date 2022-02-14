@@ -5,7 +5,6 @@
 
 <head lang="en">
 
-    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
     <meta charset="UTF-8" />
 
     <title>
@@ -57,12 +56,12 @@
 				{% for s in services %}
 				<tr>
 					{% if s.units == 1.0 %}
-						<td>{{ s.units|floatformat:"0" }} {{s.service_id.unit_name}} of {{ s.service_id.name }}: £{{ s.cost|floatformat:"2" }}</td>
+						<td>{{ s.project_id.project_id }} - {{ s.service_id.name }} - {{ s.units|floatformat:"0" }} {{s.service_id.unit_name}}: £{{ s.cost|floatformat:"2" }}</td>
 					{% else %}
 						{% if s.service_id.unit_name == "hour" %}
-							<td>{{ s.units }} {{s.service_id.unit_name}}s of {{ s.service_id.name }}: £{{ s.cost|floatformat:"2" }}</td>
+							<td>{{ s.project_id.project_id }} - {{ s.service_id.name }} - {{ s.units }} {{s.service_id.unit_name}}s: £{{ s.cost|floatformat:"2" }}</td>
 						{% else %}
-							<td>{{ s.units|floatformat:"0" }} {{s.service_id.unit_name}}s of {{ s.service_id.name }}: £{{ s.cost|floatformat:"2" }}</td>
+							<td>{{ s.project_id.project_id }} - {{ s.service_id.name }} - {{ s.units|floatformat:"0" }} {{s.service_id.unit_name}}s: £{{ s.cost|floatformat:"2" }}</td>
 						{% endif %}
 					{% endif %}
 				</tr>
@@ -80,7 +79,7 @@
 			{% endif %}
 		</div>
 		<div>
-			<strong><h1>Grand Total: £{{ bill.total_cost|floatformat:"2" }}</h1></strong>
+			<strong><h1>Total - £{{ bill.total_cost|floatformat:"2" }}</h1></strong>
 		</div>
 		{% endblock %}
 	</div>

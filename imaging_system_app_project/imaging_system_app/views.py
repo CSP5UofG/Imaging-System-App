@@ -410,7 +410,7 @@ def bill_context_dict(bill_id):
     projectbillbridge = ProjectBillBridge.objects.filter(bill_id=bill_id)
     projects = Project.objects.filter(project_id__in=projectbillbridge.values('project_id'))
     context_dict['projects'] = projects
-    services = ProjectServicesBridge.objects.filter(project_id__in=projects.values('project_id'))
+    services = ProjectServicesBridge.objects.filter(project_id__in=projects.values('project_id')).order_by('service_id', 'project_id__project_id')
     context_dict['services'] = services
     
     workerprojectbridge = WorkerProjectBridge.objects.filter(project_id__in=projects.values('project_id'))
