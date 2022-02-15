@@ -121,19 +121,7 @@ def projectDetails(request, id):
     context_dict['services'] = ProjectServicesBridge.objects.filter(project_id = id)
     context_dict['workers'] = WorkerProjectBridge.objects.filter(project_id = id)
     return render(request, 'imaging_system_app/projectDetails.html', context=context_dict)
-
-"""def addProject(request):
-    form = ProjectForm
-    context_dict={'form': form}
     
-    if request.method == 'POST':
-        form = ProjectForm(request.POST)
-        
-        if form.is_valid():
-            new_project = form.save()
-            return redirect(reverse('imaging_system_app:projects'))
-    return render(request, 'imaging_system_app/addProject.html', context=context_dict)
-"""
 def addProject(request):
     context_dict = {}
     
