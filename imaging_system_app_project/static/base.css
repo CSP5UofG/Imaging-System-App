@@ -4,7 +4,7 @@ html{
 
 body{
   height: 100%;
-  overflow-y: auto;
+  overflow-y: hidden;
   margin: 0px;
   display: flex;
   box-sizing: border-box;
@@ -20,7 +20,6 @@ body{
   height: 20%;
   width: 100%;
   background-color: #eeeeee;
-  position: fixed;
 }
 
 .side{
@@ -51,7 +50,12 @@ ul {
 
 .bottom {
   flex-grow: 1;
-  margin-top: 11%;
+  overflow-y: auto;
+}
+
+#right.bottom{
+  flex-grow: 1;
+  overflow-y: auto;
 }
 
 .pagetitle{
@@ -68,18 +72,17 @@ ul {
 }
 
 .logo{
-  width:7.5%;
-  height:75%;
-  margin: 1%;
+  width:65%;
+  height:85%;
+  margin: 1.5%;
   z-index: 1;
 }
 
 .sidenav {
   height: 100%;
   top: 20%;
-  width: 15%;
+  width: 100%;
   background-color: #0071BC;
-  position: fixed;
 }
 
 .sidenav a {
