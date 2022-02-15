@@ -1,6 +1,8 @@
 {% extends 'imaging_system_app/base.html' %}
 {% load static %}
 
+
+
 {% block title_block %}
 Project {{ project.project_id }}
 {% endblock %}
@@ -19,84 +21,92 @@ Project {{ project.project_id }}
     <h1>{{ project.cust_id.cust_name }} project {{ project.project_id }}</h1>
 </div>
 
-<form id="project_forms" name="project_forms" method="post" action="{% url 'imaging_system_app:edit-project' project.project_id %}", enctype="multipart/form-data">
-    <div class="columns">     
-        <div class="column1">
-            {% csrf_token %}
-            <h2>Customer</h2>
-            {% for hidden in customerform.hidden_fields %}
+<div class="content_to_edit">
+    <form id="project_forms" name="project_forms" method="post" action="{% url 'imaging_system_app:edit-project' project.project_id %}", enctype="multipart/form-data">
+        <div class="columns">     
+            <div class="column1">
+                {% csrf_token %}
+                <h2>Customer</h2>
+                {% for hidden in customerform.hidden_fields %}
+                    {% endfor %}
+                {% for field in customerform.visible_fields %}
+                <div>
+                    {{ field.errors }}
+                    {{ field.help_text }}<br />
+                </div>
+                <div>
+                    {{ field }}<br /><br />
+                </div>
+                <div></div>
+            {% endfor %}
+
+            </div>
+
+            
+            <div class="column2">
+                <h2>Worker</h2>
+
+                {% for hidden in workerform.hidden_fields %}
+                    {{ hidden }}
                 {% endfor %}
-            {% for field in customerform.visible_fields %}
-            <div>
-                {{ field.errors }}
-                {{ field.help_text }}<br />
-            </div>
-            <div>
-                {{ field }}<br /><br />
-            </div>
-            <div></div>
-        {% endfor %}
 
-        </div>
+                {% for field in workerform.visible_fields %}
+                <div>
+                    {{ field.errors }}
+                    {{ field.help_text }}<br />
+                </div>
 
-        <div class="column2">
-            <h2>Worker</h2>
-            {% for hidden in workerform.hidden_fields %}
-                {{ hidden }}
-            {% endfor %}
-            {% for field in workerform.visible_fields %}
-            <div>
-                {{ field.errors }}
-                {{ field.help_text }}<br />
+                <div>
+                    {{ field }}<br /><br />
+                </div>
+                <div></div>
+                {% endfor %}
             </div>
-            <div>
-                {{ field }}<br /><br />
-            </div>
-            <div></div>
-            {% endfor %}
-        </div>
-    </div>
-    
-        <div class="row2">
-            <h2>Specimen preparation record</h2>
-            {% for hidden in projectform.hidden_fields %}
-                {{ hidden }}
-            {% endfor %}
-            {% for field in projectform.visible_fields %}
-            <div>
-                {{ field.errors }}
-                {{ field.help_text }}<br />
-            </div>
-            <div>
-                {{ field }}<br /><br />
-            </div>
-            <div></div>
-            {% endfor %}
-            <br />
         </div>
         
+            <div class="row2">
+                <h2>Specimen preparation record</h2>
+                {% for hidden in projectform.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
+                {% for field in projectform.visible_fields %}
+                <div>
+                    {{ field.errors }}
+                    {{ field.help_text }}<br />
+                </div>
+                <div>
+                    {{ field }}<br /><br />
+                </div>
+                <div></div>
+                {% endfor %}
+                <br />
+            </div>
+            
 
-        <div class="row3">
-            <h2>Billing</h2>
-            {% for hidden in projectservicesbridgeform.hidden_fields %}
-                {{ hidden }}
-            {% endfor %}
-            {% for field in projectservicesbridgeform.visible_fields %}
-            <div>
-                {{ field.errors }}
-                {{ field.help_text }}<br />
+            <div class="row3">
+                <h2>Billing</h2>
+                {% for hidden in projectservicesbridgeform.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
+                {% for field in projectservicesbridgeform.visible_fields %}
+                <div>
+                    {{ field.errors }}
+                    {{ field.help_text }}<br />
+                </div>
+                <div>
+                    {{ field }}<br /><br />
+                </div>
+                <div></div>
+                {% endfor %}
+                <br />
             </div>
-            <div>
-                {{ field }}<br /><br />
-            </div>
-            <div></div>
-            {% endfor %}
-            <br />
-            <button type="submit" name="submit">
+
+            <button type="submit" name="submit" class="save_changes">
                 <p class="buttonText">Update Project</p>
             </button>
-        </div>
-        
-</form>
+            
+            
+    </form>
 
+</div>
 {% endblock %}

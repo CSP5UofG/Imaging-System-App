@@ -1,19 +1,47 @@
+.content_to_edit{
+    left: 10%;
+}
+
+
+.columns{
+    display: flex;
+    border-radius: 30px;
+    background-color: whitesmoke;
+}
+
+.column1,.column2{
+    flex-direction:column;
+    flex: 1 1;
+}
+
+.row2, .row3{
+    border-radius: 30px;
+    background-color: whitesmoke;
+}
+
 input{
     border-radius: 30px;
     padding: 1em;
     background-color: #f9f9f9;
 }
 
-.columns{
-    display: flex;
+button.save_changes{
+    background-color: #FBA138;
+    border-radius: 30px;
+    border: #FBA138;
+    text-align: center;
+    padding: 1em;
+    width: max-content;
+    height: min-content;
+
 }
 
-.column1{
-    flex-direction:column;
-    flex: 1 1;
+button.save_changes:hover{
+    background-color: #fc8600;
 }
 
-.column2{
-    flex-direction:column;
-    flex: 1 1;
+.buttonText{
+    color: white;
 }
+
+.dropdown{}
