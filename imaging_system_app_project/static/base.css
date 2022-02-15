@@ -19,7 +19,6 @@ body{
 .header {
   height: 20%;
   width: 100%;
-  background-color: #eeeeee;
 }
 
 .side{
@@ -56,6 +55,15 @@ ul {
 #right.bottom{
   flex-grow: 1;
   overflow-y: auto;
+}
+
+.content_fade{
+  height: 50px;
+  width: 75%;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 25%, rgba(251, 251, 251, 0) 100%);
+  position: fixed;
+  margin-top: -10px;
+  z-index: 0;
 }
 
 .pagetitle{
@@ -104,4 +112,8 @@ ul {
 .sidenav a:active{
   background-color: white;
   color:#0071BC;  
+}
+
+.body_block{
+  margin-top: 2%;
 }
