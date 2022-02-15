@@ -6,7 +6,8 @@
 {% endblock %}
 
 {% block css_block %}
-<link rel="stylesheet" type="text/css" href="{% static 'content.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'content.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'add_edit_forms.css' %}">
 {% endblock %}
 
 {% block pagetitle %}
@@ -76,7 +77,7 @@
             <div></div>
             {% endfor %}
             <br />
-            <button type="submit" class="submit_button" name="submit" >
+            <button type="submit" class="save_changes" name="submit"  >
                 <p class="buttonText">Create New Project</p>
             </button>
             <div></div>
