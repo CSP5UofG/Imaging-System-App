@@ -7,6 +7,7 @@
 
 {% block css_block %}
     <link rel="stylesheet" type="text/css" href="{% static 'content.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'editCustomer.css' %}">
 {% endblock %}
 
 {% block pagetitle %}
@@ -32,7 +33,7 @@
                 <div></div>
             {% endfor %}
                 <br />
-                <button type="submit" name="submit">
+                <button type="submit" name="submit" class="save_changes">
                         <p class="buttonText">Update Customer</p>
                 </button>
                 <div></div>
