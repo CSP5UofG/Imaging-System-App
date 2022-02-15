@@ -6,10 +6,6 @@
 
 }
 
-h2, h1{
-    font-family: 'Poppins';
-}
-
 .columns{
     display: flex;
     border-radius: 30px;
@@ -37,11 +33,20 @@ h2, h1{
     left:5%;
 }
 
+h2, h1{
+    font-family: 'Poppins';
+}
 
-input{
+input, select{
     border-radius: 30px;
     padding: 1em;
     background-color: #f9f9f9;
+}
+
+.save_bar{
+    position: relative;
+    top: 10%;
+    padding: 1em;
 }
 
 button.save_changes{
@@ -53,15 +58,7 @@ button.save_changes{
     width: max-content;
     height: min-content;
     position: relative;
-    top: 5%;
-
-}
-
-.save_bar{
-
-    background-color: white;
-    position:relative;
-    top: 5%;
+    top: 10%;
 
 }
 
@@ -71,6 +68,5 @@ button.save_changes:hover{
 
 .buttonText{
     color: white;
+    font: bold;
 }
-
-.dropdown{}
