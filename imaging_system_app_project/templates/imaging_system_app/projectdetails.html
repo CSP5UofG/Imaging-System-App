@@ -65,21 +65,21 @@ Project {{ project.project_id.project_id }}
         <div class="project_info_header">Name</div>
         <div>{{ project.cust_id.cust_name }}</div>
         {% for w in workers %}
-            <div>{{ w.worker_id.worker_name }}</div>
+        <div>{{ w.worker_id.worker_name }}</div>
         {% endfor %}
     </div>
     <div class="project_info_column">
         <div class="project_info_header">Contact telephone number</div>
         <div>+{{ project.cust_id.cust_tel_no }}</div>
         {% for w in workers %}
-            <div>+{{ w.worker_id.worker_tel_no }}</div>
+        <div>+{{ w.worker_id.worker_tel_no }}</div>
         {% endfor %}
     </div>
     <div class="project_info_column">
         <div class="project_info_header">Email</div>
         <div>{{ project.cust_id.email }}</div>
         {% for w in workers %}
-            <div>{{ w.worker_id.worker_email }}</div>
+        <div>{{ w.worker_id.worker_email }}</div>
         {% endfor %}
     </div>
 </div>
@@ -95,17 +95,17 @@ Project {{ project.project_id.project_id }}
     </div>
 </div>
 
-    <h2>Specimen preparation record</h2>
-    <table>
-        {% for name, value in project.get_fields %}
-        {% if name != "project id" and name != "cust id" and name != "project date" and name != "num samples" and name != "status" and name != "total" %}
-        <tr>
-            <th>{{ name }}</th>
-            <td>{{ value }}</td>
-        </tr>
-        {% endif %}
-        {% endfor %}
-    </table>
+<h2>Specimen preparation record</h2>
+<table>
+    {% for name, value in project.get_fields %}
+    {% if name != "project id" and name != "cust id" and name != "project date" and name != "num samples" and name != "status" and name != "total" %}
+    <tr>
+        <th>{{ name }}</th>
+        <td>{{ value }}</td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+</table>
 </div>
 <div>
     <h2>Billing</h2>
@@ -113,21 +113,21 @@ Project {{ project.project_id.project_id }}
         {% for s in services %}
         <tr>
             <td>{{ s.service_id.name }}</td>
-			{% if s.units == 1.0 %}
-				<td>{{ s.units|floatformat:"0" }} {{ s.service_id.unit_name }}</td>
-			{% else %}
-				{% if s.service_id.unit_name == "hour" %}
-					<td>{{ s.units }} {{ s.service_id.unit_name }}s</td>
-				{% else %}
-					<td>{{ s.units|floatformat:"0" }} {{ s.service_id.unit_name }}s </td>
-				{% endif %}
-			{% endif %}
-			<td>£{{ s.cost|floatformat:"2" }}</td>
+            {% if s.units == 1.0 %}
+            <td>{{ s.units|floatformat:"0" }} {{ s.service_id.unit_name }}</td>
+            {% else %}
+            {% if s.service_id.unit_name == "hour" %}
+            <td>{{ s.units }} {{ s.service_id.unit_name }}s</td>
+            {% else %}
+            <td>{{ s.units|floatformat:"0" }} {{ s.service_id.unit_name }}s </td>
+            {% endif %}
+            {% endif %}
+            <td>£{{ s.cost|floatformat:"2" }}</td>
         </tr>
         {% endfor %}
-		
-			
-			
+
+
+
     </table>
 </div>
 
