@@ -101,12 +101,12 @@ def projects(request):
             context_dict['dateto']= dateto
         if datefrom:
             try:
-                all_projects  = all_projects.filter(project_date__gte = datetime.date(int(datefrom[0:4]), int(datefrom[4:6]), int(datefrom[6:8])))
+                all_projects  = all_projects.filter(project_date__gte = datetime.date(int(datefrom[4:8]), int(datefrom[2:4]), int(datefrom[0:2])))
             except:
                 all_projects  = all_projects.none()
         if dateto:
             try:
-                all_projects  = all_projects.filter(project_date__lte = datetime.date(int(dateto[0:4]), int(dateto[4:6]), int(dateto[6:8])))
+                all_projects  = all_projects.filter(project_date__lte = datetime.date(int(dateto[4:8]), int(dateto[2:4]), int(dateto[0:2])))
             except:
                 all_projects = all_projects.none()
     
@@ -331,12 +331,12 @@ def bills(request):
             context_dict['dateto']= dateto
         if datefrom:
             try:
-                bills = bills.filter(project_date__gte = (datetime.dateint(datefrom[0:4]), int(datefrom[4:6]), int(datefrom[6:8])))
+                bills = bills.filter(project_date__gte = (datetime.dateint(datefrom[4:8]), int(datefrom[2:4]), int(datefrom[0:2])))
             except:
                 bills = bills.none()
         if dateto:
             try:
-                bills = bills.filter(project_date__lte = datetime.date(int(dateto[0:4]), int(dateto[4:6]), int(dateto[6:8])))
+                bills = bills.filter(project_date__lte = datetime.date(int(dateto[4:8]), int(dateto[2:4]), int(dateto[0:2])))
             except:
                 bills = bills.none()
                 
