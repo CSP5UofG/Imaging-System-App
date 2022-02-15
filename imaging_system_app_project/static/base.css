@@ -61,14 +61,14 @@ ul {
 .pagetitle{
   text-align: center;
   color:white;
-  width: 15%;
-  height: 55%;
   background-color: #0071BC;
   border-radius: 0 0 10px 10px;
   font-family: 'Poppins';
   font-weight: bolder;
   margin-left: 10%;
-  padding-bottom: 1rem;
+  width: max-content;
+  height: max-content;
+  padding: 1em;
 }
 
 .logo{

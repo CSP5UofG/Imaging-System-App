@@ -8,28 +8,30 @@ Project {{ project.project_id }}
 {% endblock %}
 
 {% block css_block %}
-<link rel="stylesheet" type="text/css" href="{% static 'content.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'base.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'editProject.css' %}">
 {% endblock %}
 
 {% block pagetitle %}
-<h1><strong> Update Project </strong></h1>
+<h1><strong> {{ project.cust_id.cust_name }} project {{ project.project_id }} </strong></h1>
 {% endblock %}
 
 {% block body_block %}
-<div>
-    <h1>{{ project.cust_id.cust_name }} project {{ project.project_id }}</h1>
-</div>
+
 
 <div class="content_to_edit">
+    <br/>
+
     <form id="project_forms" name="project_forms" method="post" action="{% url 'imaging_system_app:edit-project' project.project_id %}", enctype="multipart/form-data">
         <div class="columns">     
             <div class="column1">
                 {% csrf_token %}
                 <h2>Customer</h2>
+
                 {% for hidden in customerform.hidden_fields %}
                     {% endfor %}
                 {% for field in customerform.visible_fields %}
+
                 <div>
                     {{ field.errors }}
                     {{ field.help_text }}<br />
@@ -65,47 +67,53 @@ Project {{ project.project_id }}
         </div>
         
             <div class="row2">
-                <h2>Specimen preparation record</h2>
-                {% for hidden in projectform.hidden_fields %}
-                    {{ hidden }}
-                {% endfor %}
-                {% for field in projectform.visible_fields %}
-                <div>
-                    {{ field.errors }}
-                    {{ field.help_text }}<br />
+                <div class="row2_content">
+                    <h2>Specimen preparation record</h2>
+                    {% for hidden in projectform.hidden_fields %}
+                        {{ hidden }}
+                    {% endfor %}
+                    {% for field in projectform.visible_fields %}
+                    <div>
+                        {{ field.errors }}
+                        {{ field.help_text }}<br />
+                    </div>
+                    <div>
+                        {{ field }}<br /><br />
+                    </div>
+                    <div></div>
+                    {% endfor %}
+                    <br />
                 </div>
-                <div>
-                    {{ field }}<br /><br />
-                </div>
-                <div></div>
-                {% endfor %}
-                <br />
+                
             </div>
             
 
             <div class="row3">
-                <h2>Billing</h2>
-                {% for hidden in projectservicesbridgeform.hidden_fields %}
-                    {{ hidden }}
-                {% endfor %}
-                {% for field in projectservicesbridgeform.visible_fields %}
-                <div>
-                    {{ field.errors }}
-                    {{ field.help_text }}<br />
-                </div>
-                <div>
-                    {{ field }}<br /><br />
-                </div>
-                <div></div>
-                {% endfor %}
-                <br />
+                <div class="row3_content">
+                    <h2>Billing</h2>
+                    {% for hidden in projectservicesbridgeform.hidden_fields %}
+                        {{ hidden }}
+                    {% endfor %}
+                    {% for field in projectservicesbridgeform.visible_fields %}
+                    <div>
+                        {{ field.errors }}
+                        {{ field.help_text }}<br />
+                    </div>
+                    <div>
+                        {{ field }}<br /><br />
+                    </div>
+                    <div></div>
+                    {% endfor %}
+                    <br />
+                </div>   
             </div>
 
-            <button type="submit" name="submit" class="save_changes">
-                <p class="buttonText">Update Project</p>
-            </button>
-            
-            
+            <div class="save_bar">
+                <button type="submit" name="submit" class="save_changes">
+                    <p class="buttonText">Update Project</p>
+                </button>
+            </div>
+           
     </form>
 
 </div>
