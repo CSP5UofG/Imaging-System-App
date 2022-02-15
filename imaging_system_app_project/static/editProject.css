@@ -1,0 +1,19 @@
+input{
+    border-radius: 30px;
+    padding: 1em;
+    background-color: #f9f9f9;
+}
+
+.columns{
+    display: flex;
+}
+
+.column1{
+    flex-direction:column;
+    flex: 1 1;
+}
+
+.column2{
+    flex-direction:column;
+    flex: 1 1;
+}
