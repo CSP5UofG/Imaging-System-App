@@ -1,6 +1,15 @@
+h2{ 
+    position: relative;
+    left: 5%;
+    color: #0071BC;
+    font-family: 'Poppins';
+
+}
+
 .columns{
     display: flex;
 }
+
 .column1{
     flex-direction: column;
     flex: 1 1;
