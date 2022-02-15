@@ -1,0 +1,31 @@
+h2, h1{
+    font-family: 'Poppins';
+}
+
+input, select{
+    border-radius: 30px;
+    padding: 1em;
+    background-color: #f9f9f9;
+}
+
+button.save_changes{
+    background-color: #FBA138;
+    border-radius: 30px;
+    border: #FBA138;
+    text-align: center;
+    padding: 1em;
+    width: max-content;
+    height: min-content;
+    position: relative;
+    top: 10%;
+
+}
+
+button.save_changes:hover{
+    background-color: #fc8600;
+}
+
+.buttonText{
+    color: white;
+    font: bold;
+}
