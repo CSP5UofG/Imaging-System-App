@@ -116,63 +116,63 @@
         </div>
     </div>
     
-{% if projects %}
-<div class="section">
-    <h2>Projects</h2>
-    <div class="project_info">
-        <div class="flex_column">
-            <div class="header">Date</div>
-            {% for p in projects %}
-                <div>{{ p.project_date }}</div>
-            {% endfor %}
-        </div>
-        <div class="flex_column">
-            <div class="header">Status</div>
-            {% for p in projects %}
-                <div>{{ p.get_status_display }}</div>
-            {% endfor %}
-        </div>
-        <div class="flex_column">
-            <div class="header">Cost</div>
-            {% for p in projects %}
-                <div>£{{ p.total|floatformat:"2" }}</div>
-            {% endfor %}
-        </div>
-        <div class="flex_column">
-            <div class="header"><br></div>
-            {% for p in projects %}
-                <div><a href="{% url 'imaging_system_app:project-details' p.project_id %}"> View </a></div>
-            {% endfor %}
+    {% if projects %}
+    <div class="section">
+        <h2>Projects</h2>
+        <div class="project_info">
+            <div class="flex_column">
+                <div class="header">Date</div>
+                {% for p in projects %}
+                    <div>{{ p.project_date }}</div>
+                {% endfor %}
+            </div>
+            <div class="flex_column">
+                <div class="header">Status</div>
+                {% for p in projects %}
+                    <div>{{ p.get_status_display }}</div>
+                {% endfor %}
+            </div>
+            <div class="flex_column">
+                <div class="header">Cost</div>
+                {% for p in projects %}
+                    <div>£{{ p.total|floatformat:"2" }}</div>
+                {% endfor %}
+            </div>
+            <div class="flex_column">
+                <div class="header"><br></div>
+                {% for p in projects %}
+                    <div><a href="{% url 'imaging_system_app:project-details' p.project_id %}"> View </a></div>
+                {% endfor %}
+            </div>
         </div>
     </div>
-</div>
-{% endif %}
+    {% endif %}
 
-{% if bills %}
-<div class="section">
-    <h2>Bills</h2>
-    <div class="project_info">
-        <div class="flex_column">
-            <div class="header">Date</div>
-            {% for b in bills %}
-                <div>{{ b.billing_date }}</div>
-            {% endfor %}
-        </div>
-        <div class="flex_column">
-            <div class="header">Cost</div>
-            {% for b in bills %}
-            <div>£{{ b.total_cost|floatformat:"2" }}</div>
-            {% endfor %}
-        </div>
-        <div class="flex_column">
-            <div class="header"><br></div>
-            {% for b in bills %}
-            <div><a href="{% url 'imaging_system_app:bill-details' b.bill_id  %}" class="table_buttons"> View</a></div>
-            {% endfor %}
+    {% if bills %}
+    <div class="section">
+        <h2>Bills</h2>
+        <div class="project_info">
+            <div class="flex_column">
+                <div class="header">Date</div>
+                {% for b in bills %}
+                    <div>{{ b.billing_date }}</div>
+                {% endfor %}
+            </div>
+            <div class="flex_column">
+                <div class="header">Cost</div>
+                {% for b in bills %}
+                <div>£{{ b.total_cost|floatformat:"2" }}</div>
+                {% endfor %}
+            </div>
+            <div class="flex_column">
+                <div class="header"><br></div>
+                {% for b in bills %}
+                <div><a href="{% url 'imaging_system_app:bill-details' b.bill_id  %}" class="table_buttons"> View</a></div>
+                {% endfor %}
+            </div>
         </div>
     </div>
-</div>
-{% endif %}
+    {% endif %}
 </div>
 <br>
 
