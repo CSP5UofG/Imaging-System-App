@@ -248,7 +248,7 @@
         "fields": {
             "cust_id": 1,
             "project_date": "2021-08-11",
-            "num_samples": 9,
+            "num_samples": 3,
             "specimen_procedure": "",
             "chemical_fixation": "",
             "neg_staining": "",
@@ -268,7 +268,7 @@
             "contrast_staining": "",
             "comments_results": "",
             "status": 0,
-            "total": 50.0
+            "total": 260.0
         }
     }, {
         "model": "imaging_system_app.project",
@@ -453,16 +453,23 @@
             "project_id": 6
         }
     }, {
+        "model": "imaging_system_app.workerprojectbridge",
+        "pk": 7,
+        "fields": {
+            "worker_id": 2,
+            "project_id": 1
+        }
+    }, {
         "model": "imaging_system_app.bill",
         "pk": 1,
         "fields": {
             "billing_date": "2021-11-12",
-            "billing_address": "143, Fake street, Glasg",
-            "extra1_name": "",
-            "extra1_cost": null,
+            "billing_address": "120 University Place, Glasgow G12 8TA",
+            "extra1_name": "Extra - Annual charge",
+            "extra1_cost": 100.0,
             "extra2_name": "",
             "extra2_cost": null,
-            "total_cost": 180.0,
+            "total_cost": 490.0,
             "cust_id": 1
         }
     }, {
@@ -531,6 +538,24 @@
             "service_id": 2,
             "units": 2.0,
             "cost": 110.0
+        }
+    }, {
+        "model": "imaging_system_app.projectservicesbridge",
+        "pk": 7,
+        "fields": {
+            "project_id": 1,
+            "service_id": 3,
+            "units": 2.0,
+            "cost": 200.0
+        }
+    }, {
+        "model": "imaging_system_app.projectservicesbridge",
+        "pk": 8,
+        "fields": {
+            "project_id": 1,
+            "service_id": 6,
+            "units": 1.0,
+            "cost": 10.0
         }
     }, {
         "model": "imaging_system_app.projectbillbridge",
