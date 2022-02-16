@@ -25,38 +25,49 @@ Queries
 
     From:
     {% if datefrom %}
-    <input name="project_from" id="project_from" type="text" value={{ datefrom }}>
+    <input name="project_from" id="project_from" type="date" value={{ datefrom }}>
     {% else %}
-    <input name="project_from" id="project_from" type="text" placeholder="YYYYMMDD">
+    <input name="project_from" id="project_from" type="date" placeholder="DD/MM/YYYY">
     {% endif %}
     To:
     {% if dateto %}
-    <input name="project_to" id="project_to" type="text" value={{ dateto }}>
+    <input name="project_to" id="project_to" type="date" value={{ dateto }}>
     {% else %}
-    <input name="project_to" id="project_to" type="text" placeholder="YYYYMMDD">
+    <input name="project_to" id="project_to" type="date" placeholder="DD/MM/YYYY">
     {% endif %}
     <button type="submit" name="submit">Search</button>
 </form>
-{% if projects %}
-{% for p in projects %}
-<div class="content_entries">
-    <li class="content_entry">
-        <h2>{{ p.project_date}} - {{ p.cust_id.cust_name}}- {{p.num_samples}} samples - {{p.get_status_display}}
-        </h2> <br>
-    </li>
-</div>
-{% endfor %}
+<table class="tables">
+    <tr>
+        <th>Date</th>
+        <th>Customer</th>
+        <th>Number of samples</th>
+        <th>Status </th>
+        <th></th>
+    </tr>
 
-{% else %}
-<a href="/">
-    <div class="content_entry">
-        <li>
+    {% if projects %}
+    {% for p in projects %}
+    <tr>
+        <td id="left_corner"> {{p.project_date}} </td>
+        <td> {{p.cust_id.cust_name}} </td>
+        <td> {{p.num_samples}} </td>
+        <td> {{p.get_status_display}} </td>
+        <td></td>
+        <td> <a href="{% url 'imaging_system_app:edit-project' p.project_id %}" class="table_buttons"> Edit</a></td>
+        <td id="right_corner"> <a href="{% url 'imaging_system_app:project-details' p.project_id %}" class="table_buttons"> View </a></td>
+    </tr>
+    {% endfor %}
+
+    {% else %}
+    <a href="/">
+        <div class="content_entry">
             <strong>
                 <h2>There are no projects present.</h2>
             </strong> <br>
-        </li>
-    </div>
-</a>
-{% endif %}
+        </div>
+    </a>
+    {% endif %}
+</table>
 
 {% endblock %}

@@ -19,9 +19,20 @@
         <div class="new_entry">
             <a href="/imaging_system_app/add-customer">New customer</a><br />
         </div>
+    </div>
 
+    <div class="action_bar_search">
         <div class="search_bar">
-            <input type="text" id="search_bar" placeholder="Search customers" id>
+            <form action="{% url 'imaging_system_app:customers' %}" method="post">
+                {% csrf_token %}
+                Customer Search:
+                {% if query %}
+                <input name="customer_query" id="customer_query" type="text" value={{ query }}>
+                {% else %}
+                <input name="customer_query" id="customer_query" type="text" placeholder="Search Term">
+                {% endif %}
+                <button type="submit" name="submit">Search</button>
+            </form>
         </div>
     </div>
 

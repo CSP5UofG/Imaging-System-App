@@ -9,13 +9,27 @@ Project {{ project.project_id.project_id }}
 <link rel="stylesheet" type="text/css" href="{% static 'content.css' %}">
 
 <style>
-    .project_info {
-        margin-left: 5%;
-        margin-top: 2.5%;
-        background-color: #cccccc;
+    .content {
+        margin-left: 3%;
+    }
+    
+    .section{
+        background-color: #efefef;
+        border: 5px solid #efefef;
+        border-radius: 10px;
+        margin-top: 0.5%;
         width: 80%;
+        padding-left: 1%;
+        padding-right: 2%;
+        padding-bottom: 1%;
+    }
+
+    .project_info {
+        margin-top: 1%;
+        background-color: white;
+        width: 100%;
         text-align: center;
-        border: 5px solid #cccccc;
+        border: 5px solid white;
         border-radius: 10px;
         display: flex;
         font-family: 'Poppins';
@@ -28,8 +42,30 @@ Project {{ project.project_id.project_id }}
         text-align: center;
     }
 
+    .specimen_prep_column {
+        height: 100%;
+        flex-direction: column;
+        flex: 1 1 auto;
+        text-align: left;
+        width: 50%;
+        margin-right: 2%;
+    }
+    
+    .billing_row {
+        width: 80%;
+        flex-direction: row;
+        flex: 1 1 auto;
+        text-align: left;
+        height: 50%;
+        margin-bottom: 2%;
+    }
+
     .project_info_header {
         font-weight: bold;
+    }
+
+    h2 {
+        font-family: 'Poppins';
     }
 </style>
 
@@ -40,95 +76,122 @@ Project {{ project.project_id.project_id }}
 {% endblock %}
 
 {% block body_block %}
-<div class="project_info">
-    <div class="project_info_column">
-        <div class="project_info_header">Project date</div>
-        <div>{{ project.project_date }}</div>
+<div class="content">
+    <div class="section">
+        <h2>Project Information</h2>
+    <div class="project_info">
+        <div class="project_info_column">
+            <div class="project_info_header">Project date</div>
+            <div>{{ project.project_date }}</div>
+        </div>
+        <div class="project_info_column">
+            <div class="project_info_header">Status</div>
+            <div>{{ project.get_status_display }}</div>
+        </div>
+        <div class="project_info_column">
+            <div class="project_info_header">Number of samples</div>
+            <div>{{ project.num_samples }}</div>
+        </div>
     </div>
-    <div class="project_info_column">
-        <div class="project_info_header">Status</div>
-        <div>{{ project.get_status_display }}</div>
-    </div>
-    <div class="project_info_column">
-        <div class="project_info_header">Number of samples</div>
-        <div>{{ project.num_samples }}</div>
-    </div>
-</div>
 
-<div class="project_info">
-    <div class="project_info_column">
-        <br>
-        <div class="project_info_header">Customer</div>
-        <div class="project_info_header">Worker</div>
-    </div>
-    <div class="project_info_column">
-        <div class="project_info_header">Name</div>
-        <div>{{ project.cust_id.cust_name }}</div>
-        {% for w in workers %}
+    <h4>Personal Information</h4>
+    <div class="project_info">
+        <div class="project_info_column">
+            <br>
+            <div class="project_info_header">Customer</div>
+            <div class="project_info_header">Worker</div>
+        </div>
+        <div class="project_info_column">
+            <div class="project_info_header">Name</div>
+            <div>{{ project.cust_id.cust_name }}</div>
+            {% for w in workers %}
             <div>{{ w.worker_id.worker_name }}</div>
-        {% endfor %}
-    </div>
-    <div class="project_info_column">
-        <div class="project_info_header">Contact telephone number</div>
-        <div>+{{ project.cust_id.cust_tel_no }}</div>
-        {% for w in workers %}
+            {% endfor %}
+        </div>
+        <div class="project_info_column">
+            <div class="project_info_header">Contact telephone number</div>
+            <div>+{{ project.cust_id.cust_tel_no }}</div>
+            {% for w in workers %}
             <div>+{{ w.worker_id.worker_tel_no }}</div>
-        {% endfor %}
-    </div>
-    <div class="project_info_column">
-        <div class="project_info_header">Email</div>
-        <div>{{ project.cust_id.email }}</div>
-        {% for w in workers %}
+            {% endfor %}
+        </div>
+        <div class="project_info_column">
+            <div class="project_info_header">Email</div>
+            <div>{{ project.cust_id.email }}</div>
+            {% for w in workers %}
             <div>{{ w.worker_id.worker_email }}</div>
-        {% endfor %}
+            {% endfor %}
+        </div>
     </div>
+
+    <h4>Billing Information</h4>
+    <div class="project_info">
+        <div class="project_info_column">
+            <div class="project_info_header">Budget Code</div>
+            <div>{{ project.cust_id.cust_budget_code }}</div>
+        </div>
+        <div class="project_info_column">
+            <div class="project_info_header">Customer Type</div>
+            <div>{{ project.cust_id.get_cust_type_display }}</div>
+        </div>
+    </div>
+    
 </div>
 
-<div class="project_info">
-    <div class="project_info_column">
-        <div class="project_info_header">Budget Code</div>
-        <div>{{ project.cust_id.cust_budget_code }}</div>
-    </div>
-    <div class="project_info_column">
-        <div class="project_info_header">Customer Type</div>
-        <div>{{ project.cust_id.get_cust_type_display }}</div>
-    </div>
-</div>
-
+<div class="section">
     <h2>Specimen preparation record</h2>
-    <table>
-        {% for name, value in project.get_fields %}
+    {% for name, value in project.get_fields %}
         {% if name != "project id" and name != "cust id" and name != "project date" and name != "num samples" and name != "status" and name != "total" %}
-        <tr>
-            <th>{{ name }}</th>
-            <td>{{ value }}</td>
-        </tr>
+            {% if forloop.counter == 5 %}
+                <div class="project_info">
+                    <div class="specimen_prep_column">
+                        <div class="project_info_header">{{ name }}</div>
+                        <div>{{ value }}</div>
+                    </div>
+                </div>
+           {% else %}
+                {% if forloop.counter > 5 and forloop.counter|divisibleby:"2" %}
+                    <div class="project_info">
+                {% endif %}
+                        <div class="specimen_prep_column">
+                            <div class="project_info_header">{{ name }}</div>
+                            <div>{{ value }}</div>
+                        </div>
+                {% if forloop.counter0 > 4 and forloop.counter0|divisibleby:"2" %}
+                    </div>
+                {% endif %}
+            {% endif %}
         {% endif %}
-        {% endfor %}
-    </table>
+    {% endfor %}
 </div>
-<div>
+</div>
+    
+<div class="section">
     <h2>Billing</h2>
-    <table>
-        {% for s in services %}
-        <tr>
-            <td>{{ s.service_id.name }}</td>
-			{% if s.units == 1.0 %}
-				<td>{{ s.units|floatformat:"0" }} {{ s.service_id.unit_name }}</td>
-			{% else %}
-				{% if s.service_id.unit_name == "hour" %}
-					<td>{{ s.units }} {{ s.service_id.unit_name }}s</td>
-				{% else %}
-					<td>{{ s.units|floatformat:"0" }} {{ s.service_id.unit_name }}s </td>
-				{% endif %}
-			{% endif %}
-			<td>£{{ s.cost|floatformat:"2" }}</td>
-        </tr>
+    {% for s in services %}
+    {% if forloop.counter0|divisibleby:"4" %}
+        <div class="project_info">
+    {% endif %}
+        <div class="billing_row">
+                <div class="project_info_header">{{ s.service_id.name }}</div>
+                {% if s.units == 1.0 %}
+                    <div>{{ s.units|floatformat:"0" }} {{ s.service_id.unit_name }}</div>
+                {% else %}
+                    {% if s.service_id.unit_name == "hour" %}
+                        <div>{{ s.units }} {{ s.service_id.unit_name }}s</div>
+                    {% else %}
+                        <div>{{ s.units|floatformat:"0" }} {{ s.service_id.unit_name }}s </div>
+                    {% endif %}
+                {% endif %}
+                <div>£{{ s.cost|floatformat:"2" }}</div>
+            </div>
+            {% if forloop.counter|divisibleby:"4" %}
+        </div>
+            {% endif %}
         {% endfor %}
-		
-			
-			
-    </table>
+    </div>
 </div>
+</div>
+<br>
 
 {% endblock %}

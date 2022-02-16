@@ -108,12 +108,12 @@ td{
     background-color: #A90F9A;
     padding: 12.5px;
     margin-top: 10px;
+    margin-right: 3%;
     text-align: center;
     font-family: 'Poppins';
     font-size: 15px;
-    height: 75%;
-    width: 100%;
-    flex: 2 3 auto;
+    width: 25%;
+    flex: 1 1 auto;
 }
 
 .new_entry a{
@@ -137,17 +137,27 @@ td{
 }
 
 .action_bar{
-   margin: 0px;
-   display: flex;
-   box-sizing: border-box;
-   margin-top: 1%;
-   margin-left: 5%;
-   width: 65%;
+    margin: 0px;
+    display: flex;
+    box-sizing: border-box;
+    margin-left: 5%;
+    width: 20%;
+    font-family: 'Poppins';
+}
+.action_bar_search{
+    margin: 0px;
+    display: flex;
+    box-sizing: border-box;
+    margin-left: 5%;
+    width: 100%;
+    font-family: 'Poppins';
 }
 
 .search_bar{
     width: 100%;
-    flex: 5 1 auto;
+    flex: 1 1 auto;
+    margin-right: 5%;
+    margin-top: 1%;
 }
 
 #search_bar{

@@ -19,9 +19,19 @@
 	<div class="new_entry">
 		<a href="/imaging_system_app/add-service">New service</a><br />
 	</div>
-
+</div>
+<div class="action_bar_search">   
 	<div class="search_bar">
-		<input type="text" id="search_bar" placeholder="Search services" id>
+		<form action="{% url 'imaging_system_app:services' %}" method="post">
+			{% csrf_token %}
+			Service Name:
+			{% if query %}
+			<input name="service_name" id="service_name" type="text" value={{ query }}>
+			{% else %}
+			<input name="service_name" id="service_name" type="text" placeholder="Service Name">
+			{% endif %}
+			<button type="submit" name="submit">Search</button>
+		</form>
 	</div>
 </div>
 
