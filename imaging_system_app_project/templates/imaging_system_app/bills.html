@@ -19,7 +19,8 @@
         <div class="new_entry">
             <a href="/imaging_system_app/add-bill">New Bill</a><br />
         </div>
-        
+    </div>
+    <div class="action_bar_search">        
         <div class="search_bar">
             <form action="{% url 'imaging_system_app:bills' %}" method="post">
                 {% csrf_token %}

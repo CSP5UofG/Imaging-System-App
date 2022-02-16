@@ -19,7 +19,9 @@
         <div class="new_entry">
             <a href="/imaging_system_app/add-customer">New customer</a><br />
         </div>
+    </div>
 
+    <div class="action_bar_search">
         <div class="search_bar">
             <form action="{% url 'imaging_system_app:customers' %}" method="post">
                 {% csrf_token %}
