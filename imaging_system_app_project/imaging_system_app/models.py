@@ -28,7 +28,7 @@ class Customer(models.Model):
         
     cust_id = models.AutoField(primary_key = True)
     cust_name = models.CharField(max_length = 100)
-    cust_tel_no = models.CharField(max_length = 11) #specify if numbers can be international
+    cust_tel_no = models.CharField(max_length = 11) #specify if numbers can be international || We are using international numbers everywhere. TODO:change to 12
     cust_email = models.CharField(max_length = 100)
     cust_budget_code = models.IntegerField()
     cust_type = models.FloatField(choices = DISCOUNT_CHOICES, default = 1)
@@ -40,7 +40,7 @@ class Customer(models.Model):
 class Worker(models.Model):
     worker_id = models.AutoField(primary_key = True)
     worker_name = models.CharField(max_length = 100)
-    worker_tel_no = models.CharField(max_length = 11) #specify if numbers can be international
+    worker_tel_no = models.CharField(max_length = 11) #specify if numbers can be international || We are using international numbers everywhere. TODO:change to 12
     worker_email = models.CharField(max_length = 100)
     cust_id = models.ForeignKey(Customer, on_delete = models.CASCADE, null=True, blank=True)
     

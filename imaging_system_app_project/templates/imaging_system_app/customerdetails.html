@@ -56,6 +56,10 @@
     .header {
         font-weight: bold;
     }
+    
+    h1, h2, h3, h4, h5, h6  {
+        font-family: 'Poppins';
+    }
 
 </style>
 {% endblock %}
@@ -100,7 +104,7 @@
             <div class="flex_column">
                 <div class="header">Telephone Number</div>
                 {% for w in workers %}
-                    <div>{{ w.worker_tel_no }}</div>
+                    <div>+{{ w.worker_tel_no }}</div>
                 {% endfor %}
             </div>
             <div class="flex_column">
@@ -132,6 +136,12 @@
             <div class="header">Cost</div>
             {% for p in projects %}
                 <div>£{{ p.total|floatformat:"2" }}</div>
+            {% endfor %}
+        </div>
+        <div class="flex_column">
+            <div class="header"><br></div>
+            {% for p in projects %}
+                <div><a href="{% url 'imaging_system_app:project-details' p.project_id %}"> View </a></div>
             {% endfor %}
         </div>
     </div>

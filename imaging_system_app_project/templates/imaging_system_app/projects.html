@@ -7,7 +7,6 @@
 
 {% block css_block %}
 <link rel="stylesheet" type="text/css" href="{% static 'content.css' %}">
-<script type="text/javascript" src="{% static 'javascript/sortTable.js' %}"></script>
 {% endblock %}
 
 {% block pagetitle %}
@@ -17,26 +16,49 @@
 
 
 {% block body_block %}
+
 <div class="action_bar">
     <div class="new_entry">
         <a href="/imaging_system_app/add-project">New Project</a><br />
     </div>
     <div class="search_bar">
-        <input type="text" id="search_bar" placeholder="Search projects" id>
+        <form action="{% url 'imaging_system_app:projects' %}" method="post">
+            {% csrf_token %}
+            Customer:
+            {% if query %}
+            <input name="project_customer" id="project_customer" type="text" value={{ query }}>
+            {% else %}
+            <input name="project_customer" id="project_customer" type="text" placeholder="Customer name">
+            {% endif %}
+
+            From:
+            {% if datefrom %}
+            <input name="project_from" id="project_from" type="date" value={{ datefrom }}>
+            {% else %}
+            <input name="project_from" id="project_from" type="date" placeholder="DD/MM/YYYY">
+            {% endif %}
+            To:
+            {% if dateto %}
+            <input name="project_to" id="project_to" type="date" value={{ dateto }}>
+            {% else %}
+            <input name="project_to" id="project_to" type="date" placeholder="DD/MM/YYYY">
+            {% endif %}
+            <button type="submit" name="submit">Search</button>
+        </form>
     </div>
 </div>
 
 <table class="tables">
     <tr>
-        <th onclick="sortTable(0)">Date</th>
-        <th onclick="sortTable(1)">Customer</th>
-        <th onclick="sortTable(2)">Number of samples</th>
-        <th onclick="sortTable(3)">Status </th>
+        <th>Date</th>
+        <th>Customer</th>
+        <th>Number of samples</th>
+        <th>Status </th>
         <th></th>
     </tr>
 
-    {% if all_projects %}
-    {% for p in all_projects %}
+    {% if projects %}
+    {% for p in projects %}
     <tr>
         <td id="left_corner"> {{p.project_date}} </td>
         <td> {{p.cust_id.cust_name}} </td>
@@ -44,7 +66,8 @@
         <td> {{p.get_status_display}} </td>
         <td></td>
         <td> <a href="{% url 'imaging_system_app:edit-project' p.project_id %}" class="table_buttons"> Edit</a></td>
-        <td id="right_corner"> <a href="{% url 'imaging_system_app:project-details' p.project_id %}" class="table_buttons"> View </a></td>
+        <td id="right_corner"> <a href="{% url 'imaging_system_app:project-details' p.project_id %}"
+                class="table_buttons"> View </a></td>
     </tr>
     {% endfor %}
 

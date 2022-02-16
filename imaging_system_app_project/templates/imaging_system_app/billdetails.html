@@ -7,6 +7,66 @@
 
 {% block css_block %}
 <link rel="stylesheet" type="text/css" href="{% static 'content.css' %}">
+
+<style>
+    .content {
+        margin-left: 3%;
+        font-family: 'Poppins';
+    }
+    
+    .section{
+        background-color: #efefef;
+        border: 5px solid #efefef;
+        border-radius: 10px;
+        margin-top: 0.5%;
+        width: 80%;
+        padding-left: 1%;
+        padding-right: 2%;
+        padding-bottom: 1%;
+    }
+
+    .info {
+        margin-top: 1%;
+        background-color: white;
+        text-align: center;
+		width: 100%;
+        border: 5px solid white;
+        border-radius: 10px;
+        display: flex;
+    }
+	
+	.total{
+		color: #0071BC;
+		text-align: center;
+	}
+
+    .flex_column {
+        height: 100%;
+        flex-direction: column;
+        flex: 1 1 auto;
+        text-align: left;
+        width: 50%;
+        margin-right: 2%;
+    }
+    
+    .flex_row {
+        width: 80%;
+        flex-direction: row;
+        flex: 1 1 auto;
+        text-align: left;
+        height: 50%;
+        margin-bottom: 2%;
+    }
+
+    .header {
+        font-weight: bold;
+    }
+    
+    h1, h2, h3, h4, h5, h6  {
+        font-family: 'Poppins';
+    }
+
+</style>
 {% endblock %}
 
 {% block pagetitle %}
@@ -14,63 +74,106 @@
 {% endblock %}
 
 {% block body_block %}
-<div>
-	<h2>{{ bill.billing_date }}</h2>
-</div>
-{% if bill.billing_address %}
-<div>
-	<strong>Invoice to</strong>
-	</br>
-	{{ bill.cust_id.cust_name }}
-	</br>
-	{{ bill.billing_address }}
-	</br>
-</div>
-</br>
-{% endif %}
-<div>
-	{% if not bill.billing_address %}
-	Budget holder: {{ bill.cust_id.cust_name }}
-	</br>
-	{% endif %}
-	Period: {{start_date}} to {{end_date}}
-	</br>
-	Budget code: {{ bill.cust_id.budget_code }}
-</div>
-</br>
-<div>
-	Workers: {{ workers|join:" , " }}
-</div>
-</br>
-<div>
-	<table>
-		{% for s in services %}
-		<tr>
-			{% if s.units == 1.0 %}
-				<td>{{ s.project_id.project_id }} - {{ s.service_id.name }} - {{ s.units|floatformat:"0" }} {{s.service_id.unit_name}}: £{{ s.cost|floatformat:"2" }}</td>
-			{% else %}
-				{% if s.service_id.unit_name == "hour" %}
-					<td>{{ s.project_id.project_id }} - {{ s.service_id.name }} - {{ s.units }} {{s.service_id.unit_name}}s: £{{ s.cost|floatformat:"2" }}</td>
+<div class="content">
+	<h2>Bill ID: {{ bill.bill_id }} — {{ bill.billing_date }}</h2>
+	<div class="section">
+		<h2>Bill Information</h2>
+		<div class="info">
+			<div class="flex_column">
+				{% if bill.billing_address %}
+				<div class="header">Invoice to:</div>
+				<div>{{ bill.cust_id.cust_name }}</div>
+				<div>{{ bill.billing_address }}</div>
 				{% else %}
-					<td>{{ s.project_id.project_id }} - {{ s.service_id.name }} - {{ s.units|floatformat:"0" }} {{s.service_id.unit_name}}s: £{{ s.cost|floatformat:"2" }}</td>
+				<div class="header">Budget Holder:</div>
+				<div>{{ bill.cust_id.cust_name }}</div>
 				{% endif %}
+			</div>
+			<div class="flex_column">
+				<div class="header">Period:</div>
+				<div>{{start_date}} - {{end_date}}</div>
+			</div>
+			<div class="flex_column">
+				<div class="header">Budget code:</div>
+				<div>{{ bill.cust_id.budget_code }}</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="section">
+		<h2>Workers</h2>
+		<div class="info">
+			<div class="flex_column">
+				{% for w in workers %}
+				<div>{{ w }}</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+
+	<div class="section">
+		<h2>Cost Breakdown</h2>
+		<h3>Services</h3>
+		<div class="info">
+			{% for s in services %}
+			{% if forloop.counter0|divisibleby:"4" %}
+			<div class="flex_column">
+				{% endif %}
+				{% if s.units == 1.0 %}
+				<div class="header">Project {{ s.project_id.project_id }}</div>
+				<div>{{ s.service_id.name }}</div>
+				<div>{{ s.units|floatformat:"0" }} {{s.service_id.unit_name}}:</div>
+				<div>£{{ s.cost|floatformat:"2" }}</div>
+				{% else %}
+				{% if s.service_id.unit_name == "hour" %}
+				<div class="header">Project {{ s.project_id.project_id }}</div>
+				<div>{{ s.service_id.name }}</div>
+				<div>{{ s.units }} {{s.service_id.unit_name}}s</div>
+				<div>£{{ s.cost|floatformat:"2" }}</div>
+				{% else %}
+				<div class="header">Project {{ s.project_id.project_id }}</div>
+				<div>{{ s.service_id.name }}</div>
+				<div>{{ s.units|floatformat:"0" }} {{s.service_id.unit_name}}s</div>
+				<div>£{{ s.cost|floatformat:"2" }}</div>
+				{% endif %}
+				{% endif %}
+				<br>
+				{% if forloop.counter|divisibleby:"4" %}
+			</div>
 			{% endif %}
-		</tr>
-		{% endfor %}
-	</table>
+			{% endfor %}
+		</div>
+
+		{% if bill.extra1_cost %}
+		<div class="info">
+			<div class="flex_column">
+				<div class="header">{{ bill.extra1_name }}:</div>
+				<div>£{{ bill.extra1_cost|floatformat:"2" }}</div>
+			</div>
+		</div>
+		{% endif %}
+
+		{% if bill.extra2_cost %}
+		<div class="info">
+			<div class="flex_column">
+				<div class="header">{{ bill.extra2_name }}:</div>
+				<div>£{{ bill.extra2_cost|floatformat:"2" }}</div>
+			</div>
+		</div>
+		{% endif %}
+
+	</div>
 </div>
-<div>
-	{% if bill.extra1_cost %}
-		{{ bill.extra1_name }}: £{{ bill.extra1_cost|floatformat:"2" }}
-		</br>
-	{% endif %}
-	{% if bill.extra2_cost %}
-		{{ bill.extra2_name }}: £{{ bill.extra2_cost|floatformat:"2" }}
-		</br>
-	{% endif %}
 </div>
-<div>
-	<strong><h1>Total - £{{ bill.total_cost|floatformat:"2" }}</h1></strong>
+
+<div class="content">
+	<div class="section total">
+		<strong>
+			<h1>Total - £{{ bill.total_cost|floatformat:"2" }}</h1>
+		</strong>
+	</div>
 </div>
+</div>
+<br>
 
 {% endblock %}

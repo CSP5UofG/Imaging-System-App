@@ -82,7 +82,8 @@ ul {
 .logo{
   width:65%;
   height:85%;
-  margin: 1.5%;
+  margin-top: 5%;
+  margin-left: 15%;
   z-index: 1;
 }
 
@@ -116,8 +117,4 @@ ul {
 
 .body_block{
   margin-top: 2%;
-}
-
-h1, h2, h3, h4, h5, h6  {
-  font-family: 'Poppins';
 }
