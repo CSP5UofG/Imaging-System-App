@@ -29,3 +29,8 @@ button.save_changes:hover{
     color: white;
     font: bold;
 }
+
+.content_list{
+    position: relative;
+    left: 10%;
+}

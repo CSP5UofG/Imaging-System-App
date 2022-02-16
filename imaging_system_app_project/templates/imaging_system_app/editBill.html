@@ -18,9 +18,11 @@
 	     <div>
             <form id="service_form" method="post" action="{% url 'imaging_system_app:edit-bill' id %}", enctype="multipart/form-data">
             {% csrf_token %}
+
             {% for hidden in billform.hidden_fields %}
                 {{ hidden }}
             {% endfor %}
+
             {% for field in billform.visible_fields %}
                 <div class="form_header">
                     {{ field.errors }}
@@ -30,6 +32,7 @@
                     {{ field }}<br /><br />
                 </div>
                 <div></div>
+                
             {% endfor %}
                 <br />
                 <button type="submit" name="submit" class="submit_button">
