@@ -7,6 +7,7 @@
 
 {% block css_block %}
     <link rel="stylesheet" type="text/css" href="{% static 'content.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'add_edit_forms.css' %}">
 {% endblock %}
 
 {% block pagetitle %}
@@ -35,7 +36,7 @@
                 
             {% endfor %}
                 <br />
-                <button type="submit" name="submit" class="submit_button">
+                <button type="submit" name="submit" class="save_changes">
                         <p class="buttonText">Update Bill</p>
                 </button>
                 <div></div>
