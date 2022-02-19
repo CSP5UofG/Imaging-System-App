@@ -21,33 +21,26 @@
             enctype="multipart/form-data">
             {% csrf_token %}
             <h2>Customer</h2>
-            {% for hidden in customerform.hidden_fields %}
-            {{ hidden }}
-            {% endfor %}
-            {% for field in customerform.visible_fields %}
-            <div>
-                {{ field.errors }}
-                {{ field.help_text }}<br />
-            </div>
-            <div>
-                {{ field }}<br /><br />
-            </div>
-            <div></div>
-            {% endfor %}
+			<div>
+				<label for="customer_id">Choose a customer:</label> <br></br>
+				<select name="customer_id" id="customer_id">
+					{% for c in all_customer %}
+						<option value={{c}}>{{c.cust_name}}</option>
+					{% endfor %}
+				</select>
+			</div>
+
             <h2>Worker</h2>
-            {% for hidden in workerform.hidden_fields %}
-            {{ hidden }}
-            {% endfor %}
-            {% for field in workerform.visible_fields %}
-            <div>
-                {{ field.errors }}
-                {{ field.help_text }}<br />
-            </div>
-            <div>
-                {{ field }}<br /><br />
-            </div>
+			<div>
+			<p>{{error_message}}</p>
+				<label for="worker_id">Choose a Worker:</label> <br></br>
+				<select name="worker_id" id="worker_id">
+					{% for w in all_workers %}
+						<option value={{w}}>{{w}}</option>
+					{% endfor %}
+				</select>
+			</div>
             <div></div>
-            {% endfor %}
             <h2>Specimen preparation record</h2>
             {% for hidden in projectform.hidden_fields %}
             {{ hidden }}
