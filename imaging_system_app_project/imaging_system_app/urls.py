@@ -29,5 +29,6 @@ urlpatterns = [
     
     # sample view for queries
     path('queries/', views.queries, name='queries'),
-
+    
+    path('statistics/', views.viewStatistics, name='statistics')
 ]

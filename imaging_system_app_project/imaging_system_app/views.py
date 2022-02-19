@@ -6,6 +6,16 @@ from django.http import HttpResponse
 from django.db.models import Q
 
 from django_xhtml2pdf.utils import generate_pdf
+from write_excel import create_excel
+import sqlite3
+from xlsxwriter.workbook import Workbook
+
+import pandas as pd
+from os import listdir
+import numpy as np
+
+import seaborn as sns
+
 
 def index(request):
     context_dict = {}
@@ -488,3 +498,25 @@ def queries(request):
         
     context_dict['projects']= projects
     return render(request, 'imaging_system_app/queries.html', context=context_dict)
+
+# ===================== STATS =====================  #
+def viewStatistics(request):
+    create_excel()
+    projects = Project.objects.all()
+    df = pd.DataFrame(list(projects.values()))
+        
+    myplot = sns.countplot(data=df,
+                         x="cust_id_id")
+    
+    fig = myplot.get_figure()
+    fig.savefig('static/images/fig1.png') 
+    
+    myplot2 = sns.barplot(data=df,
+                         x = 'cust_id_id',
+                         y = 'total')
+    
+    fig2 = myplot2.get_figure()
+    fig2.savefig('static/images/fig2.png') 
+    
+    context_dict = {}
+    return render(request, 'imaging_system_app/statistics.html', context=context_dict)
