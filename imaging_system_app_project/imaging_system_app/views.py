@@ -551,14 +551,14 @@ def viewStatistics(request):
         
     myplot = sns.countplot(data=df,
                          x="cust_id_id")
-    
+    plt.close()
     fig = myplot.get_figure()
     fig.savefig('static/images/fig1.png') 
     
     myplot2 = sns.barplot(data=df,
                          x = 'cust_id_id',
                          y = 'total')
-    
+    plt.close()
     fig2 = myplot2.get_figure()
     fig2.savefig('static/images/fig2.png') 
     
