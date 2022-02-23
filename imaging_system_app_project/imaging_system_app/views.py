@@ -183,31 +183,35 @@ def projectDetails(request, id):
 def addProject(request):
     context_dict = {}
     
-    customerform = CustomerForm
-    workerform = WorkerForm
     projectform = ProjectForm
     projectservicesbridgeform = ProjectServicesBridgeForm
     
-    context_dict['customerform'] = customerform
-    context_dict['workerform'] = workerform
+    customers = Customer.objects.all()
+    workers = Worker.objects.all()
+    
     context_dict['projectform'] = projectform
     context_dict['projectservicesbridgeform'] = projectservicesbridgeform
-    
+    context_dict['all_customer'] = customers
+    context_dict['all_workers'] = workers
+        
     if request.method == 'POST':
-        customerform = CustomerForm(request.POST)
-        workerform = WorkerForm(request.POST)
+        customer = Customer.objects.get(cust_id = request.POST['customer_id'])
+        worker = Worker.objects.get(worker_id = request.POST['worker_id'])
+
         projectform = ProjectForm(request.POST)
         projectservicesbridgeform = ProjectServicesBridgeForm(request.POST)
         
-        if customerform.is_valid() and workerform.is_valid() and projectform.is_valid() and projectservicesbridgeform.is_valid():
-            customer = customerform.save()
-            worker = workerform.save(commit = False)
+        if projectform.is_valid() and projectservicesbridgeform.is_valid():
             project = projectform.save(commit = False)
             projectservicesbridge = projectservicesbridgeform.save(commit = False)
+            if worker.cust_id.cust_id != customer.cust_id:
+                workers = Worker.objects.filter(cust_id = customer.cust_id)
+                context_dict['error_message'] = "Please choose a wroker connected to the chose customer"
+                context_dict['projectform'] = projectform
+                context_dict['projectservicesbridgeform'] = projectservicesbridgeform
+                context_dict['all_workers'] = workers
+                return render(request, 'imaging_system_app/addProject.html', context_dict)
             
-            # add customer to Worker object
-            worker.cust_id = customer
-            worker.save()
             # add customer to Project object
             project.cust_id = customer
             project.save()
