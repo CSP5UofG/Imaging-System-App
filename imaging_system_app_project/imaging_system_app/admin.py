@@ -1,12 +1,40 @@
 from django.contrib import admin
+from django.contrib.auth.models import User
 
 from .models import Customer, Worker, Services, Bill, ProjectServicesBridge, ProjectBillBridge, Project, WorkerProjectBridge
+
+
+@admin.action(description='Activate user')
+def activate_user(modeladmin, request, queryset):
+    queryset.update(is_active=True)
+    
+@admin.action(description='Disable user')
+def disable_user(modeladmin, request, queryset):
+    queryset.update(is_active=False)
+    
+@admin.action(description='Give staff previleges to use the admin site')
+def allocate_staff(modeladmin, request, queryset):
+    queryset.update(is_staff=True)
+    
+@admin.action(description='Revoke staff previleges to use the admin site')
+def revoke_staff(modeladmin, request, queryset):
+    queryset.update(is_staff=False)
+
+class UserAdmin(admin.ModelAdmin):
+    list_display = ('username', 'is_active', 'is_staff', 'date_joined')
+    ordering = ('-date_joined',)
+    actions = [activate_user, disable_user, allocate_staff, revoke_staff]
+    # add actions to User dropdown list
+
+admin.site.unregister(User) # Overwrite built-in user admin
+admin.site.register(User, UserAdmin)
+
 
 class ServicesAdmin(admin.ModelAdmin):
     list_display = ('name', 'normal_price', 'in_house_price', 'outside_price', 'unit_name')
 
-
 admin.site.register(Services, ServicesAdmin)
+
 
 class CustomerAdmin(admin.ModelAdmin):
     list_display = ('cust_id', 'cust_name', 'cust_tel_no', 'cust_email', 'cust_budget_code', 'cust_type')
