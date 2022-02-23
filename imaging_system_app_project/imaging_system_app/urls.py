@@ -4,6 +4,10 @@ from imaging_system_app import views
 app_name = 'imaging_system_app'
 
 urlpatterns = [
+    path('register/', views.register, name='register'), 
+    path('login/', views.user_login, name='login'), 
+    path('logout/', views.user_logout, name='logout'), 
+    
     path('', views.index, name='index'),
     path('services/', views.services, name='services'),
     path('projects/', views.projects, name='projects'),
@@ -27,7 +31,5 @@ urlpatterns = [
     path('bills/<id>/edit/', views.editBill, name='edit-bill'),
     path('bills/<id>/print/', views.printBill, name='print-bill'),
     
-    # sample view for queries
-    path('queries/', views.queries, name='queries'),
-
+    path('statistics/', views.viewStatistics, name='statistics')
 ]
