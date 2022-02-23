@@ -7,6 +7,16 @@ from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django_xhtml2pdf.utils import generate_pdf
+from write_excel import create_excel
+import sqlite3
+from xlsxwriter.workbook import Workbook
+
+import pandas as pd
+from os import listdir
+import numpy as np
+
+import seaborn as sns
+
 
 
 # ===================== USER AUTHENTICATION =====================  #
@@ -519,3 +529,63 @@ def calculate_costs(project):
     for bill in bills:
         # adjust cost of bills the project is in
         calculate_bill(bill)
+    
+# ===================== QUERIES =====================  #
+
+def queries(request):
+    # sample view for queries in imaging_system_app/queries/
+    context_dict={}
+    projects = Project.objects.all()
+    if request.method == 'POST':
+        query = request.POST.get('project_customer')
+        datefrom = request.POST.get('project_from')
+        dateto = request.POST.get('project_to')
+        if query != "":
+            # Allows displaying search string in text box
+            context_dict['query']= query
+        if query:
+            projects = Project.objects.filter(cust_id__cust_name__icontains = query)
+            
+        if datefrom != "":
+            # Allows displaying search string in text box
+            context_dict['datefrom']= datefrom
+        if dateto != "":
+            # Allows displaying search string in text box
+            context_dict['dateto']= dateto
+        if datefrom:
+            try:
+                
+                projects = projects.filter(project_date__gte = datefrom)
+            except:
+                projects = projects.none()
+        if dateto:
+            try:
+                projects = projects.filter(project_date__lte = dateto)
+            except:
+                projects = projects.none()
+        
+        
+    context_dict['projects']= projects
+    return render(request, 'imaging_system_app/queries.html', context=context_dict)
+
+# ===================== STATS =====================  #
+def viewStatistics(request):
+    create_excel()
+    projects = Project.objects.all()
+    df = pd.DataFrame(list(projects.values()))
+        
+    myplot = sns.countplot(data=df,
+                         x="cust_id_id")
+    
+    fig = myplot.get_figure()
+    fig.savefig('static/images/fig1.png') 
+    
+    myplot2 = sns.barplot(data=df,
+                         x = 'cust_id_id',
+                         y = 'total')
+    
+    fig2 = myplot2.get_figure()
+    fig2.savefig('static/images/fig2.png') 
+    
+    context_dict = {}
+    return render(request, 'imaging_system_app/statistics.html', context=context_dict)

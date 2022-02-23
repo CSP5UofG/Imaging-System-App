@@ -30,5 +30,9 @@ urlpatterns = [
     path('add-bill/', views.addBill, name='add-bill'),
     path('bills/<id>/edit/', views.editBill, name='edit-bill'),
     path('bills/<id>/print/', views.printBill, name='print-bill'),
-
+    
+    # sample view for queries
+    path('queries/', views.queries, name='queries'),
+    
+    path('statistics/', views.viewStatistics, name='statistics')
 ]
