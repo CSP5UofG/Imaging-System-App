@@ -463,7 +463,6 @@ def printBill(request, id):
     result = generate_pdf('imaging_system_app/bill_pdf.html', file_object=resp, context = context_dict)
     return result
 
-@login_required    
 def bill_context_dict(bill_id):
     # Helper function to create context_dict for bill
     context_dict = {}
@@ -486,14 +485,12 @@ def bill_context_dict(bill_id):
 
 # ===================== COST CALCULATION =====================  #
 
-@login_required
 def calculate_service(projectservicesbridge, discount):
     cost = float(discount) * float(projectservicesbridge.service_id.normal_price) * float(projectservicesbridge.units)
     projectservicesbridge.cost = cost
     projectservicesbridge.save()
     return cost
 
-@login_required
 def calculate_project(project, discount):
     tot = 0
     projectservicesbridge = ProjectServicesBridge.objects.filter(project_id=project.project_id)
@@ -503,8 +500,7 @@ def calculate_project(project, discount):
         tot += cost
     project.total = tot
     project.save()
-
-@login_required    
+  
 def calculate_bill(bill):
     tot = 0
     projectbillbridge = ProjectBillBridge.objects.filter(bill_id=bill.bill_id)
@@ -516,8 +512,7 @@ def calculate_bill(bill):
         tot += bill.extra2_cost
     bill.total_cost = tot
     bill.save()
-
-@login_required    
+  
 def calculate_costs(project):
     discount = project.cust_id.cust_type
     # adjust cost of the project
@@ -536,6 +531,8 @@ def calculate_costs(project):
 
 
 # ===================== STATS =====================  #
+
+@login_required
 def viewStatistics(request):
     create_excel()
     projects = Project.objects.all()
