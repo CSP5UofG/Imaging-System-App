@@ -224,6 +224,14 @@ def addProject(request):
             calculate_project(project, customer.cust_type)
             return redirect(reverse('imaging_system_app:projects'))
     return render(request, 'imaging_system_app/addProject.html', context=context_dict)
+
+
+def getWorkers(request):
+    customerId = request.GET.get('customer_id')
+    workers = Worker.objects.filter(cust_id = customerId)
+    context_dict = {'workers': workers}
+    return render(request, 'imaging_system_app/worker_dropdown.html', context_dict)
+
     
 @login_required
 def editProject(request, id):

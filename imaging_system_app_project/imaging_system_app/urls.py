@@ -31,5 +31,6 @@ urlpatterns = [
     path('bills/<id>/edit/', views.editBill, name='edit-bill'),
     path('bills/<id>/print/', views.printBill, name='print-bill'),
     
-    path('statistics/', views.viewStatistics, name='statistics')
+    path('statistics/', views.viewStatistics, name='statistics'),
+    path('ajax/getWorkers/', views.getWorkers, name='get-workers'),
 ]
