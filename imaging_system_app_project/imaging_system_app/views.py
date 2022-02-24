@@ -8,18 +8,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django_xhtml2pdf.utils import generate_pdf
 from write_excel import create_excel
-import sqlite3
-from xlsxwriter.workbook import Workbook
-
-import pandas as pd
-from os import listdir
-import numpy as np
-
-import seaborn as sns
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
-
+from create_statistics_plots import create_plots
 
 
 # ===================== USER AUTHENTICATION =====================  #
@@ -546,21 +535,6 @@ def calculate_costs(project):
 @login_required
 def viewStatistics(request):
     create_excel()
-    projects = Project.objects.all()
-    df = pd.DataFrame(list(projects.values()))
-        
-    myplot = sns.countplot(data=df,
-                         x="cust_id_id")
-    plt.close()
-    fig = myplot.get_figure()
-    fig.savefig('static/images/fig1.png') 
-    
-    myplot2 = sns.barplot(data=df,
-                         x = 'cust_id_id',
-                         y = 'total')
-    plt.close()
-    fig2 = myplot2.get_figure()
-    fig2.savefig('static/images/fig2.png') 
-    
+    create_plots()
     context_dict = {}
     return render(request, 'imaging_system_app/statistics.html', context=context_dict)
