@@ -163,12 +163,12 @@ def projects(request):
     return render(request, 'imaging_system_app/projects.html', context=context_dict)
 
 @login_required
-def projectDetails(request, id):
+def projectdetails(request, id):
     context_dict={}
     context_dict['project'] = Project.objects.get(project_id = id)
     context_dict['services'] = ProjectServicesBridge.objects.filter(project_id = id)
     context_dict['workers'] = WorkerProjectBridge.objects.filter(project_id = id)
-    return render(request, 'imaging_system_app/projectDetails.html', context=context_dict)
+    return render(request, 'imaging_system_app/projectdetails.html', context=context_dict)
 
 
 @login_required    
@@ -286,14 +286,14 @@ def customers(request):
     return render(request, 'imaging_system_app/customers.html', context=context_dict)
 
 @login_required   
-def customerDetails(request, id):
+def customerdetails(request, id):
     context_dict={}
     context_dict['customer']= Customer.objects.get(cust_id = id)
     context_dict['workers']= Worker.objects.filter(cust_id = id)
     context_dict['projects']= Project.objects.filter(cust_id__cust_id = id)
     context_dict['bills']= Bill.objects.filter(cust_id = id)
 
-    return render(request, 'imaging_system_app/customerDetails.html', context=context_dict)
+    return render(request, 'imaging_system_app/customerdetails.html', context=context_dict)
 
 
 @login_required
@@ -404,10 +404,10 @@ def bills(request):
     return render(request, 'imaging_system_app/bills.html', context=context_dict)
 
 @login_required
-def billDetails(request, id):
+def billdetails(request, id):
     context_dict = bill_context_dict(id)
     # TODO: combine bill units and calculate grand total
-    return render(request, 'imaging_system_app/billDetails.html', context=context_dict)
+    return render(request, 'imaging_system_app/billdetails.html', context=context_dict)
 
 
 @login_required
