@@ -94,6 +94,9 @@
     
     <div class="section">
         <h2>Workers</h2>
+		<div class="new_entry">
+			<a href="{% url 'imaging_system_app:add-worker' customer.cust_id %}">Add Worker</a><br />
+		</div>
         <div class="project_info">
             <div class="flex_column">
                 <div class="header">Name</div>
@@ -111,6 +114,12 @@
                 <div class="header">Email</div>
                 {% for w in workers %}
                     <div>{{ w.email }}</div>
+                {% endfor %}
+            </div>
+            <div class="flex_column">
+                <div class="header"><br></div>
+                {% for w in workers %}
+                    <div><a href="{% url 'imaging_system_app:edit-worker' w.worker_id %}"> Edit </a></div>
                 {% endfor %}
             </div>
         </div>

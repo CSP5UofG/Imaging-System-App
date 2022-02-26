@@ -99,7 +99,6 @@ def addService(request):
 
 @login_required
 def editService(request, id):
-    #find the walk object to edit
     try:
         service = Services.objects.filter(service_id = id).first()
     except Services.DoesNotExist:
@@ -311,7 +310,6 @@ def addCustomer(request):
 
 @login_required
 def editCustomer(request, id):
-    #find the walk object to edit
     try:
         customer = Customer.objects.filter(cust_id = id).first()
     except Customer.DoesNotExist:
@@ -335,12 +333,38 @@ def editCustomer(request, id):
     return render(request, 'imaging_system_app/editCustomer.html', context=context_dict)
 
 # ===================== WORKER =====================  #
-
 @login_required
-def editWorker(request, worker_id):
+def addWorker(request, id):
     context_dict={}
     try:
-        worker = Worker.objects.get(worker_id = worker_id)
+        customer = Customer.objects.get(cust_id = id)
+    except Customer.DoesNotExist:
+        customer = None
+    
+    if customer is None:
+        return redirect(reverse('imaging_system_app:customers'))
+        
+    worker_form = WorkerForm
+    
+    context_dict['customer'] = customer
+    context_dict['worker_form'] = WorkerForm
+    
+    if request.method == 'POST':
+        worker_form = WorkerForm(request.POST)
+        
+        if worker_form.is_valid():
+            new_worker = worker_form.save(commit=False)
+            new_worker.cust_id = customer
+            new_worker.save()
+            return redirect(reverse('imaging_system_app:customer-details', kwargs={"id": customer.cust_id}))
+    return render(request, 'imaging_system_app/addWorker.html', context=context_dict)
+
+ 
+@login_required
+def editWorker(request, id):
+    context_dict={}
+    try:
+        worker = Worker.objects.get(worker_id = id)
     except Worker.DoesNotExist:
         worker = None
     
@@ -358,7 +382,7 @@ def editWorker(request, worker_id):
         
         if update.is_valid():
             new_worker = form.save()
-            return redirect(reverse('imaging_system_app:customer-details', kwargs={"cust_id": cust_id}))
+            return redirect(reverse('imaging_system_app:customer-details', kwargs={"id": cust_id}))
     return render(request, 'imaging_system_app/editWorker.html', context=context_dict)
 
 # ===================== BILLS =====================  #

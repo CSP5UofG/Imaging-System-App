@@ -25,6 +25,7 @@ urlpatterns = [
     path('add-customer/', views.addCustomer, name='add-customer'),
     path('customers/<id>/edit/', views.editCustomer, name='edit-customer'),
     path('workers/<id>/edit/', views.editWorker, name='edit-worker'),
+    path('customers/<id>/add-worker/', views.addWorker, name='add-worker'),
     
     path('bills/<id>/', views.billdetails, name='bill-details'),
     path('add-bill/', views.addBill, name='add-bill'),

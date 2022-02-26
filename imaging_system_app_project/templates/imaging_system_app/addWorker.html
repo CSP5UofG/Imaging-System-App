@@ -1,0 +1,43 @@
+{% extends 'imaging_system_app/base.html' %}
+{% load static %}
+
+{% block title_block %}
+     Update a worker
+{% endblock %}
+
+{% block css_block %}
+    <link rel="stylesheet" type="text/css" href="{% static 'content.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'add_edit_forms.css' %}">
+{% endblock %}
+
+{% block pagetitle %}
+	<h1><strong> Add Worker </strong></h1>
+{% endblock %}
+
+{% block body_block %} 
+		<h1> Customer: {{ customer.cust_name}} </h1>
+	     <div>
+            <form id="worker_form" method="post", enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for hidden in worker_form.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+            {% for field in worker_form.visible_fields %}
+                <div>
+                    {{ field.errors }}
+                    {{ field.help_text }}<br />
+                </div>
+                <div>
+                    {{ field }}<br /><br />
+                </div>
+                <div></div>
+            {% endfor %}
+                <br />
+                <button type="submit" name="submit" class="submit_button">
+                        <p class="buttonText">Add Worker</p>
+                </button>
+                <div></div>
+        </form>
+        </div>
+
+{% endblock %}
