@@ -1,20 +1,68 @@
 from django.shortcuts import render, redirect
 from imaging_system_app.models import Customer, Worker, Services, Bill, ProjectServicesBridge, ProjectBillBridge, Project, WorkerProjectBridge
-from imaging_system_app.forms import ServicesForm, CustomerForm, WorkerForm, ProjectForm, WorkerProjectBridgeForm, BillForm, ProjectServicesBridgeForm, ProjectBillBridgeForm
+from imaging_system_app.forms import UserForm, ServicesForm, CustomerForm, WorkerForm, ProjectForm, WorkerProjectBridgeForm, BillForm, ProjectServicesBridgeForm, ProjectBillBridgeForm
 from django.urls import reverse
 from django.http import HttpResponse
 from django.db.models import Q
-
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django_xhtml2pdf.utils import generate_pdf
+from write_excel import create_excel
+from create_statistics_plots import create_plots
 
+
+# ===================== USER AUTHENTICATION =====================  #
+
+def register(request):
+    registered = False
+    
+    if request.method == 'POST':
+        user_form = UserForm(request.POST)
+        if user_form.is_valid():
+            user = user_form.save()
+            user.set_password(user.password)
+            user.is_active = False
+            user.save()
+            registered = True
+    else:
+        user_form = UserForm()
+    
+    return render(request, 'imaging_system_app/register.html',
+                  context = {'user_form': user_form, 
+                             'registered': registered})
+
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(username=username, password=password)
+        if user:
+            if user.is_active:
+                login(request, user)
+                return redirect(reverse('imaging_system_app:index'))
+        else:
+            return HttpResponse("You have either entered invalid login details or your account has not been activated yet.")
+    else:
+        return render(request, 'imaging_system_app/login.html')
+
+@login_required
+def user_logout(request):
+    logout(request)
+    return redirect(reverse('imaging_system_app:login'))
+
+# ===================== HOME PAGE =====================  #
+
+@login_required
 def index(request):
     context_dict = {}
     context_dict['projects'] = Project.objects.order_by('-project_date')[:5]
     context_dict['bills'] = Bill.objects.order_by('-billing_date')[:5]
     return render(request, 'imaging_system_app/index.html', context=context_dict)
 
+
 # ===================== SERVICES =====================  #
 
+@login_required
 def services(request):
     context_dict = {}
     
@@ -33,6 +81,7 @@ def services(request):
 
     return render(request, 'imaging_system_app/services.html', context=context_dict)
 
+@login_required
 def addService(request):
     form = ServicesForm
     context_dict={'form': form}
@@ -48,8 +97,8 @@ def addService(request):
             return redirect(reverse('imaging_system_app:services'))
     return render(request, 'imaging_system_app/addServices.html', context=context_dict)
 
+@login_required
 def editService(request, id):
-    #find the walk object to edit
     try:
         service = Services.objects.filter(service_id = id).first()
     except Services.DoesNotExist:
@@ -75,6 +124,7 @@ def editService(request, id):
 
 # ===================== PROJECTS =====================  #
 
+@login_required
 def projects(request):
     context_dict={}
     projects = Project.objects.all()
@@ -111,41 +161,48 @@ def projects(request):
     context_dict['projects']= projects
     return render(request, 'imaging_system_app/projects.html', context=context_dict)
 
-def projectDetails(request, id):
+@login_required
+def projectdetails(request, id):
     context_dict={}
     context_dict['project'] = Project.objects.get(project_id = id)
     context_dict['services'] = ProjectServicesBridge.objects.filter(project_id = id)
     context_dict['workers'] = WorkerProjectBridge.objects.filter(project_id = id)
-    return render(request, 'imaging_system_app/projectDetails.html', context=context_dict)
-    
+    return render(request, 'imaging_system_app/projectdetails.html', context=context_dict)
+
+
+@login_required    
 def addProject(request):
     context_dict = {}
     
-    customerform = CustomerForm
-    workerform = WorkerForm
     projectform = ProjectForm
     projectservicesbridgeform = ProjectServicesBridgeForm
     
-    context_dict['customerform'] = customerform
-    context_dict['workerform'] = workerform
+    customers = Customer.objects.all()
+    workers = Worker.objects.all()
+    
     context_dict['projectform'] = projectform
     context_dict['projectservicesbridgeform'] = projectservicesbridgeform
-    
+    context_dict['all_customer'] = customers
+    context_dict['all_workers'] = workers
+        
     if request.method == 'POST':
-        customerform = CustomerForm(request.POST)
-        workerform = WorkerForm(request.POST)
+        customer = Customer.objects.get(cust_id = request.POST['customer_id'])
+        worker = Worker.objects.get(worker_id = request.POST['worker_id'])
+
         projectform = ProjectForm(request.POST)
         projectservicesbridgeform = ProjectServicesBridgeForm(request.POST)
         
-        if customerform.is_valid() and workerform.is_valid() and projectform.is_valid() and projectservicesbridgeform.is_valid():
-            customer = customerform.save()
-            worker = workerform.save(commit = False)
+        if projectform.is_valid() and projectservicesbridgeform.is_valid():
             project = projectform.save(commit = False)
             projectservicesbridge = projectservicesbridgeform.save(commit = False)
+            if worker.cust_id.cust_id != customer.cust_id:
+                workers = Worker.objects.filter(cust_id = customer.cust_id)
+                context_dict['error_message'] = "Please choose a wroker connected to the chose customer"
+                context_dict['projectform'] = projectform
+                context_dict['projectservicesbridgeform'] = projectservicesbridgeform
+                context_dict['all_workers'] = workers
+                return render(request, 'imaging_system_app/addProject.html', context_dict)
             
-            # add customer to Worker object
-            worker.cust_id = customer
-            worker.save()
             # add customer to Project object
             project.cust_id = customer
             project.save()
@@ -158,8 +215,16 @@ def addProject(request):
             calculate_project(project, customer.cust_type)
             return redirect(reverse('imaging_system_app:projects'))
     return render(request, 'imaging_system_app/addProject.html', context=context_dict)
-    
 
+
+def getWorkers(request):
+    customerId = request.GET.get('customer_id')
+    workers = Worker.objects.filter(cust_id = customerId)
+    context_dict = {'workers': workers}
+    return render(request, 'imaging_system_app/worker_dropdown.html', context_dict)
+
+    
+@login_required
 def editProject(request, id):
     context_dict={}
     try:
@@ -198,6 +263,7 @@ def editProject(request, id):
 
 # ===================== CUSTOMERS =====================  #
 
+@login_required
 def customers(request):
     context_dict={}
 
@@ -217,17 +283,19 @@ def customers(request):
     context_dict['customers']= customers
 
     return render(request, 'imaging_system_app/customers.html', context=context_dict)
-    
-def customerDetails(request, id):
+
+@login_required   
+def customerdetails(request, id):
     context_dict={}
     context_dict['customer']= Customer.objects.get(cust_id = id)
     context_dict['workers']= Worker.objects.filter(cust_id = id)
     context_dict['projects']= Project.objects.filter(cust_id__cust_id = id)
     context_dict['bills']= Bill.objects.filter(cust_id = id)
 
-    return render(request, 'imaging_system_app/customerDetails.html', context=context_dict)
+    return render(request, 'imaging_system_app/customerdetails.html', context=context_dict)
 
 
+@login_required
 def addCustomer(request):
     form = CustomerForm
     context_dict={'form': form}
@@ -240,8 +308,8 @@ def addCustomer(request):
             return redirect(reverse('imaging_system_app:customers'))
     return render(request, 'imaging_system_app/addCustomer.html', context=context_dict)
 
+@login_required
 def editCustomer(request, id):
-    #find the walk object to edit
     try:
         customer = Customer.objects.filter(cust_id = id).first()
     except Customer.DoesNotExist:
@@ -265,11 +333,38 @@ def editCustomer(request, id):
     return render(request, 'imaging_system_app/editCustomer.html', context=context_dict)
 
 # ===================== WORKER =====================  #
-
-def editWorker(request, worker_id):
+@login_required
+def addWorker(request, id):
     context_dict={}
     try:
-        worker = Worker.objects.get(worker_id = worker_id)
+        customer = Customer.objects.get(cust_id = id)
+    except Customer.DoesNotExist:
+        customer = None
+    
+    if customer is None:
+        return redirect(reverse('imaging_system_app:customers'))
+        
+    worker_form = WorkerForm
+    
+    context_dict['customer'] = customer
+    context_dict['worker_form'] = WorkerForm
+    
+    if request.method == 'POST':
+        worker_form = WorkerForm(request.POST)
+        
+        if worker_form.is_valid():
+            new_worker = worker_form.save(commit=False)
+            new_worker.cust_id = customer
+            new_worker.save()
+            return redirect(reverse('imaging_system_app:customer-details', kwargs={"id": customer.cust_id}))
+    return render(request, 'imaging_system_app/addWorker.html', context=context_dict)
+
+ 
+@login_required
+def editWorker(request, id):
+    context_dict={}
+    try:
+        worker = Worker.objects.get(worker_id = id)
     except Worker.DoesNotExist:
         worker = None
     
@@ -287,11 +382,12 @@ def editWorker(request, worker_id):
         
         if update.is_valid():
             new_worker = form.save()
-            return redirect(reverse('imaging_system_app:customer-details', kwargs={"cust_id": cust_id}))
+            return redirect(reverse('imaging_system_app:customer-details', kwargs={"id": cust_id}))
     return render(request, 'imaging_system_app/editWorker.html', context=context_dict)
 
 # ===================== BILLS =====================  #
 
+@login_required
 def bills(request):
     context_dict={}
 
@@ -331,11 +427,14 @@ def bills(request):
 
     return render(request, 'imaging_system_app/bills.html', context=context_dict)
 
-def billDetails(request, id):
+@login_required
+def billdetails(request, id):
     context_dict = bill_context_dict(id)
     # TODO: combine bill units and calculate grand total
-    return render(request, 'imaging_system_app/billDetails.html', context=context_dict)
+    return render(request, 'imaging_system_app/billdetails.html', context=context_dict)
 
+
+@login_required
 def addBill(request):
     context_dict = {}
     billform = BillForm
@@ -355,7 +454,8 @@ def addBill(request):
             calculate_bill(bill)
             return redirect(reverse('imaging_system_app:bills'))
     return render(request, 'imaging_system_app/addBill.html', context=context_dict)
-    
+ 
+@login_required 
 def editBill(request, id):
     context_dict={}
     try:
@@ -379,13 +479,14 @@ def editBill(request, id):
             return redirect(reverse('imaging_system_app:bill-details', kwargs={"id": id}))
     return render(request, 'imaging_system_app/editBill.html', context=context_dict)
 
+@login_required
 def printBill(request, id):
     context_dict = bill_context_dict(id)
     
     resp = HttpResponse(content_type='application/pdf')
     result = generate_pdf('imaging_system_app/bill_pdf.html', file_object=resp, context = context_dict)
     return result
-    
+
 def bill_context_dict(bill_id):
     # Helper function to create context_dict for bill
     context_dict = {}
@@ -407,6 +508,7 @@ def bill_context_dict(bill_id):
     return context_dict    
 
 # ===================== COST CALCULATION =====================  #
+
 def calculate_service(projectservicesbridge, discount):
     cost = float(discount) * float(projectservicesbridge.service_id.normal_price) * float(projectservicesbridge.units)
     projectservicesbridge.cost = cost
@@ -422,7 +524,7 @@ def calculate_project(project, discount):
         tot += cost
     project.total = tot
     project.save()
-    
+  
 def calculate_bill(bill):
     tot = 0
     projectbillbridge = ProjectBillBridge.objects.filter(bill_id=bill.bill_id)
@@ -434,7 +536,7 @@ def calculate_bill(bill):
         tot += bill.extra2_cost
     bill.total_cost = tot
     bill.save()
-    
+  
 def calculate_costs(project):
     discount = project.cust_id.cust_type
     # adjust cost of the project
@@ -450,3 +552,13 @@ def calculate_costs(project):
     for bill in bills:
         # adjust cost of bills the project is in
         calculate_bill(bill)
+
+
+# ===================== STATS =====================  #
+
+@login_required
+def viewStatistics(request):
+    create_excel()
+    create_plots()
+    context_dict = {}
+    return render(request, 'imaging_system_app/statistics.html', context=context_dict)

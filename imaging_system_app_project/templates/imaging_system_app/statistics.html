@@ -1,0 +1,26 @@
+{% extends 'imaging_system_app/base.html' %}
+{% load static %}
+
+{% block title_block %}
+    - Statistics
+{% endblock %}
+
+{% block css_block %}
+    <link rel="stylesheet" type="text/css" href="{% static 'content.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'index.css' %}">
+{% endblock %}
+
+{% block pagetitle %}
+	<h1><strong> Statistics </strong></h1>
+{% endblock %}
+
+{% block body_block %}  
+<div class="new_entry">
+	<a href="{% static 'excel/ExcelDatabase.xlsx' %}" download>Download DB!</a>
+</div>
+<div>
+	<img src="{% static 'images/fig1.png' %}">
+	<img src="{% static 'images/fig2.png' %}">
+	<img src="{% static 'images/fig3.png' %}">
+</div>
+{% endblock %}
