@@ -23,6 +23,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('imaging_system_app/', include('imaging_system_app.urls')),
     # maps URLS starting with imaging_system_app/ to be handled by imaging_system_app
+    path('admin/doc/',include('django.contrib.admindocs.urls')), 
     path('admin/', admin.site.urls),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -5,6 +5,7 @@ from django.utils import timezone
 # Create your models here.
     
 class Services(models.Model):
+    """Stores a single service entry."""
     service_id = models.AutoField(primary_key = True)
     name = models.CharField(max_length = 100)
     normal_price = models.FloatField()
@@ -20,6 +21,7 @@ class Services(models.Model):
 
 
 class Customer(models.Model):
+    """Stores a single customer entry."""
     DISCOUNT_CHOICES = [
         (0.5, 'In-House'),
         (1.0, 'Normal'),
@@ -28,7 +30,7 @@ class Customer(models.Model):
         
     cust_id = models.AutoField(primary_key = True)
     cust_name = models.CharField(max_length = 100)
-    cust_tel_no = models.CharField(max_length = 11) #specify if numbers can be international || We are using international numbers everywhere. TODO:change to 12
+    cust_tel_no = models.CharField(max_length = 12) # International number
     cust_email = models.CharField(max_length = 100)
     cust_budget_code = models.IntegerField()
     cust_type = models.FloatField(choices = DISCOUNT_CHOICES, default = 1)
@@ -38,9 +40,10 @@ class Customer(models.Model):
 
 
 class Worker(models.Model):
+    """Stores a single worker entry, linked to :model:`imaging_system_app.Customer`."""
     worker_id = models.AutoField(primary_key = True)
     worker_name = models.CharField(max_length = 100)
-    worker_tel_no = models.CharField(max_length = 11) #specify if numbers can be international || We are using international numbers everywhere. TODO:change to 12
+    worker_tel_no = models.CharField(max_length = 12) # International number
     worker_email = models.CharField(max_length = 100)
     cust_id = models.ForeignKey(Customer, on_delete = models.CASCADE, null=True, blank=True)
     
@@ -49,6 +52,7 @@ class Worker(models.Model):
     
 
 class Project(models.Model):
+    """Stores a single project entry, linked to :model:`imaging_system_app.Customer`."""
     STATUS_CHOICES = [
         (0, 'Prep'),
         (1, 'Section'),
@@ -81,6 +85,7 @@ class Project(models.Model):
     total = models.FloatField(default = 0)
     
     def get_fields(self):
+        """Returns all field names and values as a list."""
         return [(field.verbose_name, field.value_to_string(self)) for field in self._meta.fields]
     
     def __str__(self):
@@ -88,6 +93,10 @@ class Project(models.Model):
     
  
 class WorkerProjectBridge(models.Model):
+    """
+    Stores the mapping of :model:`imaging_system_app.Worker`
+    to :model:`imaging_system_app.Project`.
+    """
     worker_project_bridge_id = models.AutoField(primary_key = True)
     worker_id = models.ForeignKey(Worker, on_delete=models.CASCADE)
     project_id = models.ForeignKey(Project, on_delete=models.CASCADE)
@@ -97,6 +106,7 @@ class WorkerProjectBridge(models.Model):
   
     
 class Bill(models.Model):
+    """Stores a single bill entry, linked to :model:`imaging_system_app.Customer`."""
     bill_id = models.AutoField(primary_key = True)
     billing_date = models.DateField(default=timezone.now)
     billing_address = models.CharField(max_length = 100, blank=True)
@@ -112,6 +122,11 @@ class Bill(models.Model):
     
     
 class ProjectServicesBridge(models.Model):
+    """
+    Stores the mapping of :model:`imaging_system_app.Services`
+    to :model:`imaging_system_app.Project`.
+    The amount of units and the calculated cost is also stored.
+    """
     project_services_bridge_id = models.AutoField(primary_key = True)
     project_id = models.ForeignKey(Project, on_delete=models.CASCADE, null=True, blank=True)
     service_id = models.ForeignKey(Services, on_delete=models.CASCADE)
@@ -123,6 +138,10 @@ class ProjectServicesBridge(models.Model):
     
    
 class ProjectBillBridge(models.Model):
+    """
+    Stores the mapping of :model:`imaging_system_app.Project`
+    to :model:`imaging_system_app.Bill`.
+    """
     project_bill_bridge_id = models.AutoField(primary_key = True)
     bill_id = models.ForeignKey(Bill, on_delete=models.CASCADE, null=True, blank=True)
     project_id = models.ForeignKey(Project, on_delete=models.CASCADE)
