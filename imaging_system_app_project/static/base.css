@@ -118,3 +118,8 @@ ul {
 .body_block{
   margin-top: 2%;
 }
+
+#log_out{
+  position: relative;
+  bottom: 0px;
+}

@@ -25,34 +25,42 @@
     <div id="left" class="side column">
         <div class="top-left header">
             <img src="{% static 'images/logo.png' %}" type="image/png" class="logo"></div>
+            
         <div class="bottom">
             <div id="Sidenav" class="sidenav">
 
                 <a href="/imaging_system_app">Home</a><br />
-        
-                <a href="/imaging_system_app/services/">Services</a><br />
-        
+    
                 <a href="/imaging_system_app/projects/">Projects</a><br />
+
+                <a href="/imaging_system_app/services/">Services</a><br />
         
                 <a href="/imaging_system_app/customers/">Customers</a><br />
         
                 <a href="/imaging_system_app/bills/">Bills</a><br />
 				
                 <a href="/imaging_system_app/statistics/">Statistics</a><br />
-				
-				<a href="{% url 'imaging_system_app:logout' %}">Logout</a><br />
+
+                <br/><br/><br/><br/><br/><br/><br/><br/>
+                <div id="log_out">
+                    <a href="{% url 'imaging_system_app:logout' %}">Log out</a><br />
+                </div>
             </div>
+            
         </div>
     </div>
+
+    
+
     <div id="right" class="main column">
         <div class="top-right header">
             <div class="pagetitle">
                 {% block pagetitle %}
                 {% endblock %}
-            </div>
+            </div>         
         </div>
         <div class="bottom">
-            <div class="content_fade"></div>
+    
             <div class="body_block">
                 {% block body_block %}
         
