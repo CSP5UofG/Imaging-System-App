@@ -176,14 +176,11 @@ def addProject(request):
     
     projectform = ProjectForm
     projectservicesbridgeform = ProjectServicesBridgeForm
-    
     customers = Customer.objects.all()
-    workers = Worker.objects.all()
     
     context_dict['projectform'] = projectform
     context_dict['projectservicesbridgeform'] = projectservicesbridgeform
     context_dict['all_customer'] = customers
-    context_dict['all_workers'] = workers
         
     if request.method == 'POST':
         customer = Customer.objects.get(cust_id = request.POST['customer_id'])
@@ -194,15 +191,7 @@ def addProject(request):
         
         if projectform.is_valid() and projectservicesbridgeform.is_valid():
             project = projectform.save(commit = False)
-            projectservicesbridge = projectservicesbridgeform.save(commit = False)
-            if worker.cust_id.cust_id != customer.cust_id:
-                workers = Worker.objects.filter(cust_id = customer.cust_id)
-                context_dict['error_message'] = "Please choose a wroker connected to the chose customer"
-                context_dict['projectform'] = projectform
-                context_dict['projectservicesbridgeform'] = projectservicesbridgeform
-                context_dict['all_workers'] = workers
-                return render(request, 'imaging_system_app/addProject.html', context_dict)
-            
+            projectservicesbridge = projectservicesbridgeform.save(commit = False)            
             # add customer to Project object
             project.cust_id = customer
             project.save()

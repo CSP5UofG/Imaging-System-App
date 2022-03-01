@@ -22,26 +22,22 @@
             {% csrf_token %}
             <h2>Customer</h2>
 			<div>
-				<label for="customer_id">Select an existing customer:</label> <br></br>
 				<select name="customer_id" id="customer_id">
+					<option value="">Select a customer</option>
 					{% for c in all_customer %}
 						<option value={{c}}>{{c.cust_name}}</option>
 					{% endfor %}
 				</select>
 			</div> <br></br>
-			<label for="customer_id">Or create a new Customer</label> <br></br>
+			<label for="customer_id">Create a new Customer</label> <br></br>
 				<div class="new_entry">
 					<a href="/imaging_system_app/add-customer">New customer</a><br />
 				</div>
 
             <h2>Worker</h2>
 			<div>
-			<p>{{error_message}}</p>
-				<label for="worker_id">Choose a Worker:</label> <br></br>
 				<select name="worker_id" id="worker_id">
-					{% for w in all_workers %}
-						<option value={{w}}>{{w}}</option>
-					{% endfor %}
+					<option value="">Select a worker</option>
 				</select>
 			</div>
             <div></div>
