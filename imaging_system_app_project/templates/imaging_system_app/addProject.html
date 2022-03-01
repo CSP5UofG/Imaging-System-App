@@ -23,7 +23,7 @@
             <h2>Customer</h2>
 			<div>
 				<select name="customer_id" id="customer_id">
-					<option value="">Select a customer</option>
+					<option value="" selected disabled hidden>Select a customer</option>
 					{% for c in all_customer %}
 						<option value={{c}}>{{c.cust_name}}</option>
 					{% endfor %}
@@ -37,7 +37,7 @@
             <h2>Worker</h2>
 			<div>
 				<select name="worker_id" id="worker_id">
-					<option value="">Select a worker</option>
+					<option value="" selected disabled hidden>Select a worker</option>
 				</select>
 			</div>
             <div></div>

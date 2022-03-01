@@ -34,4 +34,5 @@ urlpatterns = [
     
     path('statistics/', views.viewStatistics, name='statistics'),
     path('ajax/getWorkers/', views.getWorkers, name='get-workers'),
+    path('ajax/getProjects/', views.getProjects, name='get-projects'),
 ]

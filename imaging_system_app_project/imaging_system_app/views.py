@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from imaging_system_app.models import Customer, Worker, Services, Bill, ProjectServicesBridge, ProjectBillBridge, Project, WorkerProjectBridge
-from imaging_system_app.forms import UserForm, ServicesForm, CustomerForm, WorkerForm, ProjectForm, WorkerProjectBridgeForm, BillForm, ProjectServicesBridgeForm, ProjectBillBridgeForm
+from imaging_system_app.forms import UserForm, ServicesForm, CustomerForm, WorkerForm, ProjectForm, WorkerProjectBridgeForm, BillForm, ProjectServicesBridgeForm
 from django.urls import reverse
 from django.http import HttpResponse
 from django.db.models import Q
@@ -427,23 +427,34 @@ def billdetails(request, id):
 def addBill(request):
     context_dict = {}
     billform = BillForm
-    projectbillbridgeform = ProjectBillBridgeForm
+    customers = Customer.objects.all()
     context_dict['billform'] = billform
-    context_dict['projectbillbridgeform'] = ProjectBillBridgeForm
+    context_dict['customers'] = customers
     
     if request.method == 'POST':
         billform = BillForm(request.POST)
-        projectbillbridgeform = ProjectBillBridgeForm(request.POST)
         
-        if billform.is_valid() and projectbillbridgeform.is_valid():
-            bill = billform.save()
-            projectbillbridge = projectbillbridgeform.save(commit = False)
-            projectbillbridge.bill_id = bill
-            projectbillbridge.save()
+        if billform.is_valid():
+            customer = Customer.objects.get(cust_id = request.POST['customer_id'])
+            project = Project.objects.get(project_id = request.POST['project_id'])
+            bill = billform.save(commit=False)
+            bill.cust_id = customer
+            bill.save()
+            ProjectBillBridge.objects.create(project_id = project,
+                                             bill_id = bill)
             calculate_bill(bill)
             return redirect(reverse('imaging_system_app:bills'))
     return render(request, 'imaging_system_app/addBill.html', context=context_dict)
- 
+
+
+def getProjects(request):
+    customerId = request.GET.get('customer_id')
+    projects = Project.objects.filter(cust_id = customerId)
+    context_dict = {'projects': projects}
+    return render(request, 'imaging_system_app/project_dropdown.html', context_dict)
+    return render()
+
+
 @login_required 
 def editBill(request, id):
     context_dict={}
