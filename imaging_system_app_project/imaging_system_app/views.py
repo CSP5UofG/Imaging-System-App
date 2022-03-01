@@ -541,17 +541,19 @@ def calculate_costs(project):
     discount = project.cust_id.cust_type
     # adjust cost of the project
     calculate_project(project, discount)
-    bill = ProjectBillBridge.objects.get(project_id=project.project_id).bill_id
-    projectbillbridge = ProjectBillBridge.objects.filter(bill_id=bill.bill_id)
-    bills = []
-    for pbb in projectbillbridge:
-        # adjust projects in the same bill
-        calculate_project(pbb.project_id, discount)
-        if pbb.bill_id not in bills:
-            bills.append(pbb.bill_id)
+    try:
+        # check if the project is in a bill
+        bills = ProjectBillBridge.objects.filter(project_id=project).order_by('-bill_id')
+    except:
+        bills = []
+        projectbillbridge = []
     for bill in bills:
+        projectbillbridge = ProjectBillBridge.objects.filter(bill_id=bill.bill_id)
+        for pbb in projectbillbridge:
+            # adjust projects in the same bill
+            calculate_project(pbb.project_id, discount)
         # adjust cost of bills the project is in
-        calculate_bill(bill)
+        calculate_bill(bill.bill_id)
 
 
 # ===================== STATS =====================  #
