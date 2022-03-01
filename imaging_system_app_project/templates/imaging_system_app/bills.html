@@ -24,11 +24,10 @@
         <div class="search_bar">
             <form action="{% url 'imaging_system_app:bills' %}" method="post">
                 {% csrf_token %}
-                Customer:
                 {% if query %}
                 <input name="bill_customer" id="bill_customer" type="text" value={{ query }}>
                 {% else %}
-                <input name="bill_customer" id="bill_customer" type="text" placeholder="Customer name">
+                <input name="bill_customer" id="bill_customer" type="text" placeholder=" Search for a bill..">
                 {% endif %}
     
                 From:
@@ -43,7 +42,7 @@
                 {% else %}
                 <input name="bill_to" id="bill_to" type="date" placeholder="DD/MM/YYYY">
                 {% endif %}
-                <button type="submit" name="submit">Search</button>
+                <button type="submit" name="submit" class="submit_buttons">Search</button>
             </form>
         </div>
     </div>

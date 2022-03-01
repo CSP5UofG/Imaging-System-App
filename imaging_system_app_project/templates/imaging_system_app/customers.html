@@ -25,13 +25,12 @@
         <div class="search_bar">
             <form action="{% url 'imaging_system_app:customers' %}" method="post">
                 {% csrf_token %}
-                Customer Search:
                 {% if query %}
                 <input name="customer_query" id="customer_query" type="text" value={{ query }}>
                 {% else %}
-                <input name="customer_query" id="customer_query" type="text" placeholder="Search Term">
+                <input name="customer_query" id="customer_query" type="text" placeholder=" Search for a customer..">
                 {% endif %}
-                <button type="submit" name="submit">Search</button>
+                <button type="submit" name="submit" class="submit_buttons">Search</button>
             </form>
         </div>
     </div>

@@ -24,13 +24,12 @@
 	<div class="search_bar">
 		<form action="{% url 'imaging_system_app:services' %}" method="post">
 			{% csrf_token %}
-			Service Name:
 			{% if query %}
 			<input name="service_name" id="service_name" type="text" value={{ query }}>
 			{% else %}
-			<input name="service_name" id="service_name" type="text" placeholder="Service Name">
+			<input name="service_name" id="service_name" type="text" placeholder=" Search for a service..">
 			{% endif %}
-			<button type="submit" name="submit">Search</button>
+			<button type="submit" name="submit" class="submit_buttons">Search</button>
 		</form>
 	</div>
 </div>
