@@ -11,6 +11,7 @@ class UserForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(UserForm, self).__init__(*args, **kwargs)
         self.fields['username'].help_text = None
+        self.fields['password'].help_text = "Letters, digits and special characters ( @ . + - _ ) only"
     
     class Meta:
         model = User
