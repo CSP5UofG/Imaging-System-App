@@ -153,12 +153,10 @@ class BillForm(forms.ModelForm):
                                   help_text = "Second extra service name", required = False)
     extra2_cost = forms.FloatField(min_value = 0,
                                    help_text = "Second extra service cost", required = False)
-    cust_id = forms.ModelChoiceField(queryset = Customer.objects.all(),
-                                     help_text = "Customer Company")
     
     class Meta:
         model = Bill
-        fields = ('cust_id', 'billing_date', 'billing_address', 'extra1_name', 'extra1_cost',
+        fields = ('billing_date', 'billing_address', 'extra1_name', 'extra1_cost',
                   'extra2_name', 'extra2_cost')
 
 
@@ -181,18 +179,4 @@ class ProjectServicesBridgeForm(forms.ModelForm):
     class Meta:
         model = ProjectServicesBridge
         fields = ('service_id', 'units', )
-
-
-class ProjectBillBridgeForm(forms.ModelForm):
-    project_id =  forms.ModelChoiceField(queryset = Project.objects.all(),
-                                     help_text = "Choose Project")
-    
-    class Meta:
-        model = ProjectBillBridge
-        fields = ('project_id', )
- 
-
-
-
-
 

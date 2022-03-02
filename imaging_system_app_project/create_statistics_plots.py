@@ -41,7 +41,6 @@ def create_plots():
     monthly_sum = projects_with_cust_names[['cust_name', 'project_id', 'year', 'month', 'project_date']]
     counted = monthly_sum.groupby(['year', 'month'], as_index=True)["project_id"].count().reset_index(name="count")
     counted = counted.sort_values(['year', 'month']).tail(12)
-    print(counted)
     max_project_count = int(counted['count'].max())
     ticks = np.arange(0, max_project_count+1, 1)
     myplot3 = sns.lineplot(data = counted,

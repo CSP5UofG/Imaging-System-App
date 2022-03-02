@@ -17,9 +17,25 @@
 {% block body_block %}  
     <ul class="content_list">
 	     <div>
-            <form id="customer_form" method="post" action="{% url 'imaging_system_app:add-bill' %}", enctype="multipart/form-data">
+            <form id="customer_form" method="post" action="{% url 'imaging_system_app:add-bill' %}", enctype="multipart/form-data",
+			data-update-projects="{% url 'imaging_system_app:get-projects' %}" novalidate>
             {% csrf_token %}
-            {% for hidden in billform.hidden_fields %}
+			<div>
+				<label for="customer_id">Customer</label> <br></br>  
+				<select name="customer_id" id="customer_id">
+					<option value="" selected disabled hidden>Select a customer</option>
+					{% for c in customers %}
+						<option value={{c}}>{{c.cust_name}}</option>
+					{% endfor %}
+				</select>
+			</div> <br></br> 
+			<div>
+				<label for="project_id">Project</label> <br></br>  
+				<select name="project_id" id="project_id">
+					<option value="" selected disabled hidden>Select a project</option>
+				</select>
+			</div>
+			{% for hidden in billform.hidden_fields %}
                 {{ hidden }}
             {% endfor %}
             {% for field in billform.visible_fields %}
@@ -53,5 +69,23 @@
         </form>
         </div>
     </ul>
+	
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<script>
+    $("#customer_id").change(function () {
+      var url = $("#customer_form").attr("data-update-projects");
+      var customer_id = $(this).val();
 
+      $.ajax({
+        url: url,
+        data: {
+          'customer_id': customer_id 
+        },
+        success: function (data) {
+          $("#project_id").html(data);
+        }
+      });
+
+    });
+	</script>
 {% endblock %}
