@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
 
-from imaging_system_app.models import Services, Customer, Project
+from imaging_system_app.models import Services, Customer, Project, Worker, WorkerProjectBridge, ProjectServicesBridge, ProjectBillBridge, Bill
 
 
 # ===================== MODELS TESTS =====================  #
@@ -232,6 +232,154 @@ class ProjectTests(TestCase):
         self.assertQuerysetEqual(response.context['workers'], [])
         self.assertContains(response, "1")
         self.assertContains(response, "2")
+    
+    def test_add_project_contains_correct_info(self):
+        create_superuser(self)
+        test_customer = add_customer("test")
+        test_worker = add_worker("bobTEST", test_customer)
+        response = self.client.get(reverse('imaging_system_app:add-project'))
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.context['all_customer']), 1)
+        self.assertContains(response, "TEM embedding schedule")
+        self.assertContains(response, "Units")
+        self.assertContains(response, "Service")
+    
+    def test_add_project_post_correct(self):
+        create_superuser(self)
+        test_customer = add_customer("test")
+        test_worker = add_worker("bobTEST", test_customer)
+        test_service = add_service("test", 20, 'hours')
+        response = self.client.post(reverse('imaging_system_app:add-project'),
+                                    data={'customer_id': 1,
+                                          'worker_id': 1,
+                                          'project_date_month': 2,
+                                          'project_date_day': 26,
+                                          'project_date_year': 2022,
+                                          'status': 1,
+                                          'num_samples': 1,
+                                          'specimen_procedure': '',
+                                          'chemical_fixation': '',
+                                          'neg_staining': '',
+                                          'cryofixation': '',
+                                          'tem_embedding_schedule': '',
+                                          'dehydration': '',
+                                          'resin': '',
+                                          'sem': '',
+                                          'sem_mount': '',
+                                          'fd': '',
+                                          'cpd': '',
+                                          'sem_cost': '',
+                                          'temp_time': '',
+                                          'immunolabelling': '',
+                                          'first_dilution_time': '',
+                                          'second_dilution_time': '',
+                                          'contrast_staining': '',
+                                          'comments_results': '',
+                                          'service_id': '1',
+                                          'units': '1',})
+        test_project = Project.objects.get(project_id = 1)
+        test_WPBridge = WorkerProjectBridge.objects.get(project_id = 1)
+        test_PSBridge = ProjectServicesBridge.objects.get(service_id = 1)
+        
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(test_project.status, 1)
+        self.assertEqual(test_WPBridge.worker_id, test_worker)
+        self.assertEqual(test_WPBridge.project_id, test_project)
+        self.assertEqual(test_project.cust_id, test_customer)
+        self.assertEqual(test_PSBridge.project_id, test_project)
+    
+    def test_edit_project_contains_correct_info(self):
+        create_superuser(self)
+        test_customer = add_customer("test")
+        test_worker = add_worker("bobTEST", test_customer)
+        test_project = add_project(1, 25)
+        test_service = add_service("test", 20, 'hours')
+        test_project.cust_id = test_customer
+        test_project.save()
+        WorkerProjectBridge.objects.create(worker_id=test_worker, project_id=test_project)
+        ProjectServicesBridge.objects.create(project_id=test_project, service_id=test_service,
+                                             units = 2, cost = 20)
+        response = self.client.get(reverse('imaging_system_app:edit-project', kwargs = {'id': 1}))
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "TEM embedding schedule")
+        self.assertContains(response, "Units")
+        self.assertContains(response, "Service")
+        self.assertContains(response, "bobTEST")
+        self.assertContains(response, "25")
+        
+    def test_edit_project_post_correct(self):
+        create_superuser(self)
+        test_customer = add_customer("test")
+        other_customer = add_customer("test2")
+        test_worker = add_worker("bobTEST", test_customer)
+        other_worker = add_worker("TESTbob", other_customer)
+        test_service = add_service("test", 20, 'hours')
+        test_project = add_project(1, 25)
+        test_bill = add_bill(test_customer)
+        test_project.cust_id = test_customer
+        test_project.save()
+        WorkerProjectBridge.objects.create(worker_id=test_worker, project_id=test_project)
+        ProjectServicesBridge.objects.create(project_id=test_project, service_id=test_service,
+                                             units = 2, cost = 20)
+        ProjectBillBridge.objects.create(project_id = test_project,
+                                                                  bill_id = test_bill)
+
+        response = self.client.post(reverse('imaging_system_app:edit-project', kwargs = {'id': test_project.project_id}),
+                                    data={'customer_id': [other_customer.cust_id],
+                                          'worker_id': other_worker.worker_id,
+                                          'project_date_month': ['8'],
+                                          'project_date_day': ['11'],
+                                          'project_date_year': ['2021'],
+                                          'status': ['0'],
+                                          'num_samples': ['3'],
+                                          'specimen_procedure': [''],
+                                          'chemical_fixation': [''],
+                                          'neg_staining': [''],
+                                          'cryofixation': [''],
+                                          'tem_embedding_schedule': [''],
+                                          'dehydration': [''],
+                                          'resin': [''],
+                                          'sem': [''],
+                                          'sem_mount': [''],
+                                          'fd': [''],
+                                          'cpd': [''],
+                                          'sem_cost': [''],
+                                          'temp_time': [''],
+                                          'immunolabelling': [''],
+                                          'first_dilution_time': [''],
+                                          'second_dilution_time': [''],
+                                          'contrast_staining': [''],
+                                          'comments_results': [''],
+                                          'service_id': ['1'],
+                                          'units': ['1.0'],})
+        
+        check_project = Project.objects.get(project_id = 1)
+        test_WPBridge = WorkerProjectBridge.objects.get(project_id = 1)
+        test_PSBridge = ProjectServicesBridge.objects.get(service_id = 1)
+        
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(check_project.status, 0)
+        self.assertEqual(test_WPBridge.worker_id.worker_name, "TESTbob")
+        self.assertEqual(test_WPBridge.project_id, test_project)
+        self.assertEqual(check_project.cust_id, other_customer)
+        self.assertEqual(test_PSBridge.project_id, test_project)
+    
+    def test_edit_nonexistent_project_redirects(self):
+        create_superuser(self)
+        test_customer = add_customer("test")
+        test_worker = add_worker("bobTEST", test_customer)
+        test_project = add_project(1, 25)
+        test_service = add_service("test", 20, 'hours')
+        test_project.cust_id = test_customer
+        WorkerProjectBridge.objects.create(worker_id=test_worker, project_id=test_project)
+        ProjectServicesBridge.objects.create(project_id=test_project, service_id=test_service,
+                                             units = 2, cost = 20)
+        response = self.client.get(reverse('imaging_system_app:edit-project', kwargs = {'id': 102}))
+        
+        self.assertEqual(response.status_code, 302)
+    
 
 
 class StatisticsTests(TestCase):
@@ -240,7 +388,72 @@ class StatisticsTests(TestCase):
         response = self.client.get(reverse('imaging_system_app:projects'))
         
         self.assertEqual(response.status_code, 200)
-                
+
+class WorkerTests(TestCase):
+    def test_customer_details_with_worker(self):
+        create_superuser(self)
+        test_customer = add_customer("test")
+        test_worker = add_worker("bobTEST", test_customer)
+        response = self.client.get(reverse('imaging_system_app:customer-details', kwargs = {'id': 1}))
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.context['workers']), 1)        
+        self.assertContains(response, "bobTEST")
+    
+    def test_add_worker_contain_correct_info(self):
+        create_superuser(self)
+        test_customer = add_customer("test")
+        response = self.client.get(reverse('imaging_system_app:add-worker', kwargs = {'id': 1}))
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "worker_form")
+    
+    def test_add_worker_correct_post(self):
+        create_superuser(self)
+        add_customer("test")
+        response = self.client.post(reverse('imaging_system_app:add-worker', kwargs = {'id': 1}),
+                                    data={'worker_name': 'TESTbob',
+                                          'worker_tel_no': '12345678912',
+                                          'worker_email': 'email@email.com',})
+        test_worker = Worker.objects.get(worker_name="TESTbob")
+        
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(test_worker.worker_name, "TESTbob")
+        self.assertEqual(test_worker.worker_tel_no, "12345678912")
+        self.assertEqual(test_worker.worker_email, "email@email.com")
+    
+    def test_edit_worker_contain_correct_info(self):
+        create_superuser(self)
+        test_customer = add_customer("test")
+        test_worker = add_worker("bobTEST", test_customer)
+        response = self.client.get(reverse('imaging_system_app:edit-worker', kwargs = {'id': 1}))
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "form")
+    
+    def test_edit_worker_correct_post(self):
+        create_superuser(self)
+        test_customer = add_customer("test")
+        test_worker = add_worker("bobTEST", test_customer)
+        response = self.client.post(reverse('imaging_system_app:edit-worker', kwargs = {'id': 1}),
+                                    data={'worker_name': 'TESTbobTEST',
+                                          'worker_tel_no': '12345678912',
+                                          'worker_email': 'email@email.com',})
+        test_worker = Worker.objects.get(worker_name="TESTbobTEST")
+        
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(test_worker.worker_name, "TESTbobTEST")
+        self.assertEqual(test_worker.worker_tel_no, "12345678912")
+        self.assertEqual(test_worker.worker_email, "email@email.com")
+    
+    def test_edit_worker_nonexistent_service_redirects(self):
+        create_superuser(self)
+        response = self.client.get(reverse('imaging_system_app:edit-worker', kwargs = {'id': 101}))
+        
+        self.assertEqual(response.status_code, 302)
+
+
+
 # ===================== HELPER FUNTCTIONS =====================  #
 def add_service(name, price, unit_name):
     service = Services.objects.create(name=name,
@@ -256,7 +469,8 @@ def add_customer(cust_name):
     customer = Customer.objects.create(cust_name = cust_name,
                                        cust_tel_no = "123456789101",
                                        cust_email = "email@email.com",
-                                       cust_budget_code = 101)
+                                       cust_budget_code = 101,
+                                       cust_type = 1.0)
     customer.save()
     return customer
     
@@ -270,3 +484,15 @@ def add_project(status, num_samples):
     project = Project.objects.create(status = status,
                                      num_samples = num_samples)
     return project
+
+def add_worker(test_name, customer):
+    worker = Worker.objects.create(worker_name = test_name,
+                                   worker_tel_no = "123456789",
+                                   worker_email = "worker@email.com",
+                                   cust_id = customer)
+    return worker
+def add_bill(customer):
+    new_bill = Bill.objects.create(billing_address = "address",
+                                   total_cost = 20,
+                                   cust_id = customer)
+    return new_bill
