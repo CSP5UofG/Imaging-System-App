@@ -5,30 +5,60 @@
 
 <head lang="en">
 
-    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
-    <link rel="stylesheet" type="text/css" href="{% static 'base.css' %}">
-    <meta charset="UTF-8" />
+	<link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+	<link rel="stylesheet" type="text/css" href="{% static 'base.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'login_register.css' %}">
+	<meta charset="UTF-8" />
 
-    <title>
-        GIF - Register
-    </title>
+	<title>
+		GIF - Register
+	</title>
 
 </head>
 
 <body>
-    <h1>Register</h1>
-	{% if registered %}
+	<div class="centre_box">
+		<h1>Register</h1>
+		{% if registered %}
 		Thank you for registering, note that admin approval is needed for account activation.
-	{% else %}
-		<form id="user_form" method="post" action="{% url 'imaging_system_app:register' %}" enctype="multipart/form-data">
+		<br />
+		<br>
+		<div class="action_bar">
+			<a href="{% url 'imaging_system_app:login' %}" class="action_bar_item">Goto Login</a>
+		</div>
+		{% else %}
+		<form id="user_form" method="post" action="{% url 'imaging_system_app:register' %}"
+			enctype="multipart/form-data">
 			{% csrf_token %}
-			{{ user_form.as_p }}
-			<input type="submit" name="submit" value="Register" />
+
+			{% for field in user_form %}
+				{{ field.name|title }}:
+				<br>
+				{% if field.name == "password" %}
+				<div data-tip="{{ field.help_text}}">
+					<input type="password" name="{{ field.name }}" value="" size="50" />
+				</div>
+				{% else %}
+				<input type="text" name="{{ field.name }}" value="" size="50" />
+				{% endif %}
+				{% if user_form.errors %}
+					{% for error in field.errors %}
+						<div class="alert-warning">
+							<strong>{{ error|escape }}</strong>
+						</div>
+					{% endfor %}
+				{% endif %}
+				<br>
+			{% endfor %}
+			<br>
+			<div class="action_bar">
+				<a href="javascript:{}" class="action_bar_item"
+					onclick="document.getElementById('user_form').submit(); return false;">Register</a>
+				<a href="{% url 'imaging_system_app:login' %}" class="action_bar_item">Goto Login</a>
+			</div>
 		</form>
-	{% endif %}
-	<p>
-		<a href="{% url 'imaging_system_app:login' %}">Login</a></h2>
-	</p>
+		{% endif %}
+	</div>
 </body>
 
 </html>
