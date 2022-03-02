@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 from imaging_system_app.models import Services, Customer, Project, Worker, WorkerProjectBridge, ProjectServicesBridge, ProjectBillBridge, Bill
 
@@ -453,6 +454,145 @@ class WorkerTests(TestCase):
         self.assertEqual(response.status_code, 302)
 
 
+class BillingTests(TestCase):
+    def test_all_bills_page_with_no_bills(self):
+        create_superuser(self)
+        response = self.client.get(reverse('imaging_system_app:bills'))
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'There are no bills present.')
+        self.assertQuerysetEqual(response.context['bills'], [])
+    
+    def test_all_bills_page_with_bills(self):
+        create_superuser(self)
+        test_customer = add_customer("test_customer")
+        first_test_bill = add_bill(test_customer)
+        second_test_bill = add_bill(test_customer)
+        response = self.client.get(reverse('imaging_system_app:bills'))
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "1")
+        self.assertContains(response, "test_customer")
+        self.assertEquals(len(response.context['bills']), 2)
+    
+    def test_bill_details_page_contains_correct_info(self):
+        create_superuser(self)
+        test_customer = add_customer("test_customer")
+        first_test_bill = add_bill(test_customer)
+        test_project = add_project(1, 2)
+        test_project.cust_id = test_customer
+        test_project.save()
+        ProjectBillBridge.objects.create(bill_id = first_test_bill,
+                                 project_id = test_project)
+        response = self.client.get(reverse('imaging_system_app:bill-details', kwargs = {'id': 1}))
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['bill'], first_test_bill) 
+        self.assertContains(response, "test_customer")
+        self.assertContains(response, "Fake Street 6")
+    
+    def test_add_bill_contains_correct_info(self):
+        create_superuser(self)
+        add_customer("test")
+        add_customer("test2")
+        response = self.client.get(reverse('imaging_system_app:add-bill'))
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.context['customers']), 2)
+        self.assertContains(response, "Second extra service")
+        self.assertContains(response, "Select a project")
+        self.assertContains(response, "Select a customer")
+    
+    def test_add_bill_post_correct(self):
+        create_superuser(self)
+        test_customer = add_customer("test")
+        test_project = add_project(1, 2)
+        test_project.cust_id = test_customer
+        test_project.save()
+        response = self.client.post(reverse('imaging_system_app:add-bill'),
+                                    data={'customer_id': '1',
+                                          'project_id': '1',
+                                          'billing_date_month': '3',
+                                          'billing_date_day': '2',
+                                          'billing_date_year': '2022',
+                                          'billing_address': 'Fake street 5',
+                                          'extra1_name': '',
+                                          'extra1_cost': '',
+                                          'extra2_name': '',
+                                          'extra2_cost': '',})
+        test_bill = Bill.objects.get(bill_id = 1)
+        test_BPBridge = ProjectBillBridge.objects.get(bill_id = 1)
+        
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(test_bill.billing_address, 'Fake street 5')
+        self.assertEqual(test_BPBridge.bill_id, test_bill)
+        self.assertEqual(test_BPBridge.project_id, test_project)
+    
+    def test_edit_bill_contains_correct_info(self):
+        create_superuser(self)
+        test_customer = add_customer("test_customer")
+        first_test_bill = add_bill(test_customer)
+        test_project = add_project(1, 2)
+        test_project.cust_id = test_customer
+        test_project.save()
+        ProjectBillBridge.objects.create(bill_id = first_test_bill,
+                                 project_id = test_project)
+        response = self.client.get(reverse('imaging_system_app:edit-bill', kwargs = {'id': 1}))
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Second extra service name")
+        self.assertContains(response, "First extra service cost")
+        
+    def test_edit_bill_post_correct(self):
+        create_superuser(self)
+        test_customer = add_customer("test_customer")
+        first_test_bill = add_bill(test_customer)
+        test_worker = add_worker("bob", test_customer)
+        test_project = add_project(1, 2)
+        test_project.cust_id = test_customer
+        test_project.save()
+        ProjectBillBridge.objects.create(bill_id = first_test_bill,
+                                 project_id = test_project)
+        WorkerProjectBridge.objects.create(worker_id=test_worker, project_id=test_project)
+
+        response = self.client.post(reverse('imaging_system_app:edit-bill', kwargs = {'id': 1}),
+                                    data={'billing_date_month': '3',
+                                          'billing_date_day': '2',
+                                          'billing_date_year': '2022',
+                                          'billing_address': 'Fake street 5',
+                                          'extra1_name': 'Extra fee',
+                                          'extra1_cost': '200',
+                                          'extra2_name': '',
+                                          'extra2_cost': ''})
+        
+        test_bill = Bill.objects.get(bill_id = 1)
+        test_BPBridge = ProjectBillBridge.objects.get(bill_id = 1)
+        
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(test_bill.billing_address, 'Fake street 5')
+        self.assertEqual(test_BPBridge.bill_id, test_bill)
+        self.assertEqual(test_BPBridge.project_id, test_project)
+        self.assertEqual(test_bill.extra1_name, 'Extra fee')
+        self.assertEqual(test_bill.extra1_cost, 200)
+           
+    def test_edit_nonexistent_bill_redirects(self):
+        create_superuser(self)
+        test_customer = add_customer("test_customer")
+        first_test_bill = add_bill(test_customer)
+        test_worker = add_worker("bob", test_customer)
+        test_project = add_project(1, 2)
+        test_project.cust_id = test_customer
+        test_project.save()
+        ProjectBillBridge.objects.create(bill_id = first_test_bill,
+                                 project_id = test_project)
+        WorkerProjectBridge.objects.create(worker_id=test_worker, project_id=test_project)
+
+        response = self.client.get(reverse('imaging_system_app:edit-bill', kwargs = {'id': 102}))
+        
+        self.assertEqual(response.status_code, 302)
+
+
+
 
 # ===================== HELPER FUNTCTIONS =====================  #
 def add_service(name, price, unit_name):
@@ -492,7 +632,7 @@ def add_worker(test_name, customer):
                                    cust_id = customer)
     return worker
 def add_bill(customer):
-    new_bill = Bill.objects.create(billing_address = "address",
+    new_bill = Bill.objects.create(billing_address = "Fake Street 6",
                                    total_cost = 20,
                                    cust_id = customer)
     return new_bill
