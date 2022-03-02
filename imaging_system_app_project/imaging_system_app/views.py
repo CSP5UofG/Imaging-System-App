@@ -218,10 +218,15 @@ def editProject(request, id):
     context_dict={}
     try:
         project = Project.objects.get(project_id = id)
-        context_dict['project'] = project
         projectservicesbridge = ProjectServicesBridge.objects.filter(project_id = id).first()
         worker = WorkerProjectBridge.objects.filter(project_id = id).first().worker_id
-        context_dict['workers'] = worker
+        customers = Customer.objects.all()
+        workers = Worker.objects.filter(cust_id = project.cust_id)
+        
+        context_dict['project'] = project
+        context_dict['worker'] = worker
+        context_dict['all_customer'] = customers
+        context_dict['workers'] = workers
     except Project.DoesNotExist:
         project = None
     
@@ -229,22 +234,27 @@ def editProject(request, id):
         return redirect('/imaging_system_app/')
         
     #fill new form with current instance
-    customerform = CustomerForm(request.POST or None, instance=project.cust_id)
-    workerform = WorkerForm(request.POST or None, instance=worker)
     projectform = ProjectForm(request.POST or None, instance=project)
     projectservicesbridgeform = ProjectServicesBridgeForm(request.POST or None, instance=projectservicesbridge)
-    context_dict['customerform'] = customerform
-    context_dict['workerform'] = workerform
     context_dict['projectform'] = projectform
     context_dict['projectservicesbridgeform'] = projectservicesbridgeform
     context_dict['id'] = id
     
     if request.method == 'POST':
-        if customerform.is_valid() and workerform.is_valid() and projectform.is_valid() and projectservicesbridgeform.is_valid():
-            customerform.save()
-            workerform.save()
-            projectform.save()
+
+        if projectform.is_valid() and projectservicesbridgeform.is_valid():
+            new_worker = Worker.objects.get(worker_id = request.POST['worker_id'])
+            modified_customer = Customer.objects.get(cust_id = request.POST['customer_id'])
+            
+            project_update = projectform.save(commit=False)
+            project_update.cust_id = modified_customer
+            project_update.save()
+            
             projectservicesbridgeform.save()
+            
+            WorkerProjectBridge.objects.filter(project_id = id).delete()
+            WorkerProjectBridge.objects.create(worker_id=new_worker, project_id=project)
+            
             calculate_costs(project)
             return redirect(reverse('imaging_system_app:project-details', kwargs={"id": id}))
     return render(request, 'imaging_system_app/editProject.html', context=context_dict)
