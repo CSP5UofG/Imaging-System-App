@@ -14,6 +14,20 @@ from create_statistics_plots import create_plots
 # ===================== USER AUTHENTICATION =====================  #
 
 def register(request):
+    """
+    Display form for user registration.
+
+    **Context**
+
+    ``user_form``
+        The UserForm for creating an instance of :model:`auth.User`.
+    ``registered``
+        Boolean value that becomes True when user_form is valid.
+
+    **Template:**
+
+    :template:`imaging_system_app/register.html`
+    """
     registered = False
     
     if request.method == 'POST':
@@ -32,6 +46,15 @@ def register(request):
                              'registered': registered})
 
 def user_login(request):
+    """
+    Display form for user login.
+    
+    User is redirected to :template:`imaging_system_app/index.html` when login is successful.
+
+    **Template:**
+
+    :template:`imaging_system_app/login.html`
+    """
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -47,6 +70,7 @@ def user_login(request):
 
 @login_required
 def user_logout(request):
+    """User is logged out and redirected to :template:`imaging_system_app/login.html`."""
     logout(request)
     return redirect(reverse('imaging_system_app:login'))
 
@@ -54,6 +78,24 @@ def user_logout(request):
 
 @login_required
 def index(request):
+    """
+    Home page of the app.
+    
+    Displays the 5 most recent instances of :model:`imaging_system_app.Project` by project_date.
+    
+    Displays the 5 most recent instances of :model:`imaging_system_app.Bill` by billing_date.
+    
+    **Context**
+
+    ``projects``
+        The 5 most recent instances of :model:`imaging_system_app.Project` by project_date.
+    ``bills``
+        The 5 most recent instances of :model:`imaging_system_app.Bill` by billing_date.
+
+    **Template:**
+
+    :template:`imaging_system_app/index.html`
+    """
     context_dict = {}
     context_dict['projects'] = Project.objects.order_by('-project_date')[:5]
     context_dict['bills'] = Bill.objects.order_by('-billing_date')[:5]
@@ -64,6 +106,22 @@ def index(request):
 
 @login_required
 def services(request):
+    """
+    Display all existing instances of :model:`imaging_system_app.Services`.  
+    
+    Search functionality for the name of :model:`imaging_system_app.Services`.
+
+    **Context**
+
+    ``services``
+        All instances of :model:`imaging_system_app.Services`.
+    ``query``
+        User input for searching the name of :model:`imaging_system_app.Services`.  
+
+    **Template:**
+
+    :template:`imaging_system_app/services.html`
+    """
     context_dict = {}
     
     services = Services.objects.all()
@@ -83,6 +141,22 @@ def services(request):
 
 @login_required
 def addService(request):
+    """
+    Display the ServicesForm for creating a new instance of :model:`imaging_system_app.Services`.
+    
+    The in_house_price and outside_price of the service is calculated.
+    
+    The user is redirected to :template:`imaging_system_app/Services.html` after submission.
+
+    **Context**
+
+    ``form``
+        The ServicesForm for creating an instance of :model:`imaging_system_app.Services`.
+
+    **Template:**
+
+    :template:`imaging_system_app/addServices.html`
+    """
     form = ServicesForm
     context_dict={'form': form}
     
@@ -99,6 +173,31 @@ def addService(request):
 
 @login_required
 def editService(request, id):
+    """
+    Display the ServicesForm for editing an instance of :model:`imaging_system_app.Services` with a matching service_id to the keyword argument id.
+    
+    The in_house_price and outside_price of the service is calculated and saved.
+    
+    The user is redirected to :template:`imaging_system_app/index.html` if the instance of :model:`imaging_system_app.Services` is not found.
+    
+    The user is redirected to :template:`imaging_system_app/services.html` after submission.
+    
+    **Keyword arguments**
+
+    ``id``
+        The service_id of an instance of :model:`imaging_system_app.Services`.
+
+    **Context**
+
+    ``form``
+        The filled in ServicesForm for editing the instance of :model:`imaging_system_app.Services`.
+    ``id``
+        The keyword argument id.
+
+    **Template:**
+
+    :template:`imaging_system_app/editServices.html`
+    """
     try:
         service = Services.objects.filter(service_id = id).first()
     except Services.DoesNotExist:
@@ -126,6 +225,28 @@ def editService(request, id):
 
 @login_required
 def projects(request):
+    """
+    Display all existing instances of :model:`imaging_system_app.Project`.  
+    
+    Search functionality for the cust_name of :model:`imaging_system_app.Customer` associated with an instance of :model:`imaging_system_app.Project`.  
+    
+    Filter functionality, date from and date to, for the project_date of all instances of :model:`imaging_system_app.Project`. 
+
+    **Context**
+
+    ``projects``
+        All instances of :model:`imaging_system_app.Project`.
+    ``query``
+        User input for searching the cust_name of :model:`imaging_system_app.Customer` associated with an instance of :model:`imaging_system_app.Project`.  
+    ``datefrom``
+        User input for filter start date for the project_date of all instances of :model:`imaging_system_app.Project`.
+    ``dateto``
+        User input for filter end date for the project_date of all instances of :model:`imaging_system_app.Project`.
+
+    **Template:**
+
+    :template:`imaging_system_app/projects.html`
+    """
     context_dict={}
     projects = Project.objects.all()
     if request.method == 'POST':
@@ -163,6 +284,27 @@ def projects(request):
 
 @login_required
 def projectdetails(request, id):
+    """
+    Display an individual :model:`imaging_system_app.Project`.
+    
+     **Keyword arguments**
+
+    ``id``
+        The project_id of an instance of :model:`imaging_system_app.Project`.
+
+    **Context**
+
+    ``project``
+        An instance of :model:`imaging_system_app.Project` matching the keyword argument id.
+    ``services``
+        All instances of :model:`imaging_system_app.Services` associated with project.
+    ``workers``
+        All instances of :model:`imaging_system_app.Worker` associated with project.
+
+    **Template:**
+
+    :template:`imaging_system_app/projectdetails.html`
+    """
     context_dict={}
     context_dict['project'] = Project.objects.get(project_id = id)
     context_dict['services'] = ProjectServicesBridge.objects.filter(project_id = id)
@@ -172,6 +314,28 @@ def projectdetails(request, id):
 
 @login_required    
 def addProject(request):
+    """
+    Display the ProjectForm and ProjectServicesBridgeForm for creating a new instance of :model:`imaging_system_app.Project` and instances of :model:`imaging_system_app.ProjectServicesBridge`.
+        
+    The instance of :model:`imaging_system_app.Project` and associated instances of :model:`imaging_system_app.Worker` are used to create instances of :model:`imaging_system_app.WorkerProjectBridge`.
+    
+    The cost of the project is calculated.
+    
+    The user is redirected to :template:`imaging_system_app/Projects.html` after submission.
+
+    **Context**
+
+    ``projectform``
+        The ProjectForm for creating an instance of :model:`imaging_system_app.Project`.
+    ``projectservicesbridgeform``
+        The ProjectServicesBridgeForm for creating an instance of :model:`imaging_system_app.ProjectServicesBridge`.
+    ``all_customer``
+        All instances of :model:`imaging_system_app.Customer`.
+
+    **Template:**
+
+    :template:`imaging_system_app/addProject.html`
+    """
     context_dict = {}
     
     projectform = ProjectForm
@@ -207,6 +371,18 @@ def addProject(request):
 
 
 def getWorkers(request):
+    """
+    Display the dropdown menu of :model:`imaging_system_app.Worker` associated with the selected :model:`imaging_system_app.Customer`.
+
+    **Context**
+    
+    ``workers``
+        All instances of :model:`imaging_system_app.Worker` associated with the selected :model:`imaging_system_app.Customer`.
+
+    **Template:**
+
+    :template:`imaging_system_app/worker_dropdown.html`
+    """
     customerId = request.GET.get('customer_id')
     workers = Worker.objects.filter(cust_id = customerId)
     context_dict = {'workers': workers}
@@ -215,6 +391,44 @@ def getWorkers(request):
     
 @login_required
 def editProject(request, id):
+    """
+    Display the ProjectForm and ProjectServicesBridgeForm for editing an instance of :model:`imaging_system_app.Project` and instances of :model:`imaging_system_app.ProjectServicesBridge` with a matching project_id to the keyword argument id.
+        
+    The instance of :model:`imaging_system_app.Project` and associated instances of :model:`imaging_system_app.Worker` are used to update instances of :model:`imaging_system_app.WorkerProjectBridge`.
+    
+    The cost of the project is recalculated.
+    
+    The user is redirected to :template:`imaging_system_app/index.html` if the instance of :model:`imaging_system_app.Project` is not found.
+    
+    The user is redirected to :template:`imaging_system_app/projectdetails.html` after submission.
+
+    
+    **Keyword arguments**
+
+    ``id``
+        The project_id of an instance of :model:`imaging_system_app.Project`.
+
+    **Context**
+    
+    ``project``
+        The instance of :model:`imaging_system_app.Project`.
+    ``worker``
+        The first instance of :model:`imaging_system_app.Worker` associated with project.
+    ``all_customer``
+        All instances of :model:`imaging_system_app.Customer`.
+    ``workers``
+        All instances of :model:`imaging_system_app.Worker` associated with project.
+    ``projectform``
+        The filled in ProjectForm for editing the instance of :model:`imaging_system_app.Project`.
+    ``projectservicesbridgeform``
+        The filled in ProjectServicesBridgeForm for editing the instance of :model:`imaging_system_app.ProjectServicesBridge`.
+    ``id``
+        The keyword argument id.
+
+    **Template:**
+
+    :template:`imaging_system_app/editProject.html`
+    """
     context_dict={}
     try:
         project = Project.objects.get(project_id = id)
@@ -264,6 +478,22 @@ def editProject(request, id):
 
 @login_required
 def customers(request):
+    """
+    Display all existing instances of :model:`imaging_system_app.Customer`.  
+    
+    Search functionality for cust_name, cust_tel_no, cust_email and cust_budget_code of :model:`imaging_system_app.Customer`.
+
+    **Context**
+
+    ``customers``
+        All instances of :model:`imaging_system_app.Customer`.
+    ``query``
+        User input for searching the cust_name, cust_tel_no, cust_email and cust_budget_code of :model:`imaging_system_app.Customer`.  
+
+    **Template:**
+
+    :template:`imaging_system_app/customers.html`
+    """
     context_dict={}
 
     customers = Customer.objects.all()
@@ -285,6 +515,29 @@ def customers(request):
 
 @login_required   
 def customerdetails(request, id):
+    """
+    Display an individual :model:`imaging_system_app.Customer`.
+    
+     **Keyword arguments**
+
+    ``id``
+        The cust_id of an instance of :model:`imaging_system_app.Customer`.
+
+    **Context**
+
+    ``customer``
+        An instance of :model:`imaging_system_app.Customer` matching the keyword argument id.
+    ``workers``
+        All instances of :model:`imaging_system_app.Worker` associated with customer.
+    ``projects``
+        All instances of :model:`imaging_system_app.Project` associated with customer.
+    ``bills``
+        All instances of :model:`imaging_system_app.Bill` associated with customer.
+
+    **Template:**
+
+    :template:`imaging_system_app/customerdetails.html`
+    """
     context_dict={}
     context_dict['customer']= Customer.objects.get(cust_id = id)
     context_dict['workers']= Worker.objects.filter(cust_id = id)
@@ -296,6 +549,20 @@ def customerdetails(request, id):
 
 @login_required
 def addCustomer(request):
+    """
+    Display the CustomerForm for creating a new instance of :model:`imaging_system_app.Customer`.
+        
+    The user is redirected to :template:`imaging_system_app/customers.html` after submission.
+
+    **Context**
+
+    ``form``
+        The CustomerForm for creating an instance of :model:`imaging_system_app.Customer`.
+
+    **Template:**
+
+    :template:`imaging_system_app/addCustomer.html`
+    """
     form = CustomerForm
     context_dict={'form': form}
     
@@ -309,6 +576,29 @@ def addCustomer(request):
 
 @login_required
 def editCustomer(request, id):
+    """
+    Display the CustomerForm for editing an instance of :model:`imaging_system_app.Customer` with a matching cust_id to the keyword argument id.
+    
+    The user is redirected to :template:`imaging_system_app/index.html` if the instance of :model:`imaging_system_app.Customer` is not found.
+    
+    The user is redirected to :template:`imaging_system_app/customerdetails.html` after submission.
+    
+    **Keyword arguments**
+
+    ``id``
+        The cust_id of an instance of :model:`imaging_system_app.Customer`.
+
+    **Context**
+
+    ``form``
+        The filled in CustomerForm for editing the instance of :model:`imaging_system_app.Customer`.
+    ``id``
+        The keyword argument id.
+
+    **Template:**
+
+    :template:`imaging_system_app/editCustomer.html`
+    """
     try:
         customer = Customer.objects.filter(cust_id = id).first()
     except Customer.DoesNotExist:
@@ -334,6 +624,29 @@ def editCustomer(request, id):
 # ===================== WORKER =====================  #
 @login_required
 def addWorker(request, id):
+    """
+    Display the WorkerForm for creating an instance of :model:`imaging_system_app.Worker` associated to the instance of :model:`imaging_system_app.Customer` with a matching cust_id to the keyword argument id.
+    
+    The user is redirected to :template:`imaging_system_app/customers.html` if the instance of :model:`imaging_system_app.Customer` is not found.
+    
+    The user is redirected to :template:`imaging_system_app/customerdetails.html` after submission.
+    
+    **Keyword arguments**
+
+    ``id``
+        The cust_id of an instance of :model:`imaging_system_app.Customer`.
+
+    **Context**
+
+    ``customer``
+        An instance of :model:`imaging_system_app.Customer` matching the keyword argument id.
+    ``worker_form``
+        The WorkerForm for creating an instance of :model:`imaging_system_app.Worker`.
+
+    **Template:**
+
+    :template:`imaging_system_app/addWorker.html`
+    """
     context_dict={}
     try:
         customer = Customer.objects.get(cust_id = id)
@@ -361,6 +674,29 @@ def addWorker(request, id):
  
 @login_required
 def editWorker(request, id):
+    """
+    Display the WorkerForm for editing an instance of :model:`imaging_system_app.Worker` with a matching worker_id to the keyword argument id.
+    
+    The user is redirected to :template:`imaging_system_app/index.html` if the instance of :model:`imaging_system_app.Worker` is not found.
+    
+    The user is redirected to :template:`imaging_system_app/customerdetails.html` after submission.
+    
+    **Keyword arguments**
+
+    ``id``
+        The worker_id of an instance of :model:`imaging_system_app.Worker`.
+
+    **Context**
+
+    ``worker``
+        An instance of :model:`imaging_system_app.Worker` matching the keyword argument id.
+    ``worker_form``
+        The filled in WorkerForm for editing the instance of :model:`imaging_system_app.Worker`.
+
+    **Template:**
+
+    :template:`imaging_system_app/editWorker.html`
+    """
     context_dict={}
     try:
         worker = Worker.objects.get(worker_id = id)
@@ -388,6 +724,28 @@ def editWorker(request, id):
 
 @login_required
 def bills(request):
+    """
+    Display all existing instances of :model:`imaging_system_app.Bills`.  
+    
+    Search functionality for the cust_name of :model:`imaging_system_app.Customer` associated with an instance of :model:`imaging_system_app.Bill`.  
+    
+    Filter functionality, date from and date to, for the billing_date of all instances of :model:`imaging_system_app.Bill`. 
+
+    **Context**
+
+    ``bills``
+        All instances of :model:`imaging_system_app.Bill`.
+    ``query``
+        User input for searching the cust_name of :model:`imaging_system_app.Customer` associated with an instance of :model:`imaging_system_app.Bill`.  
+    ``datefrom``
+        User input for filter start date for the billing_date of all instances of :model:`imaging_system_app.Bill`.
+    ``dateto``
+        User input for filter end date for the billing_date of all instances of :model:`imaging_system_app.Bill`.
+
+    **Template:**
+
+    :template:`imaging_system_app/bills.html`
+    """
     context_dict={}
 
     bills = Bill.objects.all()
@@ -428,6 +786,22 @@ def bills(request):
 
 @login_required
 def billdetails(request, id):
+    """
+    Display an individual :model:`imaging_system_app.Bill`.
+    
+     **Keyword arguments**
+
+    ``id``
+        The bill_id of an instance of :model:`imaging_system_app.Bill`.
+
+    **Context**
+
+    Uses helper function bill_context_dict.
+    
+    **Template:**
+
+    :template:`imaging_system_app/billdetails.html`
+    """
     context_dict = bill_context_dict(id)
     # TODO: combine bill units and calculate grand total
     return render(request, 'imaging_system_app/billdetails.html', context=context_dict)
@@ -435,6 +809,26 @@ def billdetails(request, id):
 
 @login_required
 def addBill(request):
+    """
+    Display the BillForm for creating a new instance of :model:`imaging_system_app.Bill`.
+        
+    The instance of :model:`imaging_system_app.Bill` are used to create instances of :model:`imaging_system_app.ProjectBillBridge`.
+    
+    The cost of the bill is calculated.
+    
+    The user is redirected to :template:`imaging_system_app/bills.html` after submission.
+
+    **Context**
+
+    ``billform``
+        The BillForm for creating an instance of :model:`imaging_system_app.Bill`.
+    ``customers``
+        All instances of :model:`imaging_system_app.Customer`.
+
+    **Template:**
+
+    :template:`imaging_system_app/addBill.html`
+    """
     context_dict = {}
     billform = BillForm
     customers = Customer.objects.all()
@@ -458,6 +852,18 @@ def addBill(request):
 
 
 def getProjects(request):
+    """
+    Display the dropdown menu of :model:`imaging_system_app.Project` associated with the selected :model:`imaging_system_app.Customer`.
+
+    **Context**
+    
+    ``projects``
+        All instances of :model:`imaging_system_app.Project` associated with the selected :model:`imaging_system_app.Customer`.
+
+    **Template:**
+
+    :template:`imaging_system_app/project_dropdown.html`
+    """
     customerId = request.GET.get('customer_id')
     projects = Project.objects.filter(cust_id = customerId)
     context_dict = {'projects': projects}
@@ -467,6 +873,36 @@ def getProjects(request):
 
 @login_required 
 def editBill(request, id):
+    """
+    Display the BillForm for editing an instance of :model:`imaging_system_app.Bill` with a matching bill_id to the keyword argument id.
+        
+    The instance of :model:`imaging_system_app.Bill` is used to update instances of :model:`imaging_system_app.ProjectServicesBridge`.
+    
+    The cost of the bill is recalculated.
+    
+    The user is redirected to :template:`imaging_system_app/index.html` if the instance of :model:`imaging_system_app.Bill` is not found.
+    
+    The user is redirected to :template:`imaging_system_app/billdetails.html` after submission.
+
+    
+    **Keyword arguments**
+
+    ``id``
+        The bill_id of an instance of :model:`imaging_system_app.Bill`.
+
+    **Context**
+    
+    ``bill``
+        The instance of :model:`imaging_system_app.Bill`.
+    ``billform``
+        The filled in BillForm for editing the instance of :model:`imaging_system_app.Bill`.
+    ``id``
+        The keyword argument id.
+
+    **Template:**
+
+    :template:`imaging_system_app/editBill.html`
+    """
     context_dict={}
     try:
         bill = Bill.objects.get(bill_id = id)
@@ -491,6 +927,22 @@ def editBill(request, id):
 
 @login_required
 def printBill(request, id):
+    """
+    Display the generated PDF bill of the instance of :model:`imaging_system_app.Bill` with a matching bill_id to the keyword argument id.
+    
+    **Keyword arguments**
+
+    ``id``
+        The bill_id of an instance of :model:`imaging_system_app.Bill`.
+
+    **Context**
+    
+    Uses helper function bill_context_dict.
+
+    **Template:**
+
+    :template:`imaging_system_app/bill_pdf.html`
+    """
     context_dict = bill_context_dict(id)
     
     resp = HttpResponse(content_type='application/pdf')
@@ -498,7 +950,29 @@ def printBill(request, id):
     return result
 
 def bill_context_dict(bill_id):
-    # Helper function to create context_dict for bill
+    """
+    Helper function to create context_dict for :model:`imaging_system_app.Bill`
+    
+    **Keyword arguments**
+
+    ``bill_id``
+        The bill_id of an instance of :model:`imaging_system_app.Bill`.
+
+    **Context**
+    
+    ``bill``
+        An instance of :model:`imaging_system_app.Bill` matching the keyword argument bill_id.
+    ``projects``
+        All instances of :model:`imaging_system_app.Project` associated with bill.
+    ``services``
+        All instances of :model:`imaging_system_app.ProjectServicesBridge` associated with projects.
+    ``workers``
+        All instances of :model:`imaging_system_app.WorkerProjectBridge` associated with projects.
+    ``start_date``
+        The project_date of the earliest project.
+    ``end_date``
+        The project_date of the latest project.
+    """
     context_dict = {}
     
     context_dict['bill'] = Bill.objects.get(bill_id=bill_id)
@@ -520,12 +994,33 @@ def bill_context_dict(bill_id):
 # ===================== COST CALCULATION =====================  #
 
 def calculate_service(projectservicesbridge, discount):
+    """
+    Helper function to calculate and update the cost of an instance of :model:`imaging_system_app.ProjectServicesBridge`.
+    Returns the cost.
+    
+    **Keyword arguments**
+
+    ``projectservicesbridge``
+        An instance of :model:`imaging_system_app.ProjectServicesBridge`.
+    ``discount``
+        The cust_type of an instance of :model:`imaging_system_app.Customer`.
+    """
     cost = float(discount) * float(projectservicesbridge.service_id.normal_price) * float(projectservicesbridge.units)
     projectservicesbridge.cost = cost
     projectservicesbridge.save()
     return cost
 
 def calculate_project(project, discount):
+    """
+    Helper function to calculate and update the total of an instance of :model:`imaging_system_app.Project`.
+    
+    **Keyword arguments**
+
+    ``project``
+        An instance of :model:`imaging_system_app.Project`.
+    ``discount``
+        The cust_type of an instance of :model:`imaging_system_app.Customer`.
+    """
     tot = 0
     projectservicesbridge = ProjectServicesBridge.objects.filter(project_id=project.project_id)
     services = Services.objects.filter(service_id__in=projectservicesbridge.values('service_id'))
@@ -536,6 +1031,14 @@ def calculate_project(project, discount):
     project.save()
   
 def calculate_bill(bill):
+    """
+    Helper function to calculate and update the total_cost of an instance of :model:`imaging_system_app.Bill`.
+    
+    **Keyword arguments**
+
+    ``bill``
+        An instance of :model:`imaging_system_app.Bill`.
+    """
     tot = 0
     projectbillbridge = ProjectBillBridge.objects.filter(bill_id=bill.bill_id)
     for pbb in projectbillbridge:
@@ -548,6 +1051,17 @@ def calculate_bill(bill):
     bill.save()
   
 def calculate_costs(project):
+    """
+    Main helper function for calculating and updating costs.
+    Calculate and update the total of an instance of :model:`imaging_system_app.Project`.
+    Calculate and update the total_cost of instances of :model:`imaging_system_app.Bill` associated to the :model:`imaging_system_app.Project`.
+    Calculate and update the total of instances of :model:`imaging_system_app.Project` associated to the same :model:`imaging_system_app.Bill`.
+    
+    **Keyword arguments**
+
+    ``project``
+        An instance of :model:`imaging_system_app.Project`.
+    """
     discount = project.cust_id.cust_type
     # adjust cost of the project
     calculate_project(project, discount)
@@ -570,6 +1084,14 @@ def calculate_costs(project):
 
 @login_required
 def viewStatistics(request):
+    """
+    Create an excel spreadsheet of the database.
+    Display graphs of statistical data of created instances of :model:`imaging_system_app.Project` and :model:`imaging_system_app.Bill`.
+
+    **Template:**
+
+    :template:`imaging_system_app/statistics.html`
+    """
     create_excel()
     create_plots()
     context_dict = {}
