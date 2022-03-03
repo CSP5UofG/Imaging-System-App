@@ -297,7 +297,7 @@ def projectdetails(request, id):
     
     Display an individual :model:`imaging_system_app.Project`.
     
-     **Keyword arguments**
+    **Keyword arguments**
 
     ``id``
         The project_id of an instance of :model:`imaging_system_app.Project`.
@@ -538,7 +538,7 @@ def customerdetails(request, id):
     
     Display an individual :model:`imaging_system_app.Customer`.
     
-     **Keyword arguments**
+    **Keyword arguments**
 
     ``id``
         The cust_id of an instance of :model:`imaging_system_app.Customer`.
@@ -821,7 +821,7 @@ def billdetails(request, id):
     
     Display an individual :model:`imaging_system_app.Bill`.
     
-     **Keyword arguments**
+    **Keyword arguments**
 
     ``id``
         The bill_id of an instance of :model:`imaging_system_app.Bill`.
@@ -842,6 +842,8 @@ def billdetails(request, id):
 @login_required
 def addBill(request):
     """
+    Add Bill
+    
     Display the BillForm for creating a new instance of :model:`imaging_system_app.Bill`.
         
     The instance of :model:`imaging_system_app.Bill` are used to create instances of :model:`imaging_system_app.ProjectBillBridge`.
