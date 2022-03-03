@@ -132,6 +132,7 @@ STATIC_ROOT = STATIC_DIR
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'resources'),
+    os.path.join(TEMPLATE_DIR, 'static'),
 ]
 
 
