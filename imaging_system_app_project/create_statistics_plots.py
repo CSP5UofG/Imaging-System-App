@@ -26,7 +26,7 @@ def create_plots():
     myplot.set_ylabel("Total number of projects")
     plt.close()
     fig = myplot.get_figure()
-    fig.savefig('static/images/fig1.png') 
+    fig.savefig('resources/images/fig1.png') 
     
     myplot2 = sns.barplot(data=projects_with_cust_names,
                          x = 'cust_name',
@@ -36,7 +36,7 @@ def create_plots():
     myplot2.set_ylabel("Average project cost")
     plt.close()
     fig2 = myplot2.get_figure()
-    fig2.savefig('static/images/fig2.png') 
+    fig2.savefig('resources/images/fig2.png') 
     
     monthly_sum = projects_with_cust_names[['cust_name', 'project_id', 'year', 'month', 'project_date']]
     counted = monthly_sum.groupby(['year', 'month'], as_index=True)["project_id"].count().reset_index(name="count")
@@ -52,7 +52,7 @@ def create_plots():
     plt.yticks(ticks)
     plt.close()
     fig3 = myplot3.get_figure()
-    fig3.savefig('static/images/fig3.png') 
+    fig3.savefig('resources/images/fig3.png') 
 
     
 def add_year(row):

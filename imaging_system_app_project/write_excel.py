@@ -3,7 +3,7 @@ from xlsxwriter.workbook import Workbook
 
 def create_excel():
     #creayte new excle file
-    workbook = Workbook('static/excel/ExcelDatabase.xlsx')
+    workbook = Workbook('resources/excel/ExcelDatabase.xlsx')
     
     #set up connection and cursor for the required database
     conn=sqlite3.connect('db.sqlite3')
