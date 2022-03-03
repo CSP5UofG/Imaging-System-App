@@ -1,0 +1,2 @@
+imagingsystemapp.pythonanywhere.com
+.gla.ac.uk
