@@ -107,6 +107,8 @@ def index(request):
 @login_required
 def services(request):
     """
+    Services
+    
     Display all existing instances of :model:`imaging_system_app.Services`.  
     
     Search functionality for the name of :model:`imaging_system_app.Services`.
@@ -142,6 +144,8 @@ def services(request):
 @login_required
 def addService(request):
     """
+    Add Service
+    
     Display the ServicesForm for creating a new instance of :model:`imaging_system_app.Services`.
     
     The in_house_price and outside_price of the service is calculated.
@@ -174,6 +178,8 @@ def addService(request):
 @login_required
 def editService(request, id):
     """
+    Edit Service
+    
     Display the ServicesForm for editing an instance of :model:`imaging_system_app.Services` with a matching service_id to the keyword argument id.
     
     The in_house_price and outside_price of the service is calculated and saved.
@@ -226,6 +232,8 @@ def editService(request, id):
 @login_required
 def projects(request):
     """
+    Projects
+    
     Display all existing instances of :model:`imaging_system_app.Project`.  
     
     Search functionality for the cust_name of :model:`imaging_system_app.Customer` associated with an instance of :model:`imaging_system_app.Project`.  
@@ -285,6 +293,8 @@ def projects(request):
 @login_required
 def projectdetails(request, id):
     """
+    Project Details
+    
     Display an individual :model:`imaging_system_app.Project`.
     
      **Keyword arguments**
@@ -315,6 +325,8 @@ def projectdetails(request, id):
 @login_required    
 def addProject(request):
     """
+    Add Project
+    
     Display the ProjectForm and ProjectServicesBridgeForm for creating a new instance of :model:`imaging_system_app.Project` and instances of :model:`imaging_system_app.ProjectServicesBridge`.
         
     The instance of :model:`imaging_system_app.Project` and associated instances of :model:`imaging_system_app.Worker` are used to create instances of :model:`imaging_system_app.WorkerProjectBridge`.
@@ -372,6 +384,8 @@ def addProject(request):
 
 def getWorkers(request):
     """
+    Get Workers
+    
     Display the dropdown menu of :model:`imaging_system_app.Worker` associated with the selected :model:`imaging_system_app.Customer`.
 
     **Context**
@@ -392,6 +406,8 @@ def getWorkers(request):
 @login_required
 def editProject(request, id):
     """
+    Edit Project
+    
     Display the ProjectForm and ProjectServicesBridgeForm for editing an instance of :model:`imaging_system_app.Project` and instances of :model:`imaging_system_app.ProjectServicesBridge` with a matching project_id to the keyword argument id.
         
     The instance of :model:`imaging_system_app.Project` and associated instances of :model:`imaging_system_app.Worker` are used to update instances of :model:`imaging_system_app.WorkerProjectBridge`.
@@ -479,6 +495,8 @@ def editProject(request, id):
 @login_required
 def customers(request):
     """
+    Customers
+    
     Display all existing instances of :model:`imaging_system_app.Customer`.  
     
     Search functionality for cust_name, cust_tel_no, cust_email and cust_budget_code of :model:`imaging_system_app.Customer`.
@@ -516,6 +534,8 @@ def customers(request):
 @login_required   
 def customerdetails(request, id):
     """
+    Customer Details
+    
     Display an individual :model:`imaging_system_app.Customer`.
     
      **Keyword arguments**
@@ -550,6 +570,8 @@ def customerdetails(request, id):
 @login_required
 def addCustomer(request):
     """
+    Add Customer
+    
     Display the CustomerForm for creating a new instance of :model:`imaging_system_app.Customer`.
         
     The user is redirected to :template:`imaging_system_app/customers.html` after submission.
@@ -577,6 +599,8 @@ def addCustomer(request):
 @login_required
 def editCustomer(request, id):
     """
+    Edit Customer
+    
     Display the CustomerForm for editing an instance of :model:`imaging_system_app.Customer` with a matching cust_id to the keyword argument id.
     
     The user is redirected to :template:`imaging_system_app/index.html` if the instance of :model:`imaging_system_app.Customer` is not found.
@@ -625,6 +649,8 @@ def editCustomer(request, id):
 @login_required
 def addWorker(request, id):
     """
+    Add Worker
+    
     Display the WorkerForm for creating an instance of :model:`imaging_system_app.Worker` associated to the instance of :model:`imaging_system_app.Customer` with a matching cust_id to the keyword argument id.
     
     The user is redirected to :template:`imaging_system_app/customers.html` if the instance of :model:`imaging_system_app.Customer` is not found.
@@ -675,6 +701,8 @@ def addWorker(request, id):
 @login_required
 def editWorker(request, id):
     """
+    Edit Worker
+    
     Display the WorkerForm for editing an instance of :model:`imaging_system_app.Worker` with a matching worker_id to the keyword argument id.
     
     The user is redirected to :template:`imaging_system_app/index.html` if the instance of :model:`imaging_system_app.Worker` is not found.
@@ -725,6 +753,8 @@ def editWorker(request, id):
 @login_required
 def bills(request):
     """
+    Bills
+    
     Display all existing instances of :model:`imaging_system_app.Bills`.  
     
     Search functionality for the cust_name of :model:`imaging_system_app.Customer` associated with an instance of :model:`imaging_system_app.Bill`.  
@@ -787,6 +817,8 @@ def bills(request):
 @login_required
 def billdetails(request, id):
     """
+    Bill details
+    
     Display an individual :model:`imaging_system_app.Bill`.
     
      **Keyword arguments**
@@ -853,6 +885,8 @@ def addBill(request):
 
 def getProjects(request):
     """
+    Get Projects
+    
     Display the dropdown menu of :model:`imaging_system_app.Project` associated with the selected :model:`imaging_system_app.Customer`.
 
     **Context**
@@ -874,6 +908,8 @@ def getProjects(request):
 @login_required 
 def editBill(request, id):
     """
+    Edit Bill
+    
     Display the BillForm for editing an instance of :model:`imaging_system_app.Bill` with a matching bill_id to the keyword argument id.
         
     The instance of :model:`imaging_system_app.Bill` is used to update instances of :model:`imaging_system_app.ProjectServicesBridge`.
@@ -928,6 +964,8 @@ def editBill(request, id):
 @login_required
 def printBill(request, id):
     """
+    Print Bill
+    
     Display the generated PDF bill of the instance of :model:`imaging_system_app.Bill` with a matching bill_id to the keyword argument id.
     
     **Keyword arguments**
@@ -951,7 +989,9 @@ def printBill(request, id):
 
 def bill_context_dict(bill_id):
     """
-    Helper function to create context_dict for :model:`imaging_system_app.Bill`
+    Helper function
+    
+    Create context_dict for :model:`imaging_system_app.Bill`
     
     **Keyword arguments**
 
@@ -995,7 +1035,10 @@ def bill_context_dict(bill_id):
 
 def calculate_service(projectservicesbridge, discount):
     """
-    Helper function to calculate and update the cost of an instance of :model:`imaging_system_app.ProjectServicesBridge`.
+    Helper function
+    
+    Calculate and update the cost of an instance of :model:`imaging_system_app.ProjectServicesBridge`.
+    
     Returns the cost.
     
     **Keyword arguments**
@@ -1032,7 +1075,9 @@ def calculate_project(project, discount):
   
 def calculate_bill(bill):
     """
-    Helper function to calculate and update the total_cost of an instance of :model:`imaging_system_app.Bill`.
+    Helper function
+    
+    Calculate and update the total_cost of an instance of :model:`imaging_system_app.Bill`.
     
     **Keyword arguments**
 
@@ -1053,8 +1098,11 @@ def calculate_bill(bill):
 def calculate_costs(project):
     """
     Main helper function for calculating and updating costs.
+    
     Calculate and update the total of an instance of :model:`imaging_system_app.Project`.
+    
     Calculate and update the total_cost of instances of :model:`imaging_system_app.Bill` associated to the :model:`imaging_system_app.Project`.
+    
     Calculate and update the total of instances of :model:`imaging_system_app.Project` associated to the same :model:`imaging_system_app.Bill`.
     
     **Keyword arguments**
@@ -1086,6 +1134,7 @@ def calculate_costs(project):
 def viewStatistics(request):
     """
     Create an excel spreadsheet of the database.
+    
     Display graphs of statistical data of created instances of :model:`imaging_system_app.Project` and :model:`imaging_system_app.Bill`.
 
     **Template:**
