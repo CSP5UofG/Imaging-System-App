@@ -8,19 +8,50 @@
 {% block css_block %}
     <link rel="stylesheet" type="text/css" href="{% static 'content.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'index.css' %}">
+	
+	<style>
+		.flex_container{
+    		display: flex;
+    		width: 50%;
+    		font-family: 'Poppins';
+			padding: 2%;
+		}
+		
+		.flex_column{
+			flex-direction: column;
+			flex-basis: auto;
+			padding: 1%;
+		}
+		
+		.container_entry{
+			flex: 5 2 auto;
+			padding: 10px;
+			background-color: #0071BC;
+			border-radius: 10px;
+			margin: 2%;
+		}
+		
+	</style>
 {% endblock %}
 
 {% block pagetitle %}
 	<h1><strong> Statistics </strong></h1>
 {% endblock %}
 
-{% block body_block %}  
-<div class="new_entry">
-	<a href="{% static 'excel/ExcelDatabase.xlsx' %}" download>Download database</a>
+{% block body_block %}
+<div class="action_bar">
+	<div class="new_entry">
+		<a href="{% static 'excel/ExcelDatabase.xlsx' %}" download>Download database</a>
+	</div>
 </div>
-<div>
-	<img src="{% static 'images/fig1.png' %}">
-	<img src="{% static 'images/fig2.png' %}">
-	<img src="{% static 'images/fig3.png' %}">
+<div class="flex_container">
+	<div class="flex_column">
+		<img class="container_entry" src="{% static 'images/fig1.png' %}">
+		<img class="container_entry" src="{% static 'images/fig2.png' %}">
+	</div>
+	
+	<div class="flex_column">
+		<img class="container_entry" src="{% static 'images/fig3.png' %}">
+	</div>
 </div>
 {% endblock %}
