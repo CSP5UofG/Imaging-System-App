@@ -8,8 +8,8 @@ Project {{ project.project_id }}
 {% endblock %}
 
 {% block css_block %}
-<link rel="stylesheet" type="text/css" href="{% static 'base.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'editProject.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'content.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'add_edit_forms.css' %}">
 {% endblock %}
 
 {% block pagetitle %}
@@ -18,105 +18,105 @@ Project {{ project.project_id }}
 
 {% block body_block %}
 
-
-<div class="content_to_edit">
-    <br/>
-
-    <form id="project_forms" name="project_forms" enctype="multipart/form-data" method="post" action="{% url 'imaging_system_app:edit-project' project.project_id %}" data-update-workers="{% url 'imaging_system_app:get-workers' %}" novalidate>
-        <div class="columns">     
-            <div class="column1">
-                {% csrf_token %}
-                <h2>Customer</h2>
-				<div>
-					<label for="customer_id">Reassign project to a different customer:</label> <br></br>
-					<select name="customer_id" id="customer_id" value={{project.cust_id}}>
-						{% for c in all_customer %}
-							{% if c == project.cust_id %}
-								<option value={{c}} selected>{{c.cust_name}}</option>
-							{% else %}
-								<option value={{c}}>{{c.cust_name}}</option>
-							{% endif %}
-						{% endfor %}
-					</select>
-				</div> <br></br>
-				<label>Or edit {{project.cust_id.cust_name}}</label> <br></br>
-					<div class="new_entry">
-						<a href="{% url 'imaging_system_app:edit-customer' project.cust_id.cust_id %}">Edit</a><br />
-					</div>
+<ul class="content_list">
+    <div class="content_to_edit">
+        <br/>
+    
+        <form id="project_forms" name="project_forms" enctype="multipart/form-data" method="post" action="{% url 'imaging_system_app:edit-project' project.project_id %}" data-update-workers="{% url 'imaging_system_app:get-workers' %}" novalidate>
+            <div class="columns">     
+                <div class="column1">
+                    {% csrf_token %}
+                    <h2>Customer</h2>
+                    <div>
+                        <label for="customer_id">Reassign project to a different customer:</label> <br></br>
+                        <select name="customer_id" id="customer_id" value={{project.cust_id}}>
+                            {% for c in all_customer %}
+                                {% if c == project.cust_id %}
+                                    <option value={{c}} selected>{{c.cust_name}}</option>
+                                {% else %}
+                                    <option value={{c}}>{{c.cust_name}}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div> <br></br>
+                        <div class="new_entry">
+                            <a href="{% url 'imaging_system_app:edit-customer' project.cust_id.cust_id %}">Edit {{project.cust_id.cust_name}}</a><br />
+                        </div>
+                </div>
+    
+                
+                <div class="column2">
+                    <h2>Worker</h2>
+                <div>
+                    <select name="worker_id" id="worker_id">
+                            {% for w in workers %}
+                                {% if w == worker %}
+                                    <option value={{w}} selected>{{w}}</option>
+                                {% else %}
+                                    <option value={{w}}>{{w}}</option>
+                                {% endif %}
+                            {% endfor %}
+                    </select>
+                </div> <br></br>
+                    <div class="new_entry">
+                        <a href="{% url 'imaging_system_app:edit-worker' worker.worker_id %}">Edit {{worker.worker_name}}'s contact details</a><br />
+                    </div>
+    
+                </div>
             </div>
-
             
-            <div class="column2">
-                <h2>Worker</h2>
-			<div>
-				<select name="worker_id" id="worker_id">
-						{% for w in workers %}
-							{% if w == worker %}
-								<option value={{w}} selected>{{w}}</option>
-							{% else %}
-								<option value={{w}}>{{w}}</option>
-							{% endif %}
-						{% endfor %}
-				</select>
-			</div> <br></br>
-				<label>Or edit {{worker.worker_name}}'s contact details</label> <br></br>
-				<div class="new_entry">
-					<a href="{% url 'imaging_system_app:edit-worker' worker.worker_id %}">Edit</a><br />
-				</div>
-
-            </div>
-        </div>
-        
-            <div class="row2">
-                <div class="row2_content">
-                    <h2>Specimen preparation record</h2>
-                    {% for hidden in projectform.hidden_fields %}
-                        {{ hidden }}
-                    {% endfor %}
-                    {% for field in projectform.visible_fields %}
-                    <div>
-                        {{ field.errors }}
-                        {{ field.help_text }}<br />
+                <div class="row2">
+                    <div class="row2_content">
+                        <h2>Specimen preparation record</h2>
+                        {% for hidden in projectform.hidden_fields %}
+                            {{ hidden }}
+                        {% endfor %}
+                        {% for field in projectform.visible_fields %}
+                        <div>
+                            {{ field.errors }}
+                            {{ field.help_text }}<br />
+                        </div>
+                        <div>
+                            {{ field }}<br /><br />
+                        </div>
+                        <div></div>
+                        {% endfor %}
+                        <br />
                     </div>
-                    <div>
-                        {{ field }}<br /><br />
-                    </div>
-                    <div></div>
-                    {% endfor %}
-                    <br />
+                    
                 </div>
                 
-            </div>
-            
-
-            <div class="row3">
-                <div class="row3_content">
-                    <h2>Billing</h2>
-                    {% for hidden in projectservicesbridgeform.hidden_fields %}
-                        {{ hidden }}
-                    {% endfor %}
-                    {% for field in projectservicesbridgeform.visible_fields %}
-                    <div>
-                        {{ field.errors }}
-                        {{ field.help_text }}<br />
-                    </div>
-                    <div>
-                        {{ field }}<br /><br />
-                    </div>
-                    <div></div>
-                    {% endfor %}
-                    <br />
-                </div>   
-            </div>
     
-            <div class="save_bar">
-                <button type="submit" name="submit" class="save_changes">
-                    <p class="buttonText">Update Project</p>
-                </button>
-            </div>
-           
-    </form>
-</div>
+                <div class="row3">
+                    <div class="row3_content">
+                        <h2>Billing</h2>
+                        {% for hidden in projectservicesbridgeform.hidden_fields %}
+                            {{ hidden }}
+                        {% endfor %}
+                        {% for field in projectservicesbridgeform.visible_fields %}
+                        <div>
+                            {{ field.errors }}
+                            {{ field.help_text }}<br />
+                        </div>
+                        <div>
+                            {{ field }}<br /><br />
+                        </div>
+                        <div></div>
+                        {% endfor %}
+                        <br />
+                    </div>   
+                </div>
+        
+                <div class="save_bar">
+                    <button type="submit" name="submit" class="save_changes">
+                        <p class="buttonText">Update Project</p>
+                    </button>
+                </div>
+               
+        </form>
+    </div>
+    
+</ul>
 
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 	<script>
