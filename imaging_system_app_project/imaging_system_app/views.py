@@ -4,6 +4,7 @@ from imaging_system_app.forms import UserForm, ServicesForm, CustomerForm, Worke
 from django.urls import reverse
 from django.http import HttpResponse
 from django.db.models import Q
+from django.forms import formset_factory
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django_xhtml2pdf.utils import generate_pdf
@@ -351,31 +352,35 @@ def addProject(request):
     context_dict = {}
     
     projectform = ProjectForm
-    projectservicesbridgeform = ProjectServicesBridgeForm
+    projectservicesbridgeFormSet=formset_factory(ProjectServicesBridgeForm)
     customers = Customer.objects.all()
     
     context_dict['projectform'] = projectform
-    context_dict['projectservicesbridgeform'] = projectservicesbridgeform
     context_dict['all_customer'] = customers
+    context_dict['projectservicesbridgeformset'] = projectservicesbridgeFormSet
         
     if request.method == 'POST':
         customer = Customer.objects.get(cust_id = request.POST['customer_id'])
-        worker = Worker.objects.get(worker_id = request.POST['worker_id'])
+        workers = Worker.objects.filter(pk__in = request.POST.getlist('worker_id'))
 
         projectform = ProjectForm(request.POST)
-        projectservicesbridgeform = ProjectServicesBridgeForm(request.POST)
+        PSBformset = projectservicesbridgeFormSet(request.POST)
         
-        if projectform.is_valid() and projectservicesbridgeform.is_valid():
+        if projectform.is_valid() and PSBformset.is_valid():
             project = projectform.save(commit = False)
-            projectservicesbridge = projectservicesbridgeform.save(commit = False)            
-            # add customer to Project object
             project.cust_id = customer
             project.save()
-            # add project to ProjectServicesBridge object
-            projectservicesbridge.project_id = project
-            projectservicesbridge.save()
-            # add project and worker to WorkerProjectBridge
-            WorkerProjectBridge.objects.create(worker_id=worker, project_id=project)
+            
+            for PSBform in PSBformset:
+                # add project to ProjectServicesBridge object
+                projectservicesbridge = PSBform.save(commit = False)
+                projectservicesbridge.project_id = project
+                projectservicesbridge.save()
+            
+            for worker in workers:
+                # add project and workers to WorkerProjectBridge
+                WorkerProjectBridge.objects.create(worker_id=worker, project_id=project)
+
             # calculate cost of project and its services
             calculate_project(project, customer.cust_type)
             return redirect(reverse('imaging_system_app:projects'))
@@ -448,13 +453,14 @@ def editProject(request, id):
     context_dict={}
     try:
         project = Project.objects.get(project_id = id)
-        projectservicesbridge = ProjectServicesBridge.objects.filter(project_id = id).first()
-        worker = WorkerProjectBridge.objects.filter(project_id = id).first().worker_id
+        projectservicesbridge = ProjectServicesBridge.objects.filter(project_id = id)
+        workerIDs = WorkerProjectBridge.objects.filter(project_id = id).values_list('worker_id', flat=True)
+        project_workers = Worker.objects.filter(pk__in = workerIDs)
         customers = Customer.objects.all()
         workers = Worker.objects.filter(cust_id = project.cust_id)
         
         context_dict['project'] = project
-        context_dict['worker'] = worker
+        context_dict['project_workers'] = project_workers
         context_dict['all_customer'] = customers
         context_dict['workers'] = workers
     except Project.DoesNotExist:
@@ -465,9 +471,12 @@ def editProject(request, id):
         
     #fill new form with current instance
     projectform = ProjectForm(request.POST or None, instance=project)
-    projectservicesbridgeform = ProjectServicesBridgeForm(request.POST or None, instance=projectservicesbridge)
+    all_psb = []
+    for psb in projectservicesbridge:
+        projectservicesbridgeform = ProjectServicesBridgeForm(request.POST or None, instance=psb)
+        all_psb.append(projectservicesbridgeform)
     context_dict['projectform'] = projectform
-    context_dict['projectservicesbridgeform'] = projectservicesbridgeform
+    context_dict['all_psb'] = all_psb
     context_dict['id'] = id
     
     if request.method == 'POST':
@@ -874,12 +883,13 @@ def addBill(request):
         
         if billform.is_valid():
             customer = Customer.objects.get(cust_id = request.POST['customer_id'])
-            project = Project.objects.get(project_id = request.POST['project_id'])
+            projects = Project.objects.filter(pk__in = request.POST.getlist('project_id'))
             bill = billform.save(commit=False)
             bill.cust_id = customer
             bill.save()
-            ProjectBillBridge.objects.create(project_id = project,
-                                             bill_id = bill)
+            for project in projects:
+                ProjectBillBridge.objects.create(project_id = project,
+                                                 bill_id = bill)
             calculate_bill(bill)
             return redirect(reverse('imaging_system_app:bills'))
     return render(request, 'imaging_system_app/addBill.html', context=context_dict)

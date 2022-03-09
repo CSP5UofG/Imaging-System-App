@@ -47,6 +47,8 @@ Project {{ project.project_id }}
                 
                 <div class="column2">
                     <h2>Worker</h2>
+					
+				{% for worker in project_workers %}	
                 <div>
                     <select name="worker_id" id="worker_id">
                             {% for w in workers %}
@@ -57,11 +59,13 @@ Project {{ project.project_id }}
                                 {% endif %}
                             {% endfor %}
                     </select>
-                </div> <br></br>
+                </div> <br />
                     <div class="new_entry">
                         <a href="{% url 'imaging_system_app:edit-worker' worker.worker_id %}">Edit {{worker.worker_name}}'s contact details</a><br />
                     </div>
-    
+					<br /><br />
+				{% endfor %}
+	
                 </div>
             </div>
             
@@ -90,6 +94,8 @@ Project {{ project.project_id }}
                 <div class="row3">
                     <div class="row3_content">
                         <h2>Billing</h2>
+						
+						{% for projectservicesbridgeform in all_psb %}
                         {% for hidden in projectservicesbridgeform.hidden_fields %}
                             {{ hidden }}
                         {% endfor %}
@@ -104,6 +110,8 @@ Project {{ project.project_id }}
                         <div></div>
                         {% endfor %}
                         <br />
+						{% endfor %}
+
                     </div>   
                 </div>
         

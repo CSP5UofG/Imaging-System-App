@@ -29,12 +29,18 @@
 					{% endfor %}
 				</select>
 			</div> <br></br> 
-			<div>
-				<label for="project_id">Project</label> <br></br>  
+			<label for="project_id">Project</label>   
+			<div id="select_project"><br>
 				<select name="project_id" id="project_id">
 					<option value="" selected disabled hidden>Select a project</option>
 				</select>
 			</div>
+			<div id="add-other-projects"></div>
+			<br />
+			<div class="new_entry" id="select-more-projects">
+				<p>Bill more projects</p><br />
+			</div>
+
 			{% for hidden in billform.hidden_fields %}
                 {{ hidden }}
             {% endfor %}
@@ -88,4 +94,14 @@
 
     });
 	</script>
+	
+	<script>
+        document.getElementById("select-more-projects").
+            addEventListener("click", function () {
+				let newForm = document.getElementById("select_project");
+				let cloneForm = newForm.cloneNode(true);
+				document.getElementById("add-other-projects").appendChild(cloneForm);
+        });
+    </script>
+	
 {% endblock %}

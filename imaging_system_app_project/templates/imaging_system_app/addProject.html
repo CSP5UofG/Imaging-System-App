@@ -35,11 +35,22 @@
 				</div>
 
             <h2>Worker</h2>
-			<div>
-				<select name="worker_id" id="worker_id">
+			<div id="add-other-worker">
+				<select name="worker_id" id="worker_id" class="worker-form">
 					<option value="" selected disabled hidden>Select a worker</option>
 				</select>
+				<br /><br />
 			</div>
+			
+			<div id=other-worker-form></div>
+			
+			<br />
+				<div class="new_entry" id="add-more-worker">
+					<p>Assign more wokrer</p><br />
+				</div>
+
+			
+			<div></div><br />
             <div></div>
             <h2>Specimen preparation record</h2>
             {% for hidden in projectform.hidden_fields %}
@@ -70,6 +81,30 @@
             <div></div>
             {% endfor %}
             <br />
+			
+			<div></div>
+				{{ projectservicesbridgeformset.management_form }}
+				{% for bridge in projectservicesbridgeformset %}
+					<div class="service-form">
+                    {% for field in bridge.visible_fields %}
+                    <div>
+                        {{ field.errors }}
+                        {{ field.help_text }}<br />
+                    </div>
+                    <div>
+                        {{ field }}<br /><br />
+                    </div>
+                    <div></div>
+                    {% endfor %}
+					</div>
+				{% endfor %}
+			<div></div>
+			<button type="submit" class="save_changes" name="submit" id="add-form" >
+                <p class="buttonText">Add another service</p>
+            </button>
+			<div></div><br />
+			<div></div>
+			
             <button type="submit" class="save_changes" name="submit"  >
                 <p class="buttonText">Create New Project</p>
             </button>
@@ -96,6 +131,36 @@
 
     });
 	</script>
+	
+    <script>
+        let serviceForm = document.querySelectorAll(".service-form")
+        let container = document.querySelector("#project_form")
+        let addButton = document.querySelector("#add-form")
+		let totalForms = document.querySelector("#id_form-TOTAL_FORMS")
+        let formNum = serviceForm.length-1
+        addButton.addEventListener('click', addForm)
 
+        function addForm(e){
+            e.preventDefault()
 
+            let newForm = serviceForm[0].cloneNode(true)
+            let formRegex = RegExp(`form-(\\d){1}-`,'g')
+
+            formNum++
+            newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`)
+            container.insertBefore(newForm, addButton)
+            
+			document.getElementById("id_form-TOTAL_FORMS").value = formNum+1;
+        }
+    </script>
+	
+	
+	<script>
+        document.getElementById("add-more-worker").
+            addEventListener("click", function () {
+				let newForm = document.getElementById("add-other-worker");
+				let cloneForm = newForm.cloneNode(true);
+				document.getElementById("other-worker-form").appendChild(cloneForm);
+        });
+    </script>
 {% endblock %}
