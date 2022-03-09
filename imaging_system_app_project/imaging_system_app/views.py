@@ -380,7 +380,8 @@ def addProject(request):
             for worker in workers:
                 # add project and workers to WorkerProjectBridge
                 WorkerProjectBridge.objects.create(worker_id=worker, project_id=project)
-
+            # Helper function to remove multiple instances of the same service in the formset
+            removeDuplicateServices(project)
             # calculate cost of project and its services
             calculate_project(project, customer.cust_type)
             return redirect(reverse('imaging_system_app:projects'))
@@ -406,7 +407,35 @@ def getWorkers(request):
     workers = Worker.objects.filter(cust_id = customerId)
     context_dict = {'workers': workers}
     return render(request, 'imaging_system_app/worker_dropdown.html', context_dict)
+    
+def removeDuplicateServices(project):
+    """
+    Helper function
+    
+    Check for duplicates in the formset for project services, instances of :model:`imaging_system_app.ProjectServicesBridge` that have the same project_id and service_id.
+    
+    Only the newest instance is kept, other instances are deleted.
+    
+    **Keyword arguments**
 
+    ``project``
+        The instance of :model:`imaging_system_app.Project` to be checked.
+    """
+    # Get all services used by the project, sorted by newest first
+    services = ProjectServicesBridge.objects.filter(project_id = project).order_by('-project_services_bridge_id')
+    print(services)
+    services_list = []
+    delete = []
+    for s in services:
+        if s.service_id not in services_list:
+            # First occurence in the project
+            services_list.append(s.service_id)
+        else:
+            # Service is already in the project, add this instance to the list of isntances to be deleted
+            delete.append(s.project_services_bridge_id)
+    # Delete the duplicate instances
+    ProjectServicesBridge.objects.filter(project_services_bridge_id__in=delete).delete()
+        
     
 @login_required
 def editProject(request, id):
@@ -493,6 +522,9 @@ def editProject(request, id):
             
             WorkerProjectBridge.objects.filter(project_id = id).delete()
             WorkerProjectBridge.objects.create(worker_id=new_worker, project_id=project)
+            
+            # Helper function to remove multiple instances of the same service in the formset
+            removeDuplicateServices(project_update)
             
             calculate_costs(project)
             return redirect(reverse('imaging_system_app:project-details', kwargs={"id": id}))
