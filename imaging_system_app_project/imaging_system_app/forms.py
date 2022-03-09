@@ -144,7 +144,7 @@ class BillForm(forms.ModelForm):
     billing_date = forms.DateField(widget = forms.SelectDateWidget(years=range(2000, 2100)),
                                    help_text = "Date", initial=datetime.date.today)
     billing_address = forms.CharField(max_length = 100,
-                                      help_text = "Billing Address")
+                                      help_text = "Billing Address", required = False)
     extra1_name = forms.CharField(max_length = 100,
                                   help_text = "First extra service name", required = False)
     extra1_cost = forms.FloatField(min_value = 0,
