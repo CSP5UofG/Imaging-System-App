@@ -264,7 +264,6 @@ def projects(request):
         dateto = request.POST.get('project_to')
         if query != "":
             # Allows displaying search string in text box
-            print(query)
             context_dict['query']= query
         if query:
             projects = Project.objects.filter(cust_id__cust_name__icontains = query)
@@ -423,7 +422,6 @@ def removeDuplicateServices(project):
     """
     # Get all services used by the project, sorted by newest first
     services = ProjectServicesBridge.objects.filter(project_id = project).order_by('-project_services_bridge_id')
-    print(services)
     services_list = []
     delete = []
     for s in services:
