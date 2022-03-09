@@ -14,9 +14,8 @@
 	<h1><strong> Add a Service </strong></h1>
 {% endblock %}
 
-{% block body_block %}  
-    <ul class="content_list">
-	     <div>
+{% block body_block %}
+	     <div class="content_body">
             <form id="customer_form" method="post" action="{% url 'imaging_system_app:add-service' %}", enctype="multipart/form-data">
             {% csrf_token %}
             {% for hidden in form.hidden_fields %}
@@ -38,7 +37,8 @@
                 </button>
                 <div></div>
         </form>
+        <br />
+        <br />
         </div>
-    </ul>
 
 {% endblock %}

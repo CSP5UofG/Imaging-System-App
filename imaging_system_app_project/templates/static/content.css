@@ -104,6 +104,8 @@ td{
 }
 
 .new_entry{
+    color: white;
+    text-decoration: none;
     border-radius: 30px;
     background-color: #A90F9A;
     padding: 12.5px;
@@ -192,4 +194,11 @@ input{
 
 #right_corner{ 
     border-radius: 0px 30px 30px 0px;
+}
+
+.content_body{
+    width: 80%;
+    overflow-y: hidden;
+    margin-left: 5%;
+    font-family: 'Poppins';
 }

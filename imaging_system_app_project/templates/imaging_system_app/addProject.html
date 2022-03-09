@@ -15,8 +15,7 @@
 {% endblock %}
 
 {% block body_block %}
-<ul class="content_list">
-    <div>
+    <div class="content_body">
         <form id="project_form" method="post" action="{% url 'imaging_system_app:add-project' %}" ,
             enctype="multipart/form-data" data-update-workers="{% url 'imaging_system_app:get-workers' %}" novalidate>
             {% csrf_token %}
@@ -46,7 +45,7 @@
 			
 			<br />
 				<div class="new_entry" id="add-more-worker">
-					<p>Assign more wokrer</p><br />
+					Assign more workers<br />
 				</div>
 
 			
@@ -110,6 +109,8 @@
             </button>
             <div></div>
         </form>
+        <br />
+        <br />
     </div>
 	
 	

@@ -14,9 +14,8 @@
 	<h1><strong> Add a Bill </strong></h1>
 {% endblock %}
 
-{% block body_block %}  
-    <ul class="content_list">
-	     <div>
+{% block body_block %}
+	     <div class="content_body">
             <form id="customer_form" method="post" action="{% url 'imaging_system_app:add-bill' %}", enctype="multipart/form-data",
 			data-update-projects="{% url 'imaging_system_app:get-projects' %}" novalidate>
             {% csrf_token %}
@@ -38,9 +37,9 @@
 			<div id="add-other-projects"></div>
 			<br />
 			<div class="new_entry" id="select-more-projects">
-				<p>Bill more projects</p><br />
+				Bill more projects<br />
 			</div>
-
+            <br />
 			{% for hidden in billform.hidden_fields %}
                 {{ hidden }}
             {% endfor %}
@@ -73,8 +72,9 @@
                 </button>
                 <div></div>
         </form>
+        <br />
+        <br />
         </div>
-    </ul>
 	
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 	<script>
