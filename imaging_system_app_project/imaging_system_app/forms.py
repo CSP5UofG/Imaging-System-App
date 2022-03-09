@@ -22,8 +22,7 @@ class ServicesForm(forms.ModelForm):
     name = forms.CharField(max_length = 100,
                                 help_text = "Name of Service")
     normal_price = forms.FloatField(help_text = "Price of Service")
-    in_house_price = forms.FloatField(widget=forms.HiddenInput(), required = False)
-    outside_price = forms.FloatField(widget=forms.HiddenInput(), required = False)
+    external_price = forms.FloatField(widget=forms.HiddenInput(), required = False)
     unit_name = forms.CharField(max_length = 20, help_text = "Unit name of Service")
     
     class Meta:
@@ -33,9 +32,8 @@ class ServicesForm(forms.ModelForm):
 
 class CustomerForm(forms.ModelForm):
     DISCOUNT_CHOICES = [
-        (0.5, 'In-House'),
         (1.0, 'Normal'),
-        (1.5, 'Outside')
+        (1.5, 'External')
     ]
 
     cust_name = forms.CharField(max_length = 100,

@@ -38,16 +38,14 @@
 	<table class="tables">
 		<tr>
 			<th>Name</th>
-			<th>In-House</th>
 			<th>Normal</th>
-			<th>Outside</th>
+			<th>External</th>
 		</tr>
 		{% for s in services %}
 		<tr>
 			<td id="left_corner">{{ s.name }}</td>
-			<td>{{ s.in_house_price }}</td>
 			<td>{{ s.normal_price }}</td>
-			<td>{{ s.outside_price }}</td>
+			<td>{{ s.external_price }}</td>
 			<td id="right_corner"> <a href="{% url 'imaging_system_app:edit-service' s.service_id %}" class="table_buttons"> Edit</a>
 			</td>
 		</tr>

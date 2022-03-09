@@ -149,7 +149,7 @@ def addService(request):
     
     Display the ServicesForm for creating a new instance of :model:`imaging_system_app.Services`.
     
-    The in_house_price and outside_price of the service is calculated.
+    The external_price of the service is calculated and saved.
     
     The user is redirected to :template:`imaging_system_app/Services.html` after submission.
 
@@ -170,8 +170,7 @@ def addService(request):
         
         if form.is_valid():
             new_service = form.save(commit = False)
-            new_service.in_house_price = (new_service.normal_price)/2
-            new_service.outside_price = (new_service.normal_price)*1.5
+            new_service.external_price = (new_service.normal_price)*1.5
             new_service.save()
             return redirect(reverse('imaging_system_app:services'))
     return render(request, 'imaging_system_app/addServices.html', context=context_dict)
@@ -183,7 +182,7 @@ def editService(request, id):
     
     Display the ServicesForm for editing an instance of :model:`imaging_system_app.Services` with a matching service_id to the keyword argument id.
     
-    The in_house_price and outside_price of the service is calculated and saved.
+    The external_price of the service is calculated and saved.
     
     The user is redirected to :template:`imaging_system_app/index.html` if the instance of :model:`imaging_system_app.Services` is not found.
     
@@ -222,8 +221,7 @@ def editService(request, id):
         
         if form.is_valid():
             new_service = form.save(commit = False)
-            new_service.in_house_price = (new_service.normal_price)/2
-            new_service.outside_price = (new_service.normal_price)*1.5
+            new_service.external_price = (new_service.normal_price)*1.5
             new_service.save()
             return redirect(reverse('imaging_system_app:services'))
     return render(request, 'imaging_system_app/editServices.html', context=context_dict)

@@ -9,8 +9,7 @@ class Services(models.Model):
     service_id = models.AutoField(primary_key = True)
     name = models.CharField(max_length = 100)
     normal_price = models.FloatField()
-    in_house_price = models.FloatField()
-    outside_price = models.FloatField()
+    external_price = models.FloatField()
     unit_name = models.CharField(max_length = 20)
 
     def __str__(self):
@@ -23,9 +22,8 @@ class Services(models.Model):
 class Customer(models.Model):
     """Stores a single customer entry."""
     DISCOUNT_CHOICES = [
-        (0.5, 'In-House'),
         (1.0, 'Normal'),
-        (1.5, 'Outside')
+        (1.5, 'External')
     ]
         
     cust_id = models.AutoField(primary_key = True)

@@ -4,8 +4,7 @@
         "fields": {
             "name": "JEOL 1200 TEM",
             "normal_price": 50.0,
-            "in_house_price": 25.0,
-            "outside_price": 75.0,
+            "external_price": 75.0,
             "unit_name": "hour"
         }
     }, {
@@ -14,8 +13,7 @@
         "fields": {
             "name": "JEOL IT 100 SEM",
             "normal_price": 55.0,
-            "in_house_price": 27.5,
-            "outside_price": 82.5,
+            "external_price": 82.5,
             "unit_name": "hour"
         }
     }, {
@@ -24,8 +22,7 @@
         "fields": {
             "name": "TEM processing (morphology)",
             "normal_price": 100.0,
-            "in_house_price": 50.0,
-            "outside_price": 150.0,
+            "external_price": 150.0,
             "unit_name": "sample"
         }
     }, {
@@ -34,8 +31,7 @@
         "fields": {
             "name": "Sectioning only: stained",
             "normal_price": 40.0,
-            "in_house_price": 20.0,
-            "outside_price": 60.0,
+            "external_price": 60.0,
             "unit_name": "session"
         }
     }, {
@@ -44,8 +40,7 @@
         "fields": {
             "name": "Sectioning only: contrast stained",
             "normal_price": 50.0,
-            "in_house_price": 25.0,
-            "outside_price": 75.0,
+            "external_price": 75.0,
             "unit_name": "session"
         }
     }, {
@@ -54,8 +49,7 @@
         "fields": {
             "name": "Negative staining",
             "normal_price": 10.0,
-            "in_house_price": 5.0,
-            "outside_price": 15.0,
+            "external_price": 15.0,
             "unit_name": "sample"
         }
     }, {
@@ -64,8 +58,7 @@
         "fields": {
             "name": "SEM processing: mounting",
             "normal_price": 100.0,
-            "in_house_price": 50.0,
-            "outside_price": 150.0,
+            "external_price": 150.0,
             "unit_name": "sample"
         }
     }, {
@@ -74,8 +67,7 @@
         "fields": {
             "name": "SEM processing: freeze drying",
             "normal_price": 200.0,
-            "in_house_price": 100.0,
-            "outside_price": 300.0,
+            "external_price": 300.0,
             "unit_name": "run"
         }
     }, {
@@ -84,8 +76,7 @@
         "fields": {
             "name": "SEM (mounting/coating only)",
             "normal_price": 40.0,
-            "in_house_price": 20.0,
-            "outside_price": 60.0,
+            "external_price": 60.0,
             "unit_name": "run"
         }
     }, {
@@ -94,8 +85,7 @@
         "fields": {
             "name": "Immuno-labelling (TEM and SEM)",
             "normal_price": 70.0,
-            "in_house_price": 35.0,
-            "outside_price": 105.0,
+            "external_price": 105.0,
             "unit_name": "sample"
         }
     }, {
@@ -104,8 +94,7 @@
         "fields": {
             "name": "Cryopreparation: cryosectioning",
             "normal_price": 150.0,
-            "in_house_price": 75.0,
-            "outside_price": 225.0,
+            "external_price": 225.0,
             "unit_name": "session"
         }
     }, {
@@ -114,8 +103,7 @@
         "fields": {
             "name": "Cryopreparation: freeze-fracture",
             "normal_price": 100.0,
-            "in_house_price": 50.0,
-            "outside_price": 150.0,
+            "external_price": 150.0,
             "unit_name": "sample"
         }
     }, {
@@ -124,8 +112,7 @@
         "fields": {
             "name": "Cryopreparation: LR white",
             "normal_price": 80.0,
-            "in_house_price": 40.0,
-            "outside_price": 120.0,
+            "external_price": 120.0,
             "unit_name": "sample"
         }
     }, {

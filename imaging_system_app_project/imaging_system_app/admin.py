@@ -31,7 +31,7 @@ admin.site.register(User, UserAdmin)
 
 
 class ServicesAdmin(admin.ModelAdmin):
-    list_display = ('name', 'normal_price', 'in_house_price', 'outside_price', 'unit_name')
+    list_display = ('name', 'normal_price', 'external_price', 'unit_name')
 
 admin.site.register(Services, ServicesAdmin)
 
