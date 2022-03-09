@@ -255,7 +255,7 @@ def projects(request):
     :template:`imaging_system_app/projects.html`
     """
     context_dict={}
-    projects = Project.objects.all()
+    projects = Project.objects.all().order_by('-project_date')
     if request.method == 'POST':
         query = request.POST.get('project_customer')
         datefrom = request.POST.get('project_from')
@@ -264,7 +264,7 @@ def projects(request):
             # Allows displaying search string in text box
             context_dict['query']= query
         if query:
-            projects = Project.objects.filter(cust_id__cust_name__icontains = query)
+            projects = Project.objects.filter(cust_id__cust_name__icontains = query).order_by('-project_date')
             
         if datefrom != "":
             # Allows displaying search string in text box
@@ -275,12 +275,12 @@ def projects(request):
         if datefrom:
             try:
                 
-                projects = projects.filter(project_date__gte = datefrom)
+                projects = projects.filter(project_date__gte = datefrom).order_by('-project_date')
             except:
                 projects = projects.none()
         if dateto:
             try:
-                projects = projects.filter(project_date__lte = dateto)
+                projects = projects.filter(project_date__lte = dateto).order_by('-project_date')
             except:
                 projects = projects.none()
         
@@ -350,7 +350,7 @@ def addProject(request):
     
     projectform = ProjectForm
     projectservicesbridgeFormSet=formset_factory(ProjectServicesBridgeForm)
-    customers = Customer.objects.all()
+    customers = Customer.objects.all().order_by('cust_name')
     
     context_dict['projectform'] = projectform
     context_dict['all_customer'] = customers
@@ -401,7 +401,7 @@ def getWorkers(request):
     :template:`imaging_system_app/worker_dropdown.html`
     """
     customerId = request.GET.get('customer_id')
-    workers = Worker.objects.filter(cust_id = customerId)
+    workers = Worker.objects.filter(cust_id = customerId).order_by('worker_name')
     context_dict = {'workers': workers}
     return render(request, 'imaging_system_app/worker_dropdown.html', context_dict)
     
@@ -480,9 +480,9 @@ def editProject(request, id):
         project = Project.objects.get(project_id = id)
         projectservicesbridge = ProjectServicesBridge.objects.filter(project_id = id)
         workerIDs = WorkerProjectBridge.objects.filter(project_id = id).values_list('worker_id', flat=True)
-        project_workers = Worker.objects.filter(pk__in = workerIDs)
-        customers = Customer.objects.all()
-        workers = Worker.objects.filter(cust_id = project.cust_id)
+        project_workers = Worker.objects.filter(pk__in = workerIDs).order_by('worker_name')
+        customers = Customer.objects.all().order_by('cust_name')
+        workers = Worker.objects.filter(cust_id = project.cust_id).order_by('worker_name')
         
         context_dict['project'] = project
         context_dict['project_workers'] = project_workers
@@ -551,7 +551,7 @@ def customers(request):
     """
     context_dict={}
 
-    customers = Customer.objects.all()
+    customers = Customer.objects.all().order_by('-cust_id')
     
     # search 'cust_name', 'cust_tel_no', 'cust_email', 'cust_budget_code'
     if request.method == 'POST':
@@ -560,7 +560,7 @@ def customers(request):
             # Allows displaying search string in text box
             context_dict['query']= query
         if query:
-            customers = Customer.objects.filter(Q(cust_name__icontains=query) | Q(cust_tel_no__icontains=query) | Q(cust_email__icontains=query) | Q(cust_budget_code__icontains=query))
+            customers = Customer.objects.filter(Q(cust_name__icontains=query) | Q(cust_tel_no__icontains=query) | Q(cust_email__icontains=query) | Q(cust_budget_code__icontains=query)).order_by('-cust_id')
         
     customers.order_by("cust_id")
 
@@ -597,9 +597,9 @@ def customerdetails(request, id):
     """
     context_dict={}
     context_dict['customer']= Customer.objects.get(cust_id = id)
-    context_dict['workers']= Worker.objects.filter(cust_id = id)
-    context_dict['projects']= Project.objects.filter(cust_id__cust_id = id)
-    context_dict['bills']= Bill.objects.filter(cust_id = id)
+    context_dict['workers']= Worker.objects.filter(cust_id = id).order_by('worker_name')
+    context_dict['projects']= Project.objects.filter(cust_id__cust_id = id).order_by('-project_date')
+    context_dict['bills']= Bill.objects.filter(cust_id = id).order_by('-billing_date')
 
     return render(request, 'imaging_system_app/customerdetails.html', context=context_dict)
 
@@ -815,7 +815,7 @@ def bills(request):
     """
     context_dict={}
 
-    bills = Bill.objects.all()
+    bills = Bill.objects.all().order_by('-billing_date')
     
     if request.method == 'POST':
         query = request.POST.get('bill_customer')
@@ -825,7 +825,7 @@ def bills(request):
             # Allows displaying search string in text box
             context_dict['query']= query
         if query:
-            bills = Bill.objects.filter(cust_id__cust_name__icontains = query)
+            bills = Bill.objects.filter(cust_id__cust_name__icontains = query).order_by('-billing_date')
             
         if datefrom != "":
             # Allows displaying search string in text box
@@ -836,12 +836,12 @@ def bills(request):
         if datefrom:
             try:
                 
-                bills = bills.filter(billing_date__gte = datefrom)
+                bills = bills.filter(billing_date__gte = datefrom).order_by('-billing_date')
             except:
                 bills = bills.none()
         if dateto:
             try:
-                bills = bills.filter(billing_date__lte = dateto)
+                bills = bills.filter(billing_date__lte = dateto).order_by('-billing_date')
             except:
                 bills = bills.none()
                 
@@ -902,7 +902,7 @@ def addBill(request):
     """
     context_dict = {}
     billform = BillForm
-    customers = Customer.objects.all()
+    customers = Customer.objects.all().order_by('cust_name')
     context_dict['billform'] = billform
     context_dict['customers'] = customers
     
@@ -939,7 +939,7 @@ def getProjects(request):
     :template:`imaging_system_app/project_dropdown.html`
     """
     customerId = request.GET.get('customer_id')
-    projects = Project.objects.filter(cust_id = customerId)
+    projects = Project.objects.filter(cust_id = customerId).order_by('-project_date')
     context_dict = {'projects': projects}
     return render(request, 'imaging_system_app/project_dropdown.html', context_dict)
     return render()
@@ -1058,13 +1058,13 @@ def bill_context_dict(bill_id):
     context_dict['bill'] = Bill.objects.get(bill_id=bill_id)
     
     projectbillbridge = ProjectBillBridge.objects.filter(bill_id=bill_id)
-    projects = Project.objects.filter(project_id__in=projectbillbridge.values('project_id'))
+    projects = Project.objects.filter(project_id__in=projectbillbridge.values('project_id')).order_by('-project_date')
     context_dict['projects'] = projects
     services = ProjectServicesBridge.objects.filter(project_id__in=projects.values('project_id')).order_by('service_id', 'project_id__project_id')
     context_dict['services'] = services
     
     workerprojectbridge = WorkerProjectBridge.objects.filter(project_id__in=projects.values('project_id'))
-    workers = Worker.objects.filter(worker_id__in=workerprojectbridge.values('worker_id'))
+    workers = Worker.objects.filter(worker_id__in=workerprojectbridge.values('worker_id')).order_by('worker_name')
     context_dict['workers'] = workers
     context_dict['worker_list'] = list(workers.values_list('worker_name', flat=True).distinct())
     context_dict['start_date'] = projects.order_by('project_date').first().project_date

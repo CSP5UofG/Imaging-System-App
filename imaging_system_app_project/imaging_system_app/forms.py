@@ -128,9 +128,9 @@ class ProjectForm(forms.ModelForm):
 
 
 class WorkerProjectBridgeForm(forms.ModelForm):
-    worker_id = forms.ModelChoiceField(queryset = Worker.objects.all(),
+    worker_id = forms.ModelChoiceField(queryset = Worker.objects.all().order_by('worker_name'),
                                      help_text = "Choose Worker")
-    project_id = forms.ModelChoiceField(queryset = Project.objects.all(),
+    project_id = forms.ModelChoiceField(queryset = Project.objects.all().order_by('-project_id'),
                                      help_text = "Choose Project")
     
     class Meta:
