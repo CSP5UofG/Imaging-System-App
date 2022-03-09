@@ -1,4 +1,4 @@
 <option value="" selected disabled hidden>Select a project</option>
 {% for project in projects %}
-<option value="{{ project.project_id }}">{{ project }}</option>
+<option value="{{ project.project_id }}">{{ project.project_date }} - Project {{ project.project_id }} - Cost: {{ project.total }}</option>
 {% endfor %}
