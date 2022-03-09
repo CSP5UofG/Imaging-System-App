@@ -1064,8 +1064,9 @@ def bill_context_dict(bill_id):
     context_dict['services'] = services
     
     workerprojectbridge = WorkerProjectBridge.objects.filter(project_id__in=projects.values('project_id'))
-    workers = list(Worker.objects.filter(worker_id__in=workerprojectbridge.values('worker_id')).values_list('worker_name', flat=True).distinct())
+    workers = Worker.objects.filter(worker_id__in=workerprojectbridge.values('worker_id'))
     context_dict['workers'] = workers
+    context_dict['worker_list'] = list(workers.values_list('worker_name', flat=True).distinct())
     context_dict['start_date'] = projects.order_by('project_date').first().project_date
     context_dict['end_date'] = projects.order_by('project_date').last().project_date
     
