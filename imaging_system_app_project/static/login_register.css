@@ -99,3 +99,10 @@ a{
 [data-tip]:hover:after {
 	display:block;
 }
+
+.logo_login{
+	width: 10%;
+	height: 10%;
+	background-color: #f6f6f6;
+	padding: 1%;
+}

@@ -2,70 +2,84 @@
 {% load static %}
 
 {% block title_block %}
-    - Bill {{ bill.bill_id }}
+- Bill {{ bill.bill_id }}
 {% endblock %}
 
 {% block css_block %}
 <link rel="stylesheet" type="text/css" href="{% static 'content.css' %}">
 
 <style>
-    .content {
-        margin-left: 3%;
-        font-family: 'Poppins';
-    }
-    
-    .section{
-        background-color: #efefef;
-        border: 5px solid #efefef;
-        border-radius: 10px;
-        margin-top: 0.5%;
-        width: 80%;
-        padding-left: 1%;
-        padding-right: 2%;
-        padding-bottom: 1%;
-    }
+	.content {
+		margin-left: 3%;
+		font-family: 'Poppins';
+	}
 
-    .info {
-        margin-top: 1%;
-        background-color: white;
-        text-align: center;
+	.section {
+		background-color: #efefef;
+		border: 5px solid #efefef;
+		border-radius: 10px;
+		margin-top: 0.5%;
+		width: 80%;
+		padding-left: 1%;
+		padding-right: 2%;
+		padding-bottom: 1%;
+	}
+
+	.info {
+		margin-top: 1%;
+		background-color: white;
+		text-align: center;
 		width: 100%;
-        border: 5px solid white;
-        border-radius: 10px;
-        display: flex;
-    }
-	
-	.total{
+		border: 5px solid white;
+		border-radius: 10px;
+		display: flex;
+	}
+
+	.total {
 		color: #0071BC;
 		text-align: center;
 	}
 
-    .flex_column {
-        height: 100%;
-        flex-direction: column;
-        flex: 1 1 auto;
-        text-align: left;
-        width: 50%;
-        margin-right: 2%;
-    }
-    
-    .flex_row {
-        width: 80%;
-        flex-direction: row;
-        flex: 1 1 auto;
-        text-align: left;
-        height: 50%;
-        margin-bottom: 2%;
-    }
+	.flex_column {
+		height: 100%;
+		flex-direction: column;
+		flex: 1 1 0px;
+		text-align: left;
+		width: 50%;
+		margin-right: 2%;
+		flex-wrap: wrap;
+	}
 
-    .header {
-        font-weight: bold;
-    }
-    
-    h1, h2, h3, h4, h5, h6  {
-        font-family: 'Poppins';
-    }
+	.flex_column_email {
+		height: 100%;
+		flex-direction: column;
+		flex: 1.5 1 0px;
+		text-align: left;
+		width: 50%;
+		margin-right: 2%;
+	}
 
+	.flex_row {
+		width: 80%;
+		flex-direction: row;
+		flex: 1 1 auto;
+		text-align: left;
+		height: 50%;
+		margin-bottom: 2%;
+	}
+
+	.header {
+		font-weight: bold;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		font-family: 'Poppins';
+	}
 </style>
 {% endblock %}
 
@@ -95,21 +109,21 @@
 			</div>
 			<div class="flex_column">
 				<div class="header">Budget code:</div>
-				<div>{{ bill.cust_id.budget_code }}</div>
+				<div>{{ bill.cust_id.cust_budget_code }}</div>
 			</div>
 		</div>
 	</div>
 
 	<div class="section">
-		<h2>Workers</h2>
-		<div class="info">
-			<div class="flex_column">
-				{% for w in workers %}
-				<div>{{ w }}</div>
-				{% endfor %}
-			</div>
-		</div>
-	</div>
+        <h2>Workers</h2>
+        <div class="info">
+            <div class="flex_column">
+                {% for w in workers %}
+                    <div>{{ w }}</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 
 	<div class="section">
 		<h2>Cost Breakdown</h2>

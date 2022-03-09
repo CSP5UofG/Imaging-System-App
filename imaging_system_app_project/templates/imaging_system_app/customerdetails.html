@@ -38,7 +38,16 @@
     .flex_column {
         height: 100%;
         flex-direction: column;
-        flex: 1 1 auto;
+        flex: 1 1 0px;
+        text-align: left;
+        width: 50%;
+        margin-right: 2%;
+    }
+    
+    .flex_column_email {
+        height: 100%;
+        flex-direction: column;
+        flex: 2.5 1 0px;
         text-align: left;
         width: 50%;
         margin-right: 2%;
@@ -79,11 +88,11 @@
             </div>
             <div class="flex_column">
                 <div class="header">Email</div>
-                <div>{{ customer.email }}</div>
+                <div>{{ customer.cust_email }}</div>
             </div>
             <div class="flex_column">
                 <div class="header">Budget code</div>
-                <div>{{ customer.budget_code }}</div>
+                <div>{{ customer.cust_budget_code }}</div>
             </div>
             <div class="flex_column">
                 <div class="header">Customer type</div>
@@ -110,10 +119,10 @@
                     <div>+{{ w.worker_tel_no }}</div>
                 {% endfor %}
             </div>
-            <div class="flex_column">
+            <div class="flex_column_email">
                 <div class="header">Email</div>
                 {% for w in workers %}
-                    <div>{{ w.email }}</div>
+                    <div>{{ w.worker_email }}</div>
                 {% endfor %}
             </div>
             <div class="flex_column">

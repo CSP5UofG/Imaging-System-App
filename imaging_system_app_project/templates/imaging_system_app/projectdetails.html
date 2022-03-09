@@ -117,7 +117,7 @@ Project {{ project.project_id.project_id }}
         </div>
         <div class="project_info_column">
             <div class="project_info_header">Email</div>
-            <div>{{ project.cust_id.email }}</div>
+            <div>{{ project.cust_id.cust_email }}</div>
             {% for w in workers %}
             <div>{{ w.worker_id.worker_email }}</div>
             {% endfor %}
