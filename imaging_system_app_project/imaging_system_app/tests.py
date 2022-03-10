@@ -9,8 +9,8 @@ from imaging_system_app.models import Services, Customer, Project, Worker, Worke
 # ===================== MODELS TESTS =====================  #
 class ServicesModelTests(TestCase):
     def test_can_create_service_objects(self):
-        service = Services(name="test", normal_price=20, in_house_price=10,
-                           outside_price=30, unit_name="hours")
+        service = Services(name="test", normal_price=20, 
+                           external_price=30, unit_name="hours")
         service.save()
         
         self.assertEqual(Services.objects.first(), service)
@@ -91,8 +91,7 @@ class ServicesViewsTest(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(test_service.name, "test")
         self.assertEqual(test_service.normal_price, 20)
-        self.assertEqual(test_service.in_house_price, 10)
-        self.assertEqual(test_service.outside_price, 30)
+        self.assertEqual(test_service.external_price, 30)
     
     def test_edit_service_post_correct(self):
         create_superuser(self)
@@ -106,8 +105,7 @@ class ServicesViewsTest(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(test_service.name, "test2")
         self.assertEqual(test_service.normal_price, 10)
-        self.assertEqual(test_service.in_house_price, 5)
-        self.assertEqual(test_service.outside_price, 15)
+        self.assertEqual(test_service.external_price, 15)
 
 class CustomerTests(TestCase):
     def test_all_customers_with_no_customer(self):
@@ -143,7 +141,7 @@ class CustomerTests(TestCase):
                                           'cust_tel_no': '12345678910',
                                           'cust_email': 'email@email.com',
                                           'cust_budget_code': '101',
-                                          'cust_type': '0.5'})
+                                          'cust_type': '1.0'})
         test_customer = Customer.objects.get(cust_name = 'test')
         
         self.assertEqual(response.status_code, 302)
@@ -151,7 +149,7 @@ class CustomerTests(TestCase):
         self.assertEqual(test_customer.cust_tel_no, "12345678910")
         self.assertEqual(test_customer.cust_email, "email@email.com")
         self.assertEqual(test_customer.cust_budget_code, 101)
-        self.assertEqual(test_customer.cust_type, 0.5)
+        self.assertEqual(test_customer.cust_type, 1.0)
     
     def test_edit_customer_contains_correct_service(self):
         create_superuser(self)
@@ -177,7 +175,7 @@ class CustomerTests(TestCase):
                                           'cust_tel_no': '12345678912',
                                           'cust_email': 'email@email.com',
                                           'cust_budget_code': '103',
-                                          'cust_type': '0.5'})
+                                          'cust_type': '1.0'})
         test_customer = Customer.objects.get(cust_name="test-update")
         
         self.assertEqual(response.status_code, 302)
@@ -185,7 +183,7 @@ class CustomerTests(TestCase):
         self.assertEqual(test_customer.cust_tel_no, "12345678912")
         self.assertEqual(test_customer.cust_email, "email@email.com")
         self.assertEqual(test_customer.cust_budget_code, 103)
-        self.assertEqual(test_customer.cust_type, 0.5)
+        self.assertEqual(test_customer.cust_type, 1.0)
     
     def test_customer_details_page_contains_all_info(self):
         create_superuser(self)
@@ -776,8 +774,7 @@ class QueryTests(TestCase):
 def add_service(name, price, unit_name):
     service = Services.objects.create(name=name,
                                       normal_price=price,
-                                      in_house_price = price/2,
-                                      outside_price = price*1.5,
+                                      external_price = price*1.5,
                                       unit_name = unit_name)
     
     service.save()
