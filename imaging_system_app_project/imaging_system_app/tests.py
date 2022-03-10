@@ -332,6 +332,8 @@ class ProjectTests(TestCase):
         test_project.save()
         WorkerProjectBridge.objects.create(worker_id=test_worker, project_id=test_project)
         ProjectServicesBridge.objects.create(project_id=test_project, service_id=test_service,
+                                             units = 10, cost = 100)
+        ProjectServicesBridge.objects.create(project_id=test_project, service_id=test_service,
                                              units = 2, cost = 20)
         ProjectBillBridge.objects.create(project_id = test_project,
                                                                   bill_id = test_bill)
@@ -431,6 +433,12 @@ class WorkerTests(TestCase):
         self.assertEqual(test_worker.worker_name, "TESTbob")
         self.assertEqual(test_worker.worker_tel_no, "12345678912")
         self.assertEqual(test_worker.worker_email, "email@email.com")
+    
+    def test_add_worker_nonexistent_service_redirects(self):
+        create_superuser(self)
+        response = self.client.get(reverse('imaging_system_app:add-worker', kwargs = {'id': 101}))
+        
+        self.assertEqual(response.status_code, 302)
     
     def test_edit_worker_contain_correct_info(self):
         create_superuser(self)
@@ -569,10 +577,10 @@ class BillingTests(TestCase):
                                           'billing_date_day': '2',
                                           'billing_date_year': '2022',
                                           'billing_address': 'Fake street 5',
-                                          'extra1_name': 'Extra fee',
+                                          'extra1_name': 'Extra fee 1',
                                           'extra1_cost': '200',
-                                          'extra2_name': '',
-                                          'extra2_cost': ''})
+                                          'extra2_name': 'Extra fee 2',
+                                          'extra2_cost': '400'})
         
         test_bill = Bill.objects.get(bill_id = 1)
         test_BPBridge = ProjectBillBridge.objects.get(bill_id = 1)
@@ -581,8 +589,10 @@ class BillingTests(TestCase):
         self.assertEqual(test_bill.billing_address, 'Fake street 5')
         self.assertEqual(test_BPBridge.bill_id, test_bill)
         self.assertEqual(test_BPBridge.project_id, test_project)
-        self.assertEqual(test_bill.extra1_name, 'Extra fee')
+        self.assertEqual(test_bill.extra1_name, 'Extra fee 1')
         self.assertEqual(test_bill.extra1_cost, 200)
+        self.assertEqual(test_bill.extra2_name, 'Extra fee 2')
+        self.assertEqual(test_bill.extra2_cost, 400)
            
     def test_edit_nonexistent_bill_redirects(self):
         create_superuser(self)
@@ -599,6 +609,25 @@ class BillingTests(TestCase):
         response = self.client.get(reverse('imaging_system_app:edit-bill', kwargs = {'id': 102}))
         
         self.assertEqual(response.status_code, 302)
+        
+    def test_print_bill_pdf_file(self):
+        create_superuser(self)
+        test_customer = add_customer("test_customer")
+        test_bill = add_bill(test_customer)
+        test_worker = add_worker("bob", test_customer)
+        test_project = add_project(1, 2)
+        test_project.cust_id = test_customer
+        test_project.save()
+        ProjectBillBridge.objects.create(bill_id = test_bill,
+                                 project_id = test_project)
+        WorkerProjectBridge.objects.create(worker_id=test_worker, project_id=test_project)
+        
+        date = str(test_bill.billing_date.date())
+        cust_name = test_bill.cust_id.cust_name
+        content_disposition = 'inline; filename="' + date + '_' + cust_name + '.pdf"'
+        response = self.client.get(reverse('imaging_system_app:print-bill', kwargs = {'id': 1}))
+        
+        self.assertEquals(response.get('Content-Disposition'),content_disposition)
 
 
 class UserAuthTests(TestCase):
@@ -736,6 +765,22 @@ class QueryTests(TestCase):
         self.assertContains(response, "There are no projects present.")
         self.assertEquals(len(response.context['projects']), 0)
 
+
+    def test_project_date_queries_non_existent(self):
+        create_superuser(self)
+        test_project = add_project(1, 2)
+        test_customer = add_customer("test")
+        test_project.cust_id = test_customer
+        test_project.project_date = '2022-01-01'
+        test_project.save()
+
+        response = self.client.post(reverse('imaging_system_app:projects'),
+                                            data={'project_from': 'Invalid_date',
+                                                  'project_to': 'Invalid_date'})
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "There are no projects present.")
+        self.assertEquals(len(response.context['projects']), 0)
     
     def test_bill_queries(self):
         create_superuser(self)
@@ -765,6 +810,18 @@ class QueryTests(TestCase):
         second_test_bill = add_bill(other_test_customer)
         response = self.client.post(reverse('imaging_system_app:bills'),
                                             data={'bill_customer': 'not-yet-billed'})
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "There are no bills present.")
+        self.assertEquals(len(response.context['bills']), 0)
+        
+    def test_bill_queries_non_existent(self):
+        create_superuser(self)
+        test_customer = add_customer("test_customer")
+        test_bill = add_bill(test_customer)
+        response = self.client.post(reverse('imaging_system_app:bills'),
+                                            data={'bill_from': 'Invalid_date',
+                                                  'bill_to': 'Invalid_date'})
         
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "There are no bills present.")
