@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django_xhtml2pdf.utils import generate_pdf
 from write_excel import create_excel
 from create_statistics_plots import create_plots
-
+import datetime
 
 # ===================== USER AUTHENTICATION =====================  #
 
@@ -205,7 +205,7 @@ def editService(request, id):
     :template:`imaging_system_app/editServices.html`
     """
     try:
-        service = Services.objects.filter(service_id = id).first()
+        service = Services.objects.get(service_id = id)
     except Services.DoesNotExist:
         service = None
     
@@ -661,7 +661,7 @@ def editCustomer(request, id):
     :template:`imaging_system_app/editCustomer.html`
     """
     try:
-        customer = Customer.objects.filter(cust_id = id).first()
+        customer = Customer.objects.get(cust_id = id)
     except Customer.DoesNotExist:
         customer = None
     
@@ -1008,6 +1008,8 @@ def printBill(request, id):
     
     Display the generated PDF bill of the instance of :model:`imaging_system_app.Bill` with a matching bill_id to the keyword argument id.
     
+    The default name of the pdf is billing_date_cust_name.pdf
+    
     **Keyword arguments**
 
     ``id``
@@ -1023,7 +1025,13 @@ def printBill(request, id):
     """
     context_dict = bill_context_dict(id)
     
+    # Set pdf file name to date_customer.pdf
+    date = str(context_dict['bill'].billing_date)
+    cust_name = context_dict['bill'].cust_id.cust_name
+    content_disposition = 'inline; filename="' + date + '_' + cust_name + '.pdf"'
+    
     resp = HttpResponse(content_type='application/pdf')
+    resp['Content-Disposition'] = content_disposition
     result = generate_pdf('imaging_system_app/bill_pdf.html', file_object=resp, context = context_dict)
     return result
 
@@ -1154,12 +1162,9 @@ def calculate_costs(project):
     discount = project.cust_id.cust_type
     # adjust cost of the project
     calculate_project(project, discount)
-    try:
-        # check if the project is in a bill
-        bills = ProjectBillBridge.objects.filter(project_id=project).order_by('-bill_id')
-    except:
-        bills = []
-        projectbillbridge = []
+    # check if the project is in a bill
+    bills = ProjectBillBridge.objects.filter(project_id=project).order_by('-bill_id')
+    
     for bill in bills:
         projectbillbridge = ProjectBillBridge.objects.filter(bill_id=bill.bill_id)
         for pbb in projectbillbridge:
