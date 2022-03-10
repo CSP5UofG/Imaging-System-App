@@ -815,7 +815,7 @@ class QueryTests(TestCase):
         self.assertContains(response, "There are no bills present.")
         self.assertEquals(len(response.context['bills']), 0)
         
-    def test_bill_queries_non_existent(self):
+    def test_billing_date_queries_non_existent(self):
         create_superuser(self)
         test_customer = add_customer("test_customer")
         test_bill = add_bill(test_customer)
