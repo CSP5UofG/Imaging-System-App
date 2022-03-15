@@ -35,6 +35,9 @@
         </div>
     </div>
 
+       
+            
+    {% if customers %}
         <table class="tables">
             <tr>
                 <th>Name</th>
@@ -42,7 +45,6 @@
                 <th>Budget code</th>
                 <th></th>
             </tr>
-            {% if customers %}
                 {% for c in customers %}
                     
                     <tr>
@@ -54,14 +56,13 @@
 
                     </tr>  
                 {% endfor %}
-
-            {% else %}
+        </table>
+    {% else %}
                 <a href="/">
                     <div class="content_entry">
                         <strong><h2>There are no customers yet.</h2></strong> <br />
                     </div>
                 </a>
-            {% endif %}
-        </table>
+    {% endif %}
 
 {% endblock %}

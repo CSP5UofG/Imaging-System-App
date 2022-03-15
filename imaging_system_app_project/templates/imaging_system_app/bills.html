@@ -47,6 +47,8 @@
         </div>
     </div>
 
+         
+    {% if bills %}
         <table class="tables">
             <tr>
                 <th>ID</th>
@@ -55,7 +57,6 @@
                 <th>Total cost</th>
                 <th></th>
             </tr>
-            {% if bills %}
                 {% for bill in bills %}
                     
                     <tr>
@@ -69,12 +70,11 @@
 
                     </tr>  
                 {% endfor %}
-            
-            {% else %}
+        </table>    
+    {% else %}
                 <a href="/">
                         <strong><h2>There are no bills present.</h2></strong> <br />
                 </a>
-            {% endif %}
-
+    {% endif %}
 
 {% endblock %}
