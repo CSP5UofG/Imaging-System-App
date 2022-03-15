@@ -50,6 +50,8 @@
 </div>
 
 <table class="tables">
+    
+    {% if projects %}
     <tr>
         <th>Date</th>
         <th>Customer</th>
@@ -57,8 +59,6 @@
         <th>Status </th>
         <th></th>
     </tr>
-
-    {% if projects %}
     {% for p in projects %}
     <tr>
         <td id="left_corner"> {{p.project_date}} </td>
