@@ -106,32 +106,36 @@
 		<div class="new_entry">
 			<a href="{% url 'imaging_system_app:add-worker' customer.cust_id %}">Add Worker</a><br />
 		</div>
-        <div class="project_info">
-            <div class="flex_column">
-                <div class="header">Name</div>
-                {% for w in workers %}
-                    <div>{{ w.worker_name }}</div>
-                {% endfor %}
+        {% if workers %}
+            <div class="project_info">
+                <div class="flex_column">
+                    <div class="header">Name</div>
+                    {% for w in workers %}
+                        <div>{{ w.worker_name }}</div>
+                    {% endfor %}
+                </div>
+                <div class="flex_column">
+                    <div class="header">Telephone Number</div>
+                    {% for w in workers %}
+                        <div>+{{ w.worker_tel_no }}</div>
+                    {% endfor %}
+                </div>
+                <div class="flex_column_email">
+                    <div class="header">Email</div>
+                    {% for w in workers %}
+                        <div>{{ w.worker_email }}</div>
+                    {% endfor %}
+                </div>
+                <div class="flex_column">
+                    <div class="header"><br></div>
+                    {% for w in workers %}
+                        <div><a href="{% url 'imaging_system_app:edit-worker' w.worker_id %}"> Edit </a></div>
+                    {% endfor %}
+                </div>
             </div>
-            <div class="flex_column">
-                <div class="header">Telephone Number</div>
-                {% for w in workers %}
-                    <div>+{{ w.worker_tel_no }}</div>
-                {% endfor %}
-            </div>
-            <div class="flex_column_email">
-                <div class="header">Email</div>
-                {% for w in workers %}
-                    <div>{{ w.worker_email }}</div>
-                {% endfor %}
-            </div>
-            <div class="flex_column">
-                <div class="header"><br></div>
-                {% for w in workers %}
-                    <div><a href="{% url 'imaging_system_app:edit-worker' w.worker_id %}"> Edit </a></div>
-                {% endfor %}
-            </div>
-        </div>
+        { % else %}
+            <strong><h2>There are no workers added.</h2></strong> <br />
+        {% endif %}
     </div>
     
     {% if projects %}
