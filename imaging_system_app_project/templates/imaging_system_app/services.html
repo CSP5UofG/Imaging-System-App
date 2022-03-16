@@ -44,8 +44,8 @@
 		{% for s in services %}
 		<tr>
 			<td id="left_corner">{{ s.name }}</td>
-			<td>{{ s.normal_price }}</td>
-			<td>{{ s.external_price }}</td>
+			<td> £ {{ s.normal_price }}</td>
+			<td> £ {{ s.external_price }}</td>
 			<td id="right_corner"> <a href="{% url 'imaging_system_app:edit-service' s.service_id %}" class="table_buttons"> Edit</a>
 			</td>
 		</tr>
