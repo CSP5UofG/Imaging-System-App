@@ -26,16 +26,16 @@
                 <tr>
                     <th >Date</th>
                     <th >Customer</th>
-                    <th >Nr. of samples</th>
                     <th >Status </th>
+                    <th> Total cost</th>
                     <th></th>
                 </tr>
                 {% for p in projects %}
                     <tr>
                         <td id="left_corner"> {{p.project_date}} </td>
                         <td> {{p.cust_id.cust_name}} </td>
-                        <td> {{p.num_samples}} </td>
                         <td> {{p.get_status_display}} </td>
+                        <td> £ {{p.total}} </td>
                         <td></td>
                         <td> <a href="{% url 'imaging_system_app:edit-project' p.project_id %}" class="table_buttons"> Edit</a></td>
                         <td id="right_corner"> <a href="{% url 'imaging_system_app:project-details' p.project_id %}" class="table_buttons"> View </a></td>
