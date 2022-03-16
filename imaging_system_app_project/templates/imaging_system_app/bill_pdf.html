@@ -48,10 +48,19 @@
 		</div>
 		</br>
 		<div>
-			Workers: {{ worker_list|join:" , " }}
+			<strong>Workers:</strong> {{ worker_list|join:" , " }}
 		</div>
 		</br>
 		<div>
+			<strong>Projects:</strong></br>
+			{% for s in services %}
+			<td> Project {{ s.project_id.project_id }} : £{{ s.cost|floatformat:"2" }}</td> </br>
+			{% endfor %}
+		</div>
+		</br>
+		<div> 
+			<strong>Cost breakdown:</strong>
+		</br>
 			<table>
 				{% for s in services %}
 				<tr>
