@@ -114,6 +114,7 @@
 		</div>
 	</div>
 
+	
 	<div class="section">
         <h2>Workers</h2>
         <div class="info">
@@ -124,6 +125,13 @@
             </div>
         </div>
     </div>
+
+	<div class="section">
+		<h2>Projects</h2>
+		{% for s in services %}
+		<div class="header">Project {{ s.project_id.project_id }}  -  £{{ s.cost|floatformat:"2" }}</div>
+		{% endfor %}
+	</div>
 
 	<div class="section">
 		<h2>Cost Breakdown</h2>
