@@ -317,6 +317,7 @@ def projectdetails(request, id):
     context_dict['project'] = Project.objects.get(project_id = id)
     context_dict['services'] = ProjectServicesBridge.objects.filter(project_id = id)
     context_dict['workers'] = WorkerProjectBridge.objects.filter(project_id = id)
+     
     return render(request, 'imaging_system_app/projectdetails.html', context=context_dict)
 
 
