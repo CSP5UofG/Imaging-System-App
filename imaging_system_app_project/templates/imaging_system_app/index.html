@@ -56,32 +56,31 @@
     </div>
     <div class="column2">
         <h2>Recent bills</h2>
-        <table class="tables">
-            <tr>
-                <th>ID</th>
-                <th>Billing date</th>
-                <th>Customer</th>
-                <th>Total cost</th>
-                <th></th>
-            </tr>
             {% if bills %}
-                {% for bill in bills %}
-                    
+                <table class="tables">
                     <tr>
-                        <td id="left_corner"> {{ bill.bill_id}}</td>
-                        <td> {{ bill.billing_date}} </td>
-                        <td> {{bill.cust_id}} </td>
-                        <td> £{{bill.total_cost}}</td>
-                        <td> <a href="{% url 'imaging_system_app:bill-details' bill.bill_id  %}" class="table_buttons"> View</a></td>
-                        <td id="right_corner"> <a href="{% url 'imaging_system_app:print-bill' bill.bill_id  %}" class="table_buttons"> Print </a></td>
+                        <th>ID</th>
+                        <th>Billing date</th>
+                        <th>Customer</th>
+                        <th>Total cost</th>
+                        <th></th>
+                    </tr>
+                    {% for bill in bills %}
+                        <tr>
+                            <td id="left_corner"> {{ bill.bill_id}}</td>
+                            <td> {{ bill.billing_date}} </td>
+                            <td> {{bill.cust_id}} </td>
+                            <td> £{{bill.total_cost}}</td>
+                            <td> <a href="{% url 'imaging_system_app:bill-details' bill.bill_id  %}" class="table_buttons"> View</a></td>
+                            <td id="right_corner"> <a href="{% url 'imaging_system_app:print-bill' bill.bill_id  %}" class="table_buttons"> Print </a></td>
 
-                    </tr>  
-                {% endfor %}
-            
+                        </tr>  
+                    {% endfor %}
+                </table>
             {% else %}
-                <a href="/">
-                        <strong><h2>There are no bills present.</h2></strong> <br />
-                </a>
+                    <a href="/">
+                            <strong><h2>There are no bills present.</h2></strong> <br />
+                    </a>
             {% endif %}
 
     </div>
