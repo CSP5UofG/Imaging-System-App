@@ -127,7 +127,21 @@ Type the following command in the command prompt:
 - `py population_script.py`
 
 
-### **Testing the project on a local server**
+### **Testing the project for any issues**
+
+Type the following command in the command prompt:
+- `py manage.py test`
+
+It should take a moment to run and the final output in the command prompt should be:
+
+```
+OK
+
+Destroying test database for alias 'default'...
+```
+
+
+### **Running the project on a local server**
 
 Type the following command in the command prompt:
 - `py manage.py runserver`
