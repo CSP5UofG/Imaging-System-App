@@ -161,7 +161,7 @@ class BillForm(forms.ModelForm):
 class ProjectServicesBridgeForm(forms.ModelForm):
     service_id = forms.ModelChoiceField(queryset = Services.objects.all(),
                                      help_text = "Service", initial=Services.__dict__)
-    units = forms.FloatField(help_text = "Units", min_value = 0)
+    units = forms.FloatField(help_text = "Units", min_value = 0, initial = 0)
     
     def clean_units(self):
         form_data = self.cleaned_data

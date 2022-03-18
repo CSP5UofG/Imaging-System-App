@@ -255,7 +255,7 @@ def projects(request):
     :template:`imaging_system_app/projects.html`
     """
     context_dict={}
-    projects = Project.objects.all().order_by('-project_date')
+    projects = Project.objects.all().order_by('-project_date', '-project_id')
     if request.method == 'POST':
         query = request.POST.get('project_customer')
         datefrom = request.POST.get('project_from')
@@ -264,7 +264,7 @@ def projects(request):
             # Allows displaying search string in text box
             context_dict['query']= query
         if query:
-            projects = Project.objects.filter(cust_id__cust_name__icontains = query).order_by('-project_date')
+            projects = Project.objects.filter(cust_id__cust_name__icontains = query).order_by('-project_date', '-project_id')
             
         if datefrom != "":
             # Allows displaying search string in text box
@@ -275,12 +275,12 @@ def projects(request):
         if datefrom:
             try:
                 
-                projects = projects.filter(project_date__gte = datefrom).order_by('-project_date')
+                projects = projects.filter(project_date__gte = datefrom).order_by('-project_date', '-project_id')
             except:
                 projects = projects.none()
         if dateto:
             try:
-                projects = projects.filter(project_date__lte = dateto).order_by('-project_date')
+                projects = projects.filter(project_date__lte = dateto).order_by('-project_date', '-project_id')
             except:
                 projects = projects.none()
         
@@ -420,7 +420,7 @@ def removeDuplicateServices(project):
         The instance of :model:`imaging_system_app.Project` to be checked.
     """
     # Get all services used by the project, sorted by newest first
-    services = ProjectServicesBridge.objects.filter(project_id = project).order_by('-project_services_bridge_id')
+    services = ProjectServicesBridge.objects.filter(project_id = project).order_by('project_services_bridge_id')
     services_list = []
     delete = []
     for s in services:
@@ -816,7 +816,7 @@ def bills(request):
     """
     context_dict={}
 
-    bills = Bill.objects.all().order_by('-billing_date')
+    bills = Bill.objects.all().order_by('-billing_date', '-bill_id')
     
     if request.method == 'POST':
         query = request.POST.get('bill_customer')
@@ -826,7 +826,7 @@ def bills(request):
             # Allows displaying search string in text box
             context_dict['query']= query
         if query:
-            bills = Bill.objects.filter(cust_id__cust_name__icontains = query).order_by('-billing_date')
+            bills = Bill.objects.filter(cust_id__cust_name__icontains = query).order_by('-billing_date', '-bill_id')
             
         if datefrom != "":
             # Allows displaying search string in text box
@@ -837,12 +837,12 @@ def bills(request):
         if datefrom:
             try:
                 
-                bills = bills.filter(billing_date__gte = datefrom).order_by('-billing_date')
+                bills = bills.filter(billing_date__gte = datefrom).order_by('-billing_date', '-bill_id')
             except:
                 bills = bills.none()
         if dateto:
             try:
-                bills = bills.filter(billing_date__lte = dateto).order_by('-billing_date')
+                bills = bills.filter(billing_date__lte = dateto).order_by('-billing_date', '-bill_id')
             except:
                 bills = bills.none()
                 
