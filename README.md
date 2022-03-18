@@ -1,7 +1,7 @@
 # Imaging System App
 
 * [Introduction](#introduction)
-  * [Main features](#main-features)
+* [Main features](#main-features)
 * [How to install](#how-to-install)
 
 
@@ -9,40 +9,41 @@
 
 This web app is built using the Django framework for digitalising the workflow of documenting and billing of electron microscopy for the Glasgow Imaging Facility. It is a database system that saves all created projects and bills, and allows exporting the bill as a pdf file.
 
-### Main features:
+
+## Main features:
 
 A user guide is available in docs/user_guide.md
 
-#### - Login functionality
+### Login functionality
 - Restricts content to be viewable and editable only by approved individuals.
 - The admin page is used for approving account registrations.
 
-#### - Home page
+### Home page
 - Shows the 5 most recently created projects and bills.
 
-#### - Customising services
+### Customising services
 - Allows defining a list of available services with normal and external prices.
 - Allows searching for services by their name.
 
-#### - Customers and workers
+### Customers and workers
 - Allows creating and editing customer and workers that are associated to projects.
 - Allows searching for customers by their details.
 - The customer details page allows an overview of projects and bills associated to the customer.
 
-#### - Projects
+### Projects
 - Allows creating, editing and viewing projects.
 - Allows searching for projects by the customer name and filtering by the project creation date.
 - Services used in the project are selected from the services list.
 - Project cost is automatically calculated.
 
-#### - Bills
+### Bills
 - Allows creating, editing and viewing bills.
 - Allows searching for bills by the customer name and filtering by the billing date.
 - Projects that are billed are selected from the list of projects associated with the customer.
 - Billing cost is automatically calculated.
 - A pdf version of the bill can be created and downloaded.
 
-#### - Statistics
+### Statistics
 - A dedicated page for graphs of created projects.
 - An excel version of the database can be downloaded.
 
