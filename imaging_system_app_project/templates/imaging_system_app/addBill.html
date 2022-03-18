@@ -39,6 +39,9 @@
 			<div class="new_entry" id="select-more-projects">
 				Bill more projects<br />
 			</div>
+			<div class="new_entry" id="delete-project">
+				Remove last project<br />
+			</div>
             <br />
 			{% for hidden in billform.hidden_fields %}
                 {{ hidden }}
@@ -103,5 +106,15 @@
 				document.getElementById("add-other-projects").appendChild(cloneForm);
         });
     </script>
+	
+	<script>
+        document.getElementById("delete-project").
+            addEventListener("click", function () {
+				let child = document.getElementById("add-other-projects").lastChild;
+				let parent = child.parentNode;
+				parent.removeChild(child);
+        });
+    </script>
+	
 	
 {% endblock %}
