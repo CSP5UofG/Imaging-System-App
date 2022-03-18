@@ -11,7 +11,7 @@ This web app is built using the Django framework for digitalising the workflow o
 
 ### Main features:
 
-A user guide is available in the folder docs.
+A user guide is available in docs/user_guide.md
 
 #### - Login functionality
 - Restricts content to be viewable and editable only by approved individuals.
