@@ -32,7 +32,7 @@ A user guide is available in docs/user_guide.md
 
 ### Projects
 - Allows creating, editing and viewing projects.
-- Allows searching for projects by the customer name and filtering by the project creation date.
+- Allows searching for projects by the customer name and filtering by the project date.
 - Services used in the project are selected from the services list.
 - Project cost is automatically calculated.
 
