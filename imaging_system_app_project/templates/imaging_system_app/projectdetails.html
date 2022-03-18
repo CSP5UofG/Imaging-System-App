@@ -128,7 +128,11 @@ Project {{ project.project_id.project_id }}
     <div class="project_info">
         <div class="project_info_column">
             <div class="project_info_header">Budget Code</div>
-            <div>{{ project.cust_id.cust_budget_code }}</div>
+			{% if not c.cust_budget_code is null %}
+			<div>{{ project.cust_id.cust_budget_code }}</div>
+			{% else %}
+			<div></div>
+			{% endif %}
         </div>
         <div class="project_info_column">
             <div class="project_info_header">Customer Type</div>

@@ -30,7 +30,7 @@ class Customer(models.Model):
     cust_name = models.CharField(max_length = 100)
     cust_tel_no = models.CharField(max_length = 12) # International number
     cust_email = models.CharField(max_length = 100)
-    cust_budget_code = models.IntegerField()
+    cust_budget_code = models.IntegerField(blank = True, null = True)
     cust_type = models.FloatField(choices = DISCOUNT_CHOICES, default = 1)
     
     def __str__(self):

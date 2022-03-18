@@ -43,7 +43,7 @@ class CustomerForm(forms.ModelForm):
     cust_email = forms.CharField(max_length = 100,
                                  help_text = "Customer email address")
     cust_budget_code = forms.IntegerField(help_text = "Budget code",
-                                          min_value = 0)
+                                          min_value = 0, required = False)
     cust_type = forms.ChoiceField(choices = DISCOUNT_CHOICES,
                                help_text = "Discount")
     
