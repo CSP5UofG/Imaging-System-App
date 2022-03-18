@@ -529,6 +529,36 @@ def editProject(request, id):
             calculate_costs(project)
             return redirect(reverse('imaging_system_app:project-details', kwargs={"id": id}))
     return render(request, 'imaging_system_app/editProject.html', context=context_dict)
+    
+@login_required 
+def deleteservicefromproject(request, id, service_id):
+    """
+    Delete service from project
+    
+    The user is redirected to :template:`imaging_system_app/projectdetails.html` after deleting.
+
+    
+    **Keyword arguments**
+
+    ``id``
+        The project_id of an instance of :model:`imaging_system_app.Project`.
+        
+    ``service_id``
+        The service_id of an instance of :model:`imaging_system_app.Service`.
+    """
+    try:
+        projectservicesbridge = ProjectServicesBridge.objects.get(project_id__project_id = id, service_id__service_id = service_id)
+        psb = ProjectServicesBridge.objects.filter(project_id__project_id = id)
+    except ProjectServicesBridge.DoesNotExist:
+        projectservicesbridge = None
+    
+    if projectservicesbridge is None:
+        return redirect('/imaging_system_app/')
+    
+    if psb.count() != 1:
+        projectservicesbridge.delete()
+    
+    return redirect(reverse('imaging_system_app:project-details', kwargs={"id": id}))
 
 
 # ===================== CUSTOMERS =====================  #
@@ -1005,6 +1035,36 @@ def editBill(request, id):
             return redirect(reverse('imaging_system_app:bill-details', kwargs={"id": id}))
     return render(request, 'imaging_system_app/editBill.html', context=context_dict)
 
+@login_required 
+def deleteprojectfrombill(request, id, project_id):
+    """
+    Delete project from Bill
+    
+    The user is redirected to :template:`imaging_system_app/billdetails.html` after deleting.
+
+    
+    **Keyword arguments**
+
+    ``id``
+        The bill_id of an instance of :model:`imaging_system_app.Bill`.
+        
+    ``project_id``
+        The project_id of an instance of :model:`imaging_system_app.Project`.
+    """
+    try:
+        projectbillbridge = ProjectBillBridge.objects.get(bill_id__bill_id = id, project_id__project_id = project_id)
+        pbb = ProjectBillBridge.objects.filter(bill_id__bill_id = id)
+    except ProjectBillBridge.DoesNotExist:
+        projectbillbridge = None
+    
+    if projectbillbridge is None:
+        return redirect('/imaging_system_app/')
+    
+    if pbb.count() != 1:
+        projectbillbridge.delete()
+    
+    return redirect(reverse('imaging_system_app:bill-details', kwargs={"id": id}))
+    
 @login_required
 def printBill(request, id):
     """
@@ -1070,6 +1130,7 @@ def bill_context_dict(bill_id):
     context_dict['bill'] = Bill.objects.get(bill_id=bill_id)
     
     projectbillbridge = ProjectBillBridge.objects.filter(bill_id=bill_id)
+    context_dict['project_bill_bridge'] = projectbillbridge
     projects = Project.objects.filter(project_id__in=projectbillbridge.values('project_id')).order_by('-project_date', '-project_id')
     context_dict['projects'] = projects
     services = ProjectServicesBridge.objects.filter(project_id__in=projects.values('project_id')).order_by('service_id', 'project_id__project_id')

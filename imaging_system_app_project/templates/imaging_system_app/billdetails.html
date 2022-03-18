@@ -128,8 +128,9 @@
 
 	<div class="section">
 		<h2>Projects</h2>
-		{% for s in services %}
-		<div class="header">Project {{ s.project_id.project_id }}  -  £{{ s.cost|floatformat:"2" }}</div>
+		{% for pbb in project_bill_bridge %}
+		<div class="header">Project {{ pbb.project_id.project_id }}  -  £{{ pbb.project_id.total|floatformat:"2" }}</div>
+		<div><a href="{% url 'imaging_system_app:delete-project-from-bill' pbb.bill_id.bill_id pbb.project_id.project_id %}">Delete</a></div>
 		{% endfor %}
 	</div>
 

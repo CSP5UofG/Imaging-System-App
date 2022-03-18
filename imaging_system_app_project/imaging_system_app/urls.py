@@ -20,6 +20,7 @@ urlpatterns = [
     path('projects/<id>/', views.projectdetails, name='project-details'),
     path('add-project/', views.addProject, name='add-project'),
     path('projects/<id>/edit/', views.editProject, name='edit-project'),
+    path('projects/<id>/<service_id>/delete/', views.deleteservicefromproject, name='delete-service-from-project'),
     
     path('customers/<id>/', views.customerdetails, name='customer-details'),
     path('add-customer/', views.addCustomer, name='add-customer'),
@@ -30,6 +31,7 @@ urlpatterns = [
     path('bills/<id>/', views.billdetails, name='bill-details'),
     path('add-bill/', views.addBill, name='add-bill'),
     path('bills/<id>/edit/', views.editBill, name='edit-bill'),
+    path('bills/<id>/<project_id>/delete/', views.deleteprojectfrombill, name='delete-project-from-bill'),
     path('bills/<id>/print/', views.printBill, name='print-bill'),
     
     path('statistics/', views.viewStatistics, name='statistics'),

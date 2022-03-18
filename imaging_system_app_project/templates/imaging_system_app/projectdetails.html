@@ -184,6 +184,7 @@ Project {{ project.project_id.project_id }}
                     {% endif %}
                 {% endif %}
                 <div>£{{ s.cost|floatformat:"2" }}</div>
+				<div><a href="{% url 'imaging_system_app:delete-service-from-project' s.project_id.project_id s.service_id.service_id %}">Delete</a></div>
             </div>
             {% if forloop.counter|divisibleby:"4" %}
         </div>
