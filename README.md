@@ -2,7 +2,7 @@
 
 * [Introduction](#introduction)
   * [Main features](#main-features)
-* [How to install and run the project](#how-to-install-and-run-the-project)
+* [How to install](#how-to-install)
 
 
 ## Introduction
@@ -47,7 +47,7 @@ A user guide is available in the folder docs.
 - An excel version of the database can be downloaded.
 
 
-## How to install and run the project
+## How to install
 
 ### **Download the project and Python**
 
