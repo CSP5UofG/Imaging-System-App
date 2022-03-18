@@ -117,6 +117,11 @@ A pdf version user_guide.pdf is in the docs folder.
 - On the Projects page, press the Edit button next to the project you would like to edit.
 - Press the Update Project button after making changes, the project cost will be automatically updated and you will be redirected back to the details page of the project.
 
+### Removing a service from a project
+- On the Projects page, press the View button next to the project you would like to change.
+- Press the Delete button under the service you would like to remove from the project.
+- The page will be reloaded with the service removed and costs recalculated.
+
 
 ## Bills
 
@@ -146,6 +151,11 @@ A pdf version user_guide.pdf is in the docs folder.
 ### Editing a bill
 - On the Bills page, press the Edit button next to the bill you would like to edit.
 - Press the Update Bill button after making changes, the billing cost will be automatically updated and you will be redirected back to the details page of the bill.
+
+### Removing a project from a bill
+- On the Bills page, press the View button next to the bill you would like to change.
+- Press the Delete button under the project you would like to remove from the bill.
+- The page will be reloaded with the project removed and costs recalculated.
 
 ### Printing a bill
 - On the Bills page, press the Print button next to the bill you would like to print.
