@@ -40,12 +40,13 @@
 				</select>
 				<br /><br />
 			</div>
-			
 			<div id=other-worker-form></div>
-			
 			<br />
 				<div class="new_entry" id="add-more-worker">
 					Assign more workers<br />
+				</div>
+				<div class="new_entry" id="delete-worker">
+					Remove last worker<br />
 				</div>
 
 			
@@ -164,4 +165,15 @@
 				document.getElementById("other-worker-form").appendChild(cloneForm);
         });
     </script>
+	
+		<script>
+        document.getElementById("delete-worker").
+            addEventListener("click", function () {
+				let child = document.getElementById("other-worker-form").lastChild;
+				let parent = child.parentNode;
+				parent.removeChild(child);
+        });
+    </script>
+	
+
 {% endblock %}
