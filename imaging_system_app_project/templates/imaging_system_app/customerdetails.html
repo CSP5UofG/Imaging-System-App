@@ -103,9 +103,6 @@
     
     <div class="section">
         <h2>Workers</h2>
-		<div class="new_entry">
-			<a href="{% url 'imaging_system_app:add-worker' customer.cust_id %}">Add Worker</a><br />
-		</div>
         {% if workers %}
             <div class="project_info">
                 <div class="flex_column">
@@ -133,9 +130,13 @@
                     {% endfor %}
                 </div>
             </div>
-        { % else %}
-            <strong><h2>There are no workers added.</h2></strong> <br />
+        {% else %}
+            <h3>There are no workers added.</h3> <br />
         {% endif %}
+        
+        <div class="new_entry">
+			<a href="{% url 'imaging_system_app:add-worker' customer.cust_id %}">Add Worker</a><br />
+		</div>
     </div>
     
     {% if projects %}
