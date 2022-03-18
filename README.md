@@ -56,11 +56,13 @@ A pdf version installation_instructions.pdf is in the docs folder.
 
 Download the source code as a zip file and unzip it, by default it should be csp5-main-master.zip. You should now have a folder called imaging_system_app_project inside the unzipped folder, this is the project folder.
 
-Install [Python](https://www.python.org/downloads/release/python-3910/).
+Install Python.
+  - https://www.python.org/downloads/release/python-3910/
 
 When running the Python installer, remember to check the boxes next to “Install launcher for all users (recommended)”.
 
-For any errors with Python, check out the [official documentation](https://docs.python.org/3/using/windows.html) to set up Python on Windows.
+For any errors with Python, check out the official documentation to set up Python on Windows.
+  - https://docs.python.org/3/using/windows.html
 
 
 ### **Adding your website as an allowed host**
@@ -162,5 +164,13 @@ The admin page can now be accessed by going to http​://127.0.0.1:8000/admin
 
 To stop the local server, type Ctrl+C in the command prompt.
 
+
+### **Prepare the app for deployment**
+
+- Open imaging_system_app_project/settings.py
+- Change `Debug = True` to `Debug = False`.
+- Advanced deployment settings are below the debug setting.
+  - These settings relate to forcing a secure https connection. For more information, refer to the official Django documentation on deployment.
+    - https://docs.djangoproject.com/en/3.2/ref/settings/
 
 ### **The project should now be ready to be hosted on your website.**
