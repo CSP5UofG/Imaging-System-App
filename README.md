@@ -52,7 +52,7 @@ A user guide is available in docs/user_guide.md
 
 ### **Download the project and Python**
 
-Download the source code as a zip file and unzip the project. You should now have a folder called imaging_system_app_project.
+Download the source code as a zip file and unzip it, by default it should be csp5-main-master.zip. You should now have a folder called imaging_system_app_project inside the unzipped folder, this is the project folder.
 
 Install [Python](https://www.python.org/downloads/release/python-3910/).
 
@@ -92,8 +92,9 @@ Note that this command has to be run every time you start a new command prompt.
 
 Navigate to the project directory in the command prompt.
 
-For example if the project is in the Desktop:
+For example if the csp5-main-master folder is in the Desktop:
 - `cd Desktop`
+- `cd csp5-main-master`
 - `cd imaging_system_app_project`
 
 Note that the instructions below require you to be in the project directory in the command prompt.
