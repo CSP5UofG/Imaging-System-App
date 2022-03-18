@@ -424,7 +424,10 @@ def removeDuplicateServices(project):
     services_list = []
     delete = []
     for s in services:
-        if s.service_id not in services_list:
+        if s.units == 0:
+            # Service has 0 units (hours/samples/runs)
+            delete.append(s.project_services_bridge_id)
+        elif s.service_id not in services_list:
             # First occurence in the project
             services_list.append(s.service_id)
         else:
