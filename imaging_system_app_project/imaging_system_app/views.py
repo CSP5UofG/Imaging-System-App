@@ -364,6 +364,8 @@ def addProject(request):
         projectform = ProjectForm(request.POST)
         PSBformset = projectservicesbridgeFormSet(request.POST)
         
+        context_dict['projectservicesbridgeformset'] = PSBformset
+        
         if projectform.is_valid() and PSBformset.is_valid():
             project = projectform.save(commit = False)
             project.cust_id = customer

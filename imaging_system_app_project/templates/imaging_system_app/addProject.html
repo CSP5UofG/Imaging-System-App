@@ -88,8 +88,8 @@
 					<div class="service-form">
                     {% for field in bridge.visible_fields %}
                     <div>
-                        {{ field.errors }}
                         {{ field.help_text }}<br />
+                        {{ field.errors }} <br/>
                     </div>
                     <div>
                         {{ field }}<br /><br />
