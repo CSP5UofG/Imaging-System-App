@@ -943,7 +943,7 @@ def getProjects(request):
     :template:`imaging_system_app/project_dropdown.html`
     """
     customerId = request.GET.get('customer_id')
-    projects = Project.objects.filter(cust_id = customerId).order_by('-project_date')
+    projects = Project.objects.filter(cust_id = customerId).order_by('-project_date', '-project_id')
     context_dict = {'projects': projects}
     return render(request, 'imaging_system_app/project_dropdown.html', context_dict)
     return render()
@@ -1070,7 +1070,7 @@ def bill_context_dict(bill_id):
     context_dict['bill'] = Bill.objects.get(bill_id=bill_id)
     
     projectbillbridge = ProjectBillBridge.objects.filter(bill_id=bill_id)
-    projects = Project.objects.filter(project_id__in=projectbillbridge.values('project_id')).order_by('-project_date')
+    projects = Project.objects.filter(project_id__in=projectbillbridge.values('project_id')).order_by('-project_date', '-project_id')
     context_dict['projects'] = projects
     services = ProjectServicesBridge.objects.filter(project_id__in=projects.values('project_id')).order_by('service_id', 'project_id__project_id')
     context_dict['services'] = services
