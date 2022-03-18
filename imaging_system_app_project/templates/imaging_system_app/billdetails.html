@@ -109,7 +109,11 @@
 			</div>
 			<div class="flex_column">
 				<div class="header">Budget code:</div>
+				{% if not c.cust_budget_code is null %}
 				<div>{{ bill.cust_id.cust_budget_code }}</div>
+				{% else %}
+				<div></div>
+				{% endif %}
 			</div>
 		</div>
 	</div>

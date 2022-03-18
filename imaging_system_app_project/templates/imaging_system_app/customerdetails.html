@@ -92,7 +92,11 @@
             </div>
             <div class="flex_column">
                 <div class="header">Budget code</div>
+				{% if not c.cust_budget_code is null %}
                 <div>{{ customer.cust_budget_code }}</div>
+				{% else %}
+				<div></div>
+				{% endif %}
             </div>
             <div class="flex_column">
                 <div class="header">Customer type</div>

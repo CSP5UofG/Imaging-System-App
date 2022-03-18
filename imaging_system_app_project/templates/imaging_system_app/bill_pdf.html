@@ -44,7 +44,11 @@
 			{% endif %}
 			Period: {{start_date}} to {{end_date}}
 			</br>
+			{% if not c.cust_budget_code is null %}
 			Budget code: {{ bill.cust_id.cust_budget_code }}
+			{% else %}
+			Budget code: 
+			{% endif %}
 		</div>
 		</br>
 		<div>
