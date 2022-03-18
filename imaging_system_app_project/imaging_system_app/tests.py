@@ -658,7 +658,7 @@ class UserAuthTests(TestCase):
     def test_registration_page_contains_correct_info(self):
         response = self.client.get(reverse('imaging_system_app:register'))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Goto Login')
+        self.assertContains(response, 'Cancel')
         self.assertContains(response, 'Register')
         self.assertContains(response, 'Username')
         self.assertContains(response, 'Password')
