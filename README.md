@@ -50,6 +50,8 @@ A user guide is available in docs/user_guide.md
 
 ## How to install
 
+A pdf version installation_instructions.pdf is in the docs folder.
+
 ### **Download the project and Python**
 
 Download the source code as a zip file and unzip it, by default it should be csp5-main-master.zip. You should now have a folder called imaging_system_app_project inside the unzipped folder, this is the project folder.

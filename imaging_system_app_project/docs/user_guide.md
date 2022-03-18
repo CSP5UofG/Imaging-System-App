@@ -1,4 +1,7 @@
 # User Guide
+
+A pdf version user_guide.pdf is in the docs folder.
+
   * [Registration and login](#registration-and-login)
   * [Services](#services)
   * [Customers](#customers)
