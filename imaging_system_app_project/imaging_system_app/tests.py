@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.utils import timezone
+import pathlib as pl
 
 from imaging_system_app.models import Services, Customer, Project, Worker, WorkerProjectBridge, ProjectServicesBridge, ProjectBillBridge, Bill
 
@@ -251,6 +252,8 @@ class ProjectTests(TestCase):
         other_test_worker = add_worker("TESTbob", test_customer)
         test_service = add_service("test", 20, 'hours')
         other_test_service = add_service("other_test", 35, "hours")
+        zero_test_service = add_service("zero_test", 0, "hours")
+        duplicate_test_service = add_service("test", 10, "hours")
         response = self.client.post(reverse('imaging_system_app:add-project'),
                                     data={'customer_id': 1,
                                           'worker_id': ['1', '2'],
@@ -290,14 +293,61 @@ class ProjectTests(TestCase):
         test_project = Project.objects.get(project_id = 1)
         test_WPBridge = WorkerProjectBridge.objects.filter(project_id = 1)
         test_PSBridge = ProjectServicesBridge.objects.filter(service_id = 1)
+        test_PSBridge2 = ProjectServicesBridge.objects.filter(project_id = 1)
         
         self.assertEqual(response.status_code, 302)
         self.assertEqual(test_project.status, 1)
         self.assertEqual(len(test_WPBridge), 2)
-        self.assertEqual(len(test_WPBridge), 2)
+        self.assertEqual(len(test_PSBridge2), 2)
         self.assertEqual(test_project.cust_id, test_customer)
         self.assertEqual(test_PSBridge[0].project_id, test_project)
         self.assertEqual(test_project.total, 55)
+    
+    def test_add_project_service_form_errors(self):
+        create_superuser(self)
+        test_customer = add_customer("test")
+        test_worker = add_worker("bobTEST", test_customer)
+        other_test_worker = add_worker("TESTbob", test_customer)
+        test_service = add_service("test", 20, 'hour')
+        other_test_service = add_service("other_test", 35, "run")
+        response = self.client.post(reverse('imaging_system_app:add-project'),
+                                    data={'customer_id': 1,
+                                          'worker_id': ['1', '2'],
+                                          'project_date_month': 2,
+                                          'project_date_day': 26,
+                                          'project_date_year': 2022,
+                                          'status': 1,
+                                          'num_samples': '11',
+                                          'specimen_procedure': '',
+                                          'chemical_fixation': '',
+                                          'neg_staining': '',
+                                          'cryofixation': '',
+                                          'tem_embedding_schedule': '',
+                                          'dehydration': '',
+                                          'resin': '',
+                                          'sem': '',
+                                          'sem_mount': '',
+                                          'fd': '',
+                                          'cpd': '',
+                                          'sem_cost': '',
+                                          'temp_time': '',
+                                          'immunolabelling': '',
+                                          'first_dilution_time': '',
+                                          'second_dilution_time': '',
+                                          'contrast_staining': '',
+                                          'comments_results': '',
+                                          'service_id': '1',
+                                          'units': '1',
+                                          'form-TOTAL_FORMS': 2,
+                                          'form-INITIAL_FORMS': 0,
+                                          'form-MIN_NUM_FORMS': 0,
+                                          'form-MAX_NUM_FORMS': 1000,
+                                          'form-0-service_id': 1,
+                                          'form-0-units': 0.6,
+                                          'form-1-service_id': 2,
+                                          'form-1-units': 1.5, })
+        self.assertContains(response, "Value must be an integer. ")
+        self.assertContains(response, "Value must be in .5 increments. ")
     
     def test_edit_project_contains_correct_info(self):
         create_superuser(self)
@@ -392,14 +442,36 @@ class ProjectTests(TestCase):
         
         self.assertEqual(response.status_code, 302)
     
+    def test_delete_service_from_project_deleted(self):
+        create_superuser(self)
+        test_customer = add_customer("test")
+        test_worker = add_worker("bobTEST", test_customer)
+        test_project = add_project(1, 25)
+        test_service = add_service("test", 20, 'hours')
+        other_test_service = add_service("other_test", 35, "hours")
+        test_project.cust_id = test_customer
+        test_project.save()
+        WorkerProjectBridge.objects.create(worker_id=test_worker, project_id=test_project)
+        ProjectServicesBridge.objects.create(project_id=test_project, service_id=test_service,
+                                             units = 2, cost = 20)
+        ProjectServicesBridge.objects.create(project_id=test_project, service_id=other_test_service,
+                                             units = 2, cost = 20)
+        response = self.client.get(reverse('imaging_system_app:delete-service-from-project', kwargs = {'id': 1, 'service_id':1}))
+        test_PSBridge = ProjectServicesBridge.objects.filter(project_id = 1)
+        self.assertEqual(len(test_PSBridge), 1)
+        
+    def test_delete_service_from_project_error_redirects_index(self):
+        create_superuser(self)
+        response = self.client.get(reverse('imaging_system_app:delete-service-from-project', kwargs = {'id': 1, 'service_id':1}))
+        self.assertEqual(response.url, '/imaging_system_app/')
 
 
 class StatisticsTests(TestCase):
     def test_statistics_page_contains_correct_info(self):
         create_superuser(self)
         response = self.client.get(reverse('imaging_system_app:projects'))
-        
         self.assertEqual(response.status_code, 200)
+        
 
 class WorkerTests(TestCase):
     def test_customer_details_with_worker(self):
@@ -609,7 +681,32 @@ class BillingTests(TestCase):
         response = self.client.get(reverse('imaging_system_app:edit-bill', kwargs = {'id': 102}))
         
         self.assertEqual(response.status_code, 302)
+    
+    def test_delete_project_from_bill_deleted(self):
+        create_superuser(self)
+        test_customer = add_customer("test_customer")
+        test_bill = add_bill(test_customer)
+        test_worker = add_worker("bob", test_customer)
+        test_project = add_project(1, 2)
+        test_project.cust_id = test_customer
+        test_project.save()
+        test_project2 = add_project(2, 2)
+        test_project2.cust_id = test_customer
+        test_project2.save()
+        ProjectBillBridge.objects.create(bill_id = test_bill,
+                                 project_id = test_project)
+        ProjectBillBridge.objects.create(bill_id = test_bill,
+                                 project_id = test_project2)
+        response = self.client.get(reverse('imaging_system_app:delete-project-from-bill', kwargs = {'id': 1, 'project_id':1}))
+        test_PBBridge = ProjectBillBridge.objects.filter(bill_id = 1)
+        self.assertEqual(len(test_PBBridge), 1)
         
+    def test_delete_project_from_bill_error_redirects_index(self):
+        create_superuser(self)
+        response = self.client.get(reverse('imaging_system_app:delete-project-from-bill', kwargs = {'id': 1, 'project_id':1}))
+        self.assertEqual(response.url, '/imaging_system_app/')
+    
+    
     def test_print_bill_pdf_file(self):
         create_superuser(self)
         test_customer = add_customer("test_customer")
